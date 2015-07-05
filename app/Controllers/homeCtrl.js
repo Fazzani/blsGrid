@@ -41,10 +41,31 @@ app.controller("homeCtrl", function ($scope,$http) {
 	{'name':'lousdni','age':28,'prenom':'sfz78zeni'}]
 
 	$scope.options={
+		multiSelection:false,
 		search:{
 			searchText:'', 
 			searchClass:'form-control'
 		},
+		actions:[
+		{
+			title:'edit',
+			glyphicon:'glyphicon glyphicon-edit',
+			class:'btn-circle btn-info btn-xs',
+			action:function(row){
+				console.log('edit  : '+ row.userId);
+			}
+		},
+		{
+			title:'delete',
+			glyphicon:'glyphicon glyphicon-remove',
+			class:'btn-circle btn-danger btn-xs',
+			action:function(row){
+				//$scope.listPersons.
+				console.log('delete  : '+ row.userId);
+			}
+		}
+		
+		],
 		pagination:{
 			pageLength:20,
 			pageIndex:0,

@@ -8,10 +8,11 @@ return {
           	$scope.$evalAsync(function () {
           			$timeout(function(){ 
           				element.colResizable({
-				        liveDrag:true,
-				        postbackSafe: true,
-				        partialRefresh: true,
-				       // minWidth: 100
+          					fixed:true,
+					        liveDrag:true,
+					        postbackSafe: true,
+					        partialRefresh: true,
+					       // minWidth: 100
         			});
           		},1000);
             });
@@ -46,6 +47,7 @@ return {
 	controller : function($scope,$filter,$timeout,$element){
 		
 		var defaultOptions={
+			multiSelection:true,
 			search:{
 				searchText:'', 
 				searchClass:'form-control'
@@ -65,11 +67,13 @@ return {
 			}
 		};
 		$scope.options = angular.extend({}, defaultOptions, $scope.options);
-		$scope.columns=[];
+		$scope.columns = [];
 		$scope.isLoading = true;
-		$scope.dataFilterSearch = $scope.data=[];
+		$scope.dataFilterSearch = $scope.data = [];
 		$scope.offset = 0;
 		$scope.filteredData = [];
+		$scope.selectedRows = [];
+		$scope.actionsEnabled=$scope.options.actions!=null;
 		$scope.$watch('source.length', function(newVal, oldValue)
 			{
 				angular.forEach($scope.source, function(value, key){
@@ -93,22 +97,22 @@ return {
         		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
         		$scope.predicate = predicate;
       		};
-      		$scope.glyphOrder= function(col){
+      		$scope.glyphOrder = function(col){
       			if(col!=$scope.predicate)
       				return '';
       			return $scope.reverse? 'glyphicon-chevron-up':'glyphicon-chevron-down';
       		};
-      		$scope.toPage=function  (page) {
+      		$scope.toPage = function(page) {
       			$scope.options.pagination.pageIndex=page;
       			$scope.refreshOffset();
       		}
       		$scope.$watch('options.pagination.pageIndex', function(newValue, oldValue){
 				$scope.refreshOffset();
       		})
-      		$scope.refreshOffset=function(){
+      		$scope.refreshOffset = function(){
       			$scope.offset=($scope.options.pagination.pageIndex-1) * $scope.options.pagination.pageLength;
       		}
-      		$scope.updateRecordsCount=function(){
+      		$scope.updateRecordsCount = function(){
       			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.selected;
       			$scope.dataFilterSearch = $filter('filter')($scope.data,$scope.options.search.searchText);
       		}
@@ -121,6 +125,19 @@ return {
       		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
       			$scope.pages= new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
       		})
+      		$scope.toggleSelectedRow = function(data){
+      			if(!$scope.options.multiSelection)
+      			{
+      				$scope.selectedRows = [data];
+      			}
+      			else
+      			{
+	      			if($scope.selectedRows.indexOf(data)>-1)
+	      				$scope.selectedRows.splice($scope.selectedRows.indexOf(data),1);
+	      			else
+	      				$scope.selectedRows.push(data);
+      			}
+      		}
 
 		}
 	}
@@ -146,14 +163,18 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 	        			<tr>\
 	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)">{{col|uppercase}}\
 	          				<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i></th>\
+	          				<th ng-if="actionsEnabled">Actions</th>\
 	        			</tr>\
 	      			</thead>\
 	      			<tbody>\
-	        				<tr ng-repeat="d in filteredData = (data | filter:options.search.searchText| limitTo:options.pagination.pageLength:offset | orderBy:predicate:reverse)">\
-	        					<td ng-repeat="a in columns">{{d[a]}} </td>\
+	        				<tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| limitTo:options.pagination.pageLength:offset | orderBy:predicate:reverse)">\
+	        					<td ng-repeat="a in columns">{{d[a]}}</td>\
+	        					<td ng-if="actionsEnabled" class="center">\
+	        						<a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
+	        					</td>\
 	        				</tr>\
 	        			</tbody>\
-	        			<tfoot>  <tr><td colspan="{{columns.length}}">\
+	        			<tfoot>  <tr><td colspan="{{columns.length + (actionsEnabled?1:0)}}">\
 	        				<pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
 							<div class="pagerList col-md-2 col-xs-4">\
 									<select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
