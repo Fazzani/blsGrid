@@ -1,3 +1,13 @@
+
+.blsGrid tfoot {
+    background-color: mintcream;
+}
+.blsGrid tfoot td {
+    padding: 0px 5px !important;
+}
+.blsGrid .pagination{
+    margin: 8px 0 !important;
+}
 /*th comment*/
 th.colHeader a{
 	  cursor: pointer;
@@ -74,7 +84,7 @@ th.colHeader a:hover{
     
 }
 .pagerList{
-	margin: 20px 0;
+	margin: 6px 0;
 	padding: 0px 0% 0% 10%;
 }
 .double-bounce1, .double-bounce2 {
