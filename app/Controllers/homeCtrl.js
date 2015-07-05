@@ -50,7 +50,8 @@ app.controller("homeCtrl", function ($scope,$http) {
 			pageIndex:0,
 			pager:{
 				nextTitle:'Suivant',
-				perviousTitle:'Précédent'
+				perviousTitle:'Précédent',
+				maxSize:3
 			},
 			itemsPerPage:{
 				selected:20,
