@@ -1,5 +1,6 @@
 'use strict';
 
+
 app.directive("panel", function () {
 return {
 	link: function (scope, element, attrs) {

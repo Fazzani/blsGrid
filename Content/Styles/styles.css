@@ -2,6 +2,7 @@ th.colHeader a{
 	  cursor: pointer;
  outline: none;
 }
+
 th.colHeader a:hover{
 		outline: none;
 		text-decoration:none;
