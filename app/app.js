@@ -1,2 +1,1 @@
-
-var app = angular.module('app',['bls_tpls']);
+var app = angular.module('app',['bls_tpls','ui.bootstrap']);

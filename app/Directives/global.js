@@ -1,6 +1,26 @@
 'use strict';
 
-app.directive("panel", function () {
+app
+.directive("resizable", function ($timeout) {
+return {
+	 link: function ($scope, element, attrs) 
+      {
+          	$scope.$evalAsync(function () {
+          			$timeout(function(){ 
+          				element.colResizable({
+				        liveDrag:true,
+				        postbackSafe: true,
+				        partialRefresh: true,
+				       // minWidth: 100
+        			});
+          		},1000);
+            });
+      },
+	restrict: "CA",
+	require: '^hfGrid'
+	}
+})
+.directive("panel", function () {
 return {
 	link: function (scope, element, attrs) {
 		scope.dataSource = "directive";
@@ -22,84 +42,86 @@ return {
 			gridClass:'@', 
 			options:'='
 	},
-	templateUrl: 'template/blsGrid/blsGrid.html',
-	controller:function($scope,$filter,$timeout){
-			var defaultOptions={
-				search:{
-					searchText:'', 
-					searchClass:'form-control'
+	templateUrl : 'template/blsGrid/blsGrid.html',
+	controller : function($scope,$filter,$timeout,$element){
+		
+		var defaultOptions={
+			search:{
+				searchText:'', 
+				searchClass:'form-control'
+			},
+			pagination:{
+				pageLength:5,
+				pageIndex:1,
+				pager:{
+					nextTitle:'Suivant',
+					perviousTitle:'Précédent', 
+					maxSize:3
 				},
-				pagination:{
-					pageLength:5,
-					pageIndex:1,
-					pager:{
-						nextTitle:'Suivant',
-						perviousTitle:'Précédent', 
-						maxSize:3
-					},
-					itemsPerPage:{
-						selected:10,
-						range:[10,20]
-					}
+				itemsPerPage:{
+					selected:10,
+					range:[10,20]
 				}
-			};
-			$scope.options = angular.extend({}, defaultOptions, $scope.options);
-			$scope.columns=[];
-			$scope.isLoading=true;
-			$scope.dataFilterSearch = $scope.data=[];
-			$scope.offset=0;
-			$scope.filteredData =[];
-			$scope.$watch('source.length',function(newVal, oldValue)
-				{
-					angular.forEach($scope.source, function(value, key){
-						$scope.data.push(value);
-						//if(key===0)
-						//	$scope.columns=Object.keys(value);
-						angular.forEach(value,function(v, k){
-						if($scope.columns.indexOf(k)<0)
-							$scope.columns.push(k);
-						});
+			}
+		};
+		$scope.options = angular.extend({}, defaultOptions, $scope.options);
+		$scope.columns=[];
+		$scope.isLoading = true;
+		$scope.dataFilterSearch = $scope.data=[];
+		$scope.offset = 0;
+		$scope.filteredData = [];
+		$scope.$watch('source.length', function(newVal, oldValue)
+			{
+				angular.forEach($scope.source, function(value, key){
+					$scope.data.push(value);
+					//if(key===0)
+					//	$scope.columns=Object.keys(value);
+					angular.forEach(value,function(v, k){
+					if($scope.columns.indexOf(k)<0)
+						$scope.columns.push(k);
 					});
-					$scope.reverse = true;
-					$scope.predicate = $scope.columns[0];
-					$scope.pages = new Array(Math.ceil($scope.data.length/$scope.options.pagination.pageLength));
-					if($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength)<1)
-            						$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.range[0];
-					$scope.isLoading=false;
 				});
-			
+				$scope.reverse = true;
+				$scope.predicate = $scope.columns[0];
+				$scope.pages = new Array(Math.ceil($scope.data.length/$scope.options.pagination.pageLength));
+				if($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength)<1)
+        			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.range[0];
+				$scope.isLoading=false;
+			});
+		
 			$scope.order = function(predicate) {
-	        			$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-	        			$scope.predicate = predicate;
-	      		};
-	      		$scope.glyphOrder= function(col){
-	      			if(col!=$scope.predicate)
-	      				return '';
-	      			return $scope.reverse? 'glyphicon-chevron-up':'glyphicon-chevron-down';
-	      		};
-	      		$scope.toPage=function  (page) {
-	      			$scope.options.pagination.pageIndex=page;
-	      			$scope.refreshOffset();
-	      		}
-	      		$scope.$watch('options.pagination.pageIndex', function(newValue, oldValue){
+        		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+        		$scope.predicate = predicate;
+      		};
+      		$scope.glyphOrder= function(col){
+      			if(col!=$scope.predicate)
+      				return '';
+      			return $scope.reverse? 'glyphicon-chevron-up':'glyphicon-chevron-down';
+      		};
+      		$scope.toPage=function  (page) {
+      			$scope.options.pagination.pageIndex=page;
+      			$scope.refreshOffset();
+      		}
+      		$scope.$watch('options.pagination.pageIndex', function(newValue, oldValue){
 				$scope.refreshOffset();
-	      		})
-	      		$scope.refreshOffset=function(){
-	      			$scope.offset=($scope.options.pagination.pageIndex-1) * $scope.options.pagination.pageLength;
-	      		}
-	      		$scope.updateRecordsCount=function(){
-	      			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.selected;
-	      			$scope.dataFilterSearch = $filter('filter')($scope.data,$scope.options.search.searchText);
-	      		}
-	      		$scope.$watch('options.pagination.pageLength', function(newValue, oldValue){
+      		})
+      		$scope.refreshOffset=function(){
+      			$scope.offset=($scope.options.pagination.pageIndex-1) * $scope.options.pagination.pageLength;
+      		}
+      		$scope.updateRecordsCount=function(){
+      			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.selected;
+      			$scope.dataFilterSearch = $filter('filter')($scope.data,$scope.options.search.searchText);
+      		}
+      		$scope.$watch('options.pagination.pageLength', function(newValue, oldValue){
 				$scope.pages= new Array(Math.ceil($scope.dataFilterSearch.length/newValue));
-	      		})
-	      		$scope.$watch('options.search.searchText', function(newValue, oldValue){
-	      			$scope.dataFilterSearch = $filter('filter')($scope.data,newValue);
-	      		})
-	      		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
-	      			$scope.pages= new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
-	      		})
+      		})
+      		$scope.$watch('options.search.searchText', function(newValue, oldValue){
+      			$scope.dataFilterSearch = $filter('filter')($scope.data,newValue);
+      		})
+      		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
+      			$scope.pages= new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
+      		})
+
 		}
 	}
 });
@@ -119,10 +141,10 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 		 		            		</form>\
 		 		 </div>\
 			<div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div>  <div class="double-bounce2"></div></div></div>\
-			<table class="{{gridClass}} blsGrid">\
+			<table class="{{gridClass}} column-resizable blsGrid resizable" >\
 	      			<thead>\
 	        			<tr>\
-	          				<th class="colHeader" ng-repeat="col in columns"  ng-click="order(col)">{{col|uppercase}}\
+	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)">{{col|uppercase}}\
 	          				<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i></th>\
 	        			</tr>\
 	      			</thead>\
@@ -141,3 +163,4 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 	    	</table>\
 	 	</div>');
 }]);
+
