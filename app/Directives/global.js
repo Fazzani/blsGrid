@@ -61,7 +61,7 @@ return {
 					maxSize:3
 				},
 				itemsPerPage:{
-					prefixStorage:'ipp_',//itemsPerPage
+					prefixStorage:'ipp_',//itemsPerPage storage prefix 
 					selected:10,
 					range:[10,20]
 				}
