@@ -1,4 +1,4 @@
-app.controller("homeCtrl", function ($scope,$http) {
+app.controller("homeCtrl", function ($scope,$http,$filter) {
 	var root = 'http://jsonplaceholder.typicode.com';
 	$scope.fakeData=[];
 	$http.get(root + '/posts').
@@ -30,10 +30,10 @@ app.controller("homeCtrl", function ($scope,$http) {
 	{'name':'poni','age':21, 'prenom':'bFezzeni'},
 	{'name':'gusi','age':35,'prenom':'Fezzeni87'},
 	{'name':'hbsdni','age':22,'prenom':'Fez78zeni'},
-	{'name':'hesdni','age':22,'prenom':'ez78eni'},
+	{'name':'hesdni','age':55,'prenom':'ez78eni'},
 	{'name':'hesdni','age':22,'prenom':'Fezzeni'},
-	{'name':'htedni','age':22,'prenom':'yr78zeni'},
-	{'name':'redni','age':22,'prenom':'Fez78zeni'},
+	{'name':'htedni','age':75,'prenom':'yr78zeni'},
+	{'name':'redni','age':11,'prenom':'Fez78zeni'},
 	{'name':'hgsdni','age':22,'prenom':'Fre8zeni'},
 	{'name':'opusdni','age':44,'prenom':'sfz78zeni'},
 	{'name':'jusdni','age':57,'prenom':'sfz78zeni'},
@@ -52,7 +52,11 @@ app.controller("homeCtrl", function ($scope,$http) {
 			glyphicon:'glyphicon glyphicon-edit',
 			class:'btn-circle btn-info btn-xs',
 			action:function(row){
-				console.log('edit  : '+ row.userId);
+				console.log('edit  : '+ row.id);
+				var obj = $filter('filter')($scope.fakeData, {id: row.id})[0];
+				console.log(obj);
+				$scope.fakeData.slice($scope.fakeData.indexOf(obj),1);
+				// $scope.fakeData.push(row);
 			}
 		},
 		{
@@ -61,7 +65,11 @@ app.controller("homeCtrl", function ($scope,$http) {
 			class:'btn-circle btn-danger btn-xs',
 			action:function(row){
 				//$scope.listPersons.
-				console.log('delete  : '+ row.userId);
+				console.log('delete  : '+ row.id);
+				var obj = $filter('filter')($scope.fakeData, {id: row.id})[0];
+				console.log(obj);
+				$scope.fakeData.slice($scope.fakeData.indexOf(obj),1);
+				//$scope.fakeData.slice($scope.fakeData.indexOf(row),1);
 			}
 		}
 		
@@ -75,6 +83,7 @@ app.controller("homeCtrl", function ($scope,$http) {
 				maxSize:3
 			},
 			itemsPerPage:{
+				prefixStorage:'ipp_',//itemsPerPage
 				selected:20,
 				range:[20,50,100]
 			}

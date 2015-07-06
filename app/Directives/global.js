@@ -44,7 +44,7 @@ return {
 			options:'='
 	},
 	templateUrl : 'template/blsGrid/blsGrid.html',
-	controller : function($scope,$filter,$timeout,$element){
+	controller : function($scope,$filter,$timeout,$element,$log,localStorageService){
 		
 		var defaultOptions={
 			multiSelection:true,
@@ -61,6 +61,7 @@ return {
 					maxSize:3
 				},
 				itemsPerPage:{
+					prefixStorage:'ipp_',//itemsPerPage
 					selected:10,
 					range:[10,20]
 				}
@@ -74,8 +75,13 @@ return {
 		$scope.filteredData = [];
 		$scope.selectedRows = [];
 		$scope.actionsEnabled=$scope.options.actions!=null;
+		$scope.uniqueId = $scope.options.pagination.itemsPerPage.prefixStorage + $element.id;
+		$scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.uniqueId)||$scope.options.pagination.itemsPerPage.selected;
+
 		$scope.$watch('source.length', function(newVal, oldValue)
 			{
+				$log.info('data source updated...');
+
 				angular.forEach($scope.source, function(value, key){
 					$scope.data.push(value);
 					//if(key===0)
@@ -88,8 +94,9 @@ return {
 				$scope.reverse = true;
 				$scope.predicate = $scope.columns[0];
 				$scope.pages = new Array(Math.ceil($scope.data.length/$scope.options.pagination.pageLength));
+
 				if($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength)<1)
-        			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.range[0];
+        			$scope.options.pagination.pageLength = localStorageService.get($scope.uniqueId) || $scope.options.pagination.itemsPerPage.range[0];
 				$scope.isLoading=false;
 			});
 		
@@ -113,7 +120,8 @@ return {
       			$scope.offset=($scope.options.pagination.pageIndex-1) * $scope.options.pagination.pageLength;
       		}
       		$scope.updateRecordsCount = function(){
-      			$scope.options.pagination.pageLength=$scope.options.pagination.itemsPerPage.selected;
+      			$scope.saveUserData({key:$scope.uniqueId, val: $scope.options.pagination.itemsPerPage.selected})
+      			$scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
       			$scope.dataFilterSearch = $filter('filter')($scope.data,$scope.options.search.searchText);
       		}
       		$scope.$watch('options.pagination.pageLength', function(newValue, oldValue){
@@ -123,8 +131,13 @@ return {
       			$scope.dataFilterSearch = $filter('filter')($scope.data,newValue);
       		})
       		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
-      			$scope.pages= new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
+      			$scope.pages = new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
       		})
+      		$scope.saveUserData = function(data){
+      			if(localStorageService.isSupported) {
+      				localStorageService.set(data.key, data.val);
+				}
+      		}
       		$scope.toggleSelectedRow = function(data){
       			if(!$scope.options.multiSelection)
       			{
