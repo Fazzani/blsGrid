@@ -2,37 +2,37 @@
 
 app
 .directive("resizable", function ($timeout) {
-return {
-	 link: function ($scope, element, attrs) 
-      {
-          	$scope.$evalAsync(function () {
-          			$timeout(function(){ 
-          				element.colResizable({
-          					fixed:true,
+	return {
+		link: function ($scope, element, attrs) 
+	    {
+	          	$scope.$evalAsync(function () {
+	          		$timeout(function(){ 
+	          			element.colResizable({
+	          				fixed:true,
 					        liveDrag:true,
 					        postbackSafe: true,
 					        partialRefresh: true,
 					       // minWidth: 100
-        			});
-          		},1000);
-            });
-      },
-	restrict: "CA",
-	require: '^hfGrid'
+	        			});
+	          		},800);
+	            });
+	      },
+		restrict: "CA",
+		require: '^hfGrid'
 	}
 })
 .directive("panel", function () {
-return {
-	link: function (scope, element, attrs) {
-		scope.dataSource = "directive";
-	},
-	restrict: "E",
-	scope: true,
-	template: function () {
-		return angular.element(
-		document.querySelector("#template")).html();
-	},
-	transclude: true
+	return {
+		link: function (scope, element, attrs) {
+			scope.dataSource = "directive";
+		},
+		restrict: "E",
+		scope: true,
+		template: function () {
+			return angular.element(
+			document.querySelector("#template")).html();
+		},
+		transclude: true
 	}
 }).directive("hfGrid", function () {
 	return {
@@ -175,10 +175,10 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 		 		         </form>\
 		 		 </div>\
 			<div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div>  <div class="double-bounce2"></div></div></div>\
-			<table class="{{gridClass}} column-resizable blsGrid resizable" >\
+			<table class="{{gridClass}} column-resizable blsGrid resizable dragable" id="dragtable">\
 	      			<thead>\
 	        			<tr>\
-	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)">{{col|uppercase}}\
+	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)" style="cursor:move" draggable dragData="{{hd}}" dragImage="{{dragtable}}">{{col|uppercase}}\
 	          					<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i>\
 	          				</th>\
 	          				<th ng-if="actionsEnabled">Actions</th>\
