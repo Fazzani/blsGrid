@@ -37,121 +37,125 @@ return {
 }).directive("hfGrid", function () {
 	return {
 		restrict: "E",
-		transclude:true,
+		transclude: true,
 		scope: {
 			source:'=ngModel',
 			gridClass:'@', 
 			options:'='
 	},
 	templateUrl : 'template/blsGrid/blsGrid.html',
-	controller : function($scope,$filter,$timeout,$element,$log,localStorageService){
-		
-		var defaultOptions={
-			multiSelection:true,
-			search:{
-				searchText:'', 
-				searchClass:'form-control'
-			},
-			pagination:{
-				pageLength:5,
-				pageIndex:1,
-				pager:{
-					nextTitle:'Suivant',
-					perviousTitle:'Précédent', 
-					maxSize:3
+	controller : function($scope, $filter, $timeout, $element, $log, localStorageService)
+		{
+			var defaultOptions = {
+				multiSelection: true,
+				search:{
+					searchText: '', 
+					searchClass: 'form-control'
 				},
-				itemsPerPage:{
-					prefixStorage:'ipp_',//itemsPerPage storage prefix 
-					selected:10,
-					range:[10,20]
+				pagination:{
+					pageLength: 5,
+					pageIndex: 1,
+					pager:{
+						nextTitle:'Suivant',
+						perviousTitle: 'Précédent', 
+						maxSize: 3
+					},
+					itemsPerPage:{
+						prefixStorage: 'ipp_',//itemsPerPage storage prefix 
+						selected: 10,
+						range: [10,20]
+					}
 				}
-			}
-		};
-		$scope.options = angular.extend({}, defaultOptions, $scope.options);
-		$scope.columns = [];
-		$scope.isLoading = true;
-		$scope.dataFilterSearch = $scope.data = [];
-		$scope.offset = 0;
-		$scope.filteredData = [];
-		$scope.selectedRows = [];
-		$scope.actionsEnabled=$scope.options.actions!=null;
-		$scope.uniqueId = $scope.options.pagination.itemsPerPage.prefixStorage + $element.id;
-		$scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.uniqueId)||$scope.options.pagination.itemsPerPage.selected;
+			};
+			$scope.options = angular.extend({}, defaultOptions, $scope.options);
+			$scope.columns = [];
+			$scope.isLoading = true;
+			$scope.dataFilterSearch = $scope.data = [];
+			$scope.offset = 0;
+			$scope.filteredData = [];
+			$scope.selectedRows = [];
+			$scope.actionsEnabled = $scope.options.actions != null;
+			$scope.uniqueId = $scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
+			$scope.storageIds = {
+				predicateId : 'prd_' + $scope.uniqueId,
+				reverseId : 'rvs_' + $scope.uniqueId,
+				itemsPerPageId : 'ipp_' + $scope.uniqueId
+			};
+			$scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
 
-		$scope.$watch('source.length', function(newVal, oldValue)
+			$scope.$watch('source.length', function(newVal, oldValue)
 			{
-				$log.info('data source updated...');
-
 				angular.forEach($scope.source, function(value, key){
 					$scope.data.push(value);
 					//if(key===0)
 					//	$scope.columns=Object.keys(value);
 					angular.forEach(value,function(v, k){
-					if($scope.columns.indexOf(k)<0)
-						$scope.columns.push(k);
-					});
+						if($scope.columns.indexOf(k)<0)
+							$scope.columns.push(k);
+						});
 				});
-				$scope.reverse = true;
-				$scope.predicate = $scope.columns[0];
-				$scope.pages = new Array(Math.ceil($scope.data.length/$scope.options.pagination.pageLength));
+				$scope.reverse = localStorageService.get($scope.storageIds.reverseId);
+				$scope.predicate = localStorageService.get($scope.storageIds.predicateId) || $scope.columns[0];
+				$scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
 
 				if($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength)<1)
-        			$scope.options.pagination.pageLength = localStorageService.get($scope.uniqueId) || $scope.options.pagination.itemsPerPage.range[0];
-				$scope.isLoading=false;
+	    			$scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
+				$scope.isLoading = false;
 			});
-		
 			$scope.order = function(predicate) {
-        		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-        		$scope.predicate = predicate;
-      		};
-      		$scope.glyphOrder = function(col){
-      			if(col!=$scope.predicate)
-      				return '';
-      			return $scope.reverse? 'glyphicon-chevron-up':'glyphicon-chevron-down';
-      		};
-      		$scope.toPage = function(page) {
-      			$scope.options.pagination.pageIndex=page;
-      			$scope.refreshOffset();
-      		}
-      		$scope.$watch('options.pagination.pageIndex', function(newValue, oldValue){
+	    		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+	    		$scope.predicate = predicate;
+	  			$scope.saveUserData({ key: $scope.storageIds.predicateId, val: $scope.predicate});
+	  			$scope.saveUserData({ key: $scope.storageIds.reverseId, val: $scope.reverse });
+	  		};
+	  		$scope.glyphOrder = function(col){
+	  			if(col != $scope.predicate)
+	  				return '';
+				$scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
+	  			return $scope.reverse ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
+	  		};
+	  		$scope.toPage = function(page) {
+	  			$scope.options.pagination.pageIndex = page;
+	  			$scope.refreshOffset();
+	  		}
+	  		$scope.$watch('options.pagination.pageIndex', function(newValue, oldValue){
 				$scope.refreshOffset();
-      		})
-      		$scope.refreshOffset = function(){
-      			$scope.offset=($scope.options.pagination.pageIndex-1) * $scope.options.pagination.pageLength;
-      		}
-      		$scope.updateRecordsCount = function(){
-      			$scope.saveUserData({key:$scope.uniqueId, val: $scope.options.pagination.itemsPerPage.selected})
-      			$scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
-      			$scope.dataFilterSearch = $filter('filter')($scope.data,$scope.options.search.searchText);
-      		}
-      		$scope.$watch('options.pagination.pageLength', function(newValue, oldValue){
-				$scope.pages= new Array(Math.ceil($scope.dataFilterSearch.length/newValue));
-      		})
-      		$scope.$watch('options.search.searchText', function(newValue, oldValue){
-      			$scope.dataFilterSearch = $filter('filter')($scope.data,newValue);
-      		})
-      		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
-      			$scope.pages = new Array(Math.ceil(newValue/$scope.options.pagination.pageLength));
-      		})
-      		$scope.saveUserData = function(data){
-      			if(localStorageService.isSupported) {
-      				localStorageService.set(data.key, data.val);
+	  		})
+	  		$scope.refreshOffset = function(){
+	  			$scope.offset = ($scope.options.pagination.pageIndex - 1) * $scope.options.pagination.pageLength;
+	  		}
+	  		$scope.updateRecordsCount = function(){
+	  			$scope.saveUserData({key : $scope.storageIds.itemsPerPageId, val : $scope.options.pagination.itemsPerPage.selected});
+	  			$scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
+	  			$scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
+	  		}
+	  		$scope.$watch('options.pagination.pageLength', function(newValue, oldValue){
+				$scope.pages = new Array(Math.ceil($scope.dataFilterSearch.length / newValue));
+	  		})
+	  		$scope.$watch('options.search.searchText', function(newValue, oldValue){
+	  			$scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
+	  		})
+	  		$scope.$watch('dataFilterSearch.length', function(newValue, oldValue){
+	  			$scope.pages = new Array(Math.ceil(newValue / $scope.options.pagination.pageLength));
+	  		})
+	  		$scope.saveUserData = function(data){
+	  			if(localStorageService.isSupported) {
+	  				localStorageService.set(data.key, data.val);
 				}
-      		}
-      		$scope.toggleSelectedRow = function(data){
-      			if(!$scope.options.multiSelection)
-      			{
-      				$scope.selectedRows = [data];
-      			}
-      			else
-      			{
-	      			if($scope.selectedRows.indexOf(data)>-1)
-	      				$scope.selectedRows.splice($scope.selectedRows.indexOf(data),1);
+	  		}
+	  		$scope.toggleSelectedRow = function(data){
+	  			if(!$scope.options.multiSelection)
+	  			{
+	  				$scope.selectedRows = [data];
+	  			}
+	  			else
+	  			{
+	      			if($scope.selectedRows.indexOf(data) > -1)
+	      				$scope.selectedRows.splice($scope.selectedRows.indexOf(data), 1);
 	      			else
 	      				$scope.selectedRows.push(data);
-      			}
-      		}
-
+	  			}
+	  		}
 		}
 	}
 });
@@ -163,19 +167,20 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 		 <div class="bls-table-container">\
 		 		<div class="row-fluid">\
 		 				<form action="" class="search-form">\
-		 		                		<div class="form-group has-feedback">\
-		 		            				<label for="search" class="sr-only">Search</label>\
-		 		            				<input type="text" class="{{options.search.searchClass}}" name="search" id="search" placeholder="search" ng-model="options.search.searchText">\
-		 		              			<span class="glyphicon glyphicon-search form-control-feedback"></span>\
-		 		            			</div>\
-		 		            		</form>\
+		 		            <div class="form-group has-feedback">\
+		 		            	<label for="search" class="sr-only">Search</label>\
+		 		            	<input type="text" class="{{options.search.searchClass}}" name="search" id="search" placeholder="search" ng-model="options.search.searchText">\
+		 		              	<span class="glyphicon glyphicon-search form-control-feedback"></span>\
+		 		            </div>\
+		 		         </form>\
 		 		 </div>\
 			<div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div>  <div class="double-bounce2"></div></div></div>\
 			<table class="{{gridClass}} column-resizable blsGrid resizable" >\
 	      			<thead>\
 	        			<tr>\
 	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)">{{col|uppercase}}\
-	          				<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i></th>\
+	          					<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i>\
+	          				</th>\
 	          				<th ng-if="actionsEnabled">Actions</th>\
 	        			</tr>\
 	      			</thead>\
