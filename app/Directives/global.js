@@ -156,6 +156,27 @@ app
 	      				$scope.selectedRows.push(data);
 	  			}
 	  		}
+
+	  		$scope.handleDrop = function (draggedData,
+	  		                              targetElem) {
+
+	  		  var swapArrayElements = function (array_object, index_a, index_b) {
+	  		    var temp = array_object[index_a];
+	  		    array_object[index_a] = array_object[index_b];
+	  		    array_object[index_b] = temp;
+	  		  };
+
+	  		  var srcInd = $scope.columns.indexOf(draggedData);
+	  		  var destInd = $scope.columns.indexOf($(targetElem).data('originalTitle'));
+	  		  swapArrayElements($scope.columns, srcInd, destInd);
+
+	  		};
+
+	  		$scope.handleDrag = function (columnName) {
+
+	  		  $scope.dragHead = columnName.replace(/["']/g, "");
+
+	  		};
 		}
 	}
 });
@@ -178,7 +199,7 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 			<table class="{{gridClass}} column-resizable blsGrid resizable dragable" id="dragtable">\
 	      			<thead>\
 	        			<tr>\
-	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)" style="cursor:move" draggable dragData="{{hd}}" dragImage="{{dragtable}}">{{col|uppercase}}\
+	          				<th class="colHeader" ng-repeat="col in columns" data-original-title="{{col}}" ng-click="order(col)" style="cursor:move" draggable dragData="{{col}}" drop="handleDrop" drag="handleDrag" droppable dragImage="5">{{col|uppercase}}\
 	          					<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i>\
 	          				</th>\
 	          				<th ng-if="actionsEnabled">Actions</th>\
