@@ -1,9 +1,11 @@
-app.controller("homeCtrl", function ($scope,$http,$filter) {
+app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
 	var root = 'http://jsonplaceholder.typicode.com';
 	$scope.fakeData=[];
 	$http.get(root + '/posts').
 		  success(function(data, status, headers, config) {
-		   	$scope.fakeData=data;
+		  	$timeout(function(){ 
+		   		$scope.fakeData=data;
+		  	},100);
 		  }).
 		  error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs
@@ -42,6 +44,7 @@ app.controller("homeCtrl", function ($scope,$http,$filter) {
 
 	$scope.options={
 		multiSelection:false,
+		colDef:[{'userId':{DisplayName: 'User Id'}}],
 		search:{
 			searchText:'', 
 			searchClass:'form-control'

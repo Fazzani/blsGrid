@@ -162,3 +162,44 @@ th,td {
   line-height: 1.33;
   border-radius: 35px;
 }
+
+/*-------------- Dropable -------------------*/
+.hidtable {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: move;
+    background: white;
+    border-style: dotted;
+    z-index: 4;
+}
+
+.coverhidtable {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: move;
+    background: white;
+    color: white;
+    z-index: 4;
+}
+
+.acttable {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: move;
+    z-index: 5;
+    background: white;
+}
+
+.drag {
+    background: orange;
+    color: white;
+    cursor: move;
+}
+
+.over {
+    background: red;
+    color: white;
+}

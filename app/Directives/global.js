@@ -2,37 +2,37 @@
 
 app
 .directive("resizable", function ($timeout) {
-return {
-	 link: function ($scope, element, attrs) 
-      {
-          	$scope.$evalAsync(function () {
-          			$timeout(function(){ 
-          				element.colResizable({
-          					fixed:true,
+	return {
+		link: function ($scope, element, attrs) 
+	    {
+	          	$scope.$evalAsync(function () {
+	          		$timeout(function(){ 
+	          			element.colResizable({
+	          				fixed:true,
 					        liveDrag:true,
 					        postbackSafe: true,
 					        partialRefresh: true,
 					       // minWidth: 100
-        			});
-          		},1000);
-            });
-      },
-	restrict: "CA",
-	require: '^hfGrid'
+	        			});
+	          		},800);
+	            });
+	      },
+		restrict: "CA",
+		require: '^hfGrid'
 	}
 })
 .directive("panel", function () {
-return {
-	link: function (scope, element, attrs) {
-		scope.dataSource = "directive";
-	},
-	restrict: "E",
-	scope: true,
-	template: function () {
-		return angular.element(
-		document.querySelector("#template")).html();
-	},
-	transclude: true
+	return {
+		link: function (scope, element, attrs) {
+			scope.dataSource = "directive";
+		},
+		restrict: "E",
+		scope: true,
+		template: function () {
+			return angular.element(
+			document.querySelector("#template")).html();
+		},
+		transclude: true
 	}
 }).directive("hfGrid", function () {
 	return {
@@ -52,6 +52,8 @@ return {
 					searchText: '', 
 					searchClass: 'form-control'
 				},
+				colDef:[{'userId': { displayName: 'User Id'}}]
+				,
 				pagination:{
 					pageLength: 5,
 					pageIndex: 1,
@@ -87,15 +89,30 @@ return {
 			{
 				angular.forEach($scope.source, function(value, key){
 					$scope.data.push(value);
+
 					//if(key===0)
 					//	$scope.columns=Object.keys(value);
-					angular.forEach(value,function(v, k){
-						if($scope.columns.indexOf(k)<0)
-							$scope.columns.push(k);
+					if($scope.columns.length>0)
+					{
+						// angular.forEach(value,function(v, k){
+							// angular.forEach($scope.columns, function(vTmp, kTmp) {
+							// 	console.log(vTmp);
+							// 	console.log(k);
+	  				// 			if(!(k in vTmp))
+	  				// 				$scope.columns.push({id:k, displayName:k});
+	  				// 		});
+						// });
+					}
+					else
+					{
+						angular.forEach(value,function(v, k){
+							$scope.columns.push({id:k, displayName:k});
 						});
+						$scope.columns.push({id:'Actions', displayName:'Actions'});
+					}
 				});
 				$scope.reverse = localStorageService.get($scope.storageIds.reverseId);
-				$scope.predicate = localStorageService.get($scope.storageIds.predicateId) || $scope.columns[0];
+				$scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0]==undefined?"":$scope.columns[0].id);
 				$scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
 
 				if($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength)<1)
@@ -103,12 +120,14 @@ return {
 				$scope.isLoading = false;
 			});
 			$scope.order = function(predicate) {
+				console.log('order function was called');
 	    		$scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
 	    		$scope.predicate = predicate;
 	  			$scope.saveUserData({ key: $scope.storageIds.predicateId, val: $scope.predicate});
 	  			$scope.saveUserData({ key: $scope.storageIds.reverseId, val: $scope.reverse });
 	  		};
 	  		$scope.glyphOrder = function(col){
+				console.log('glyphOrder function was called');
 	  			if(col != $scope.predicate)
 	  				return '';
 				$scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
@@ -156,8 +175,46 @@ return {
 	      				$scope.selectedRows.push(data);
 	  			}
 	  		}
+	  	
+	  		$scope.handleDrop = function (draggedData, targetElem) {
+
+	  		  var swapArrayElements = function (array_object, index_a, index_b) {
+	  		    var temp = array_object[index_a];
+	  		    array_object[index_a] = array_object[index_b];
+	  		    array_object[index_b] = temp;
+	  		  };
+
+	  		  var srcIdx = $filter('getIndexByProperty')('id', draggedData, $scope.columns);
+	  		  var destIdx = $scope.columns.indexOf($(targetElem).data('originalTitle'));
+	  		  swapArrayElements($scope.columns, srcIdx, destIdx);
+	  		};
+
+	  		$scope.handleDrag = function (columnName) {
+	  			console.log('handleDrag : '+columnName);
+	  		  $scope.dragHead = columnName.replace(/["']/g, "");
+	  		};
 		}
 	}
+}).filter('getByProperty', function() {
+    return function(propertyName, propertyValue, collection) {
+        var i=0, len=collection.length;
+        for (; i<len; i++) {
+            if (collection[i][propertyName] == propertyValue) {
+                return collection[i];
+            }
+        }
+        return null;
+    }
+}).filter('getIndexByProperty', function() {
+    return function(propertyName, propertyValue, collection) {
+        var i=0, len=collection.length;
+        for (; i<len; i++) {
+            if (collection[i][propertyName] == propertyValue) {
+                return i;
+            }
+        }
+        return null;
+    }
 });
 
 
@@ -174,25 +231,24 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 		 		            </div>\
 		 		         </form>\
 		 		 </div>\
-			<div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div>  <div class="double-bounce2"></div></div></div>\
-			<table class="{{gridClass}} column-resizable blsGrid resizable" >\
+			<div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
+			<table class="{{gridClass}} blsGrid resizable dragable" id="dragtable">\
 	      			<thead>\
 	        			<tr>\
-	          				<th class="colHeader" ng-repeat="col in columns" ng-click="order(col)">{{col|uppercase}}\
-	          					<i ng-class="glyphOrder(col)" class="glyphicon pull-right"></i>\
+	          				<th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" style="cursor:move" draggable dragData="{{col.id}}" drop="handleDrop" drag="handleDrag" droppable dragImage="5">{{col.displayName|uppercase}}\
+	          					<i class="glyphicon pull-right"></i>\
 	          				</th>\
-	          				<th ng-if="actionsEnabled">Actions</th>\
 	        			</tr>\
 	      			</thead>\
 	      			<tbody>\
 	        				<tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| limitTo:options.pagination.pageLength:offset | orderBy:predicate:reverse)">\
-	        					<td ng-repeat="a in columns">{{d[a]}}</td>\
+	        					<td ng-repeat="a in columns|filter:{ id:\'!Actions\'}">{{d[a.id]}}</td>\
 	        					<td ng-if="actionsEnabled" class="center">\
 	        						<a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
 	        					</td>\
 	        				</tr>\
 	        			</tbody>\
-	        			<tfoot>  <tr><td colspan="{{columns.length + (actionsEnabled?1:0)}}">\
+	        			<tfoot>  <tr><td colspan="{{columns.length}}">\
 	        				<pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
 							<div class="pagerList col-md-2 col-xs-4">\
 									<select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
