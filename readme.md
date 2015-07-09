@@ -2,7 +2,7 @@
 ========
 ###Default options structure : 
 ___________________________
-```var defaultOptions = {
+>```var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
     search: {
