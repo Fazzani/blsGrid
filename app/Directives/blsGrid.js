@@ -1,5 +1,4 @@
 'use strict';
-
 app.directive("blsGrid", function() {
     return {
         restrict: "E",
@@ -48,7 +47,6 @@ app.directive("blsGrid", function() {
                 itemsPerPageId: 'ipp_' + $scope.uniqueId
             };
             $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
-
             $scope.$watch('source.length', function(newVal, oldValue) {
                 if (newVal != oldValue) {
                     angular.forEach($scope.source, function(value, key) {
@@ -56,7 +54,6 @@ app.directive("blsGrid", function() {
                             value.actions = $scope.options.actions;
                         }
                         $scope.data.push(value);
-
                         //if(key===0)
                         //  $scope.columns=Object.keys(value);
                         if ($scope.columns.length > 0) {
@@ -70,26 +67,22 @@ app.directive("blsGrid", function() {
                             // });
                         } else {
                             angular.forEach(value, function(v, k) {
-                                if (k != 'actions' && $scope.actionsEnabled)
-                                    $scope.columns.push({
-                                        id: k,
-                                        displayName: $scope.options.colDef[k] ? $scope.options.colDef[k].displayName : k
-                                    });
-                            });
-                            if ($scope.actionsEnabled)
-                                $scope.columns.push({
-                                    id: 'actions',
-                                    displayName: 'Actions'
+                                if (k != 'actions' && $scope.actionsEnabled) $scope.columns.push({
+                                    id: k,
+                                    displayName: $scope.options.colDef[k] ? $scope.options.colDef[k].displayName : k
                                 });
+                            });
+                            if ($scope.actionsEnabled) $scope.columns.push({
+                                id: 'actions',
+                                displayName: 'Actions'
+                            });
                             $scope.initResizableColumns();
                         }
                     });
                     $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
                     $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
                     $scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
-
-                    if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1)
-                        $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
+                    if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1) $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
                     $scope.isLoading = false;
                 }
             });
@@ -103,7 +96,6 @@ app.directive("blsGrid", function() {
                         // minWidth: 100
                     });
                 });
-
             }
             $scope.order = function(predicate) {
                 //$log.info('order function was called');
@@ -120,8 +112,7 @@ app.directive("blsGrid", function() {
             };
             $scope.glyphOrder = function(col) {
                 //$log.info('glyphOrder function was called');
-                if (col != $scope.predicate)
-                    return '';
+                if (col != $scope.predicate) return '';
                 $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
                 return $scope.reverse ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
             };
@@ -153,11 +144,11 @@ app.directive("blsGrid", function() {
                 $scope.pages = new Array(Math.ceil(newValue / $scope.options.pagination.pageLength));
             })
             $scope.saveUserData = function(data) {
-                if (localStorageService.isSupported) {
-                    localStorageService.set(data.key, data.val);
+                    if (localStorageService.isSupported) {
+                        localStorageService.set(data.key, data.val);
+                    }
                 }
-            }
-            //Clear User Data from the localStorage //Flush
+                //Clear User Data from the localStorage //Flush
             $scope.$on('flushEvent', function(data) {
                 $log.info(localStorageService.keys());
                 $log.info('clearUserDataEvent intercepted');
@@ -173,34 +164,26 @@ app.directive("blsGrid", function() {
                 if (!$scope.options.multiSelection) {
                     $scope.selectedRows = [data];
                 } else {
-                    if ($scope.selectedRows.indexOf(data) > -1)
-                        $scope.selectedRows.splice($scope.selectedRows.indexOf(data), 1);
-                    else
-                        $scope.selectedRows.push(data);
+                    if ($scope.selectedRows.indexOf(data) > -1) $scope.selectedRows.splice($scope.selectedRows.indexOf(data), 1);
+                    else $scope.selectedRows.push(data);
                 }
             }
-
             $scope.handleDrop = function(draggedData, targetElem) {
                 var swapArrayElements = function(array_object, index_a, index_b) {
                     var temp = array_object[index_a];
                     array_object[index_a] = array_object[index_b];
                     array_object[index_b] = temp;
                 };
-
                 var srcIdx = $filter('getIndexByProperty')('id', draggedData, $scope.columns);
                 var destIdx = $filter('getIndexByProperty')('id', $(targetElem).data('originalTitle'), $scope.columns);
                 swapArrayElements($scope.columns, srcIdx, destIdx);
                 swapArrayElements($scope.data, srcIdx, destIdx);
             };
-
             $scope.handleDrag = function(columnName) {
                 //$log.info('handleDrag : ' + columnName);
                 $scope.dragHead = columnName.replace(/["']/g, "");
             };
-
-            $scope.saveReorderColumns = function() {
-
-            }
+            $scope.saveReorderColumns = function() {}
         }
     }
 }).filter('getByProperty', function() {
@@ -226,11 +209,8 @@ app.directive("blsGrid", function() {
         return null;
     }
 });
-
-
 angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
-    $templateCache.put('template/blsGrid/blsGrid.html',
-        '<pre>pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
+    $templateCache.put('template/blsGrid/blsGrid.html', '<pre>pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
                 <div class="row-fluid">\
                         <form action="" class="search-form">\

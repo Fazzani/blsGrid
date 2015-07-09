@@ -1,6 +1,6 @@
 #BlsGrid
 ========
-###Default options structure : 
+###Default options structure
 ___________________________
 >```var defaultOptions = {
     multiSelection: true,
@@ -46,8 +46,12 @@ ______
 * Reset user settings (remove data from the localStorage)
 * Fix initial loading (spinner)
 * Fix ItemsPerPage change
+* Add toolbar 
+    - Search
+    - Reset user settings
+    - Pagination 
 * Allow customize
-    ** Header's class 
-    ** Spinner css
+    - Header's class 
+    - Spinner css
 
 

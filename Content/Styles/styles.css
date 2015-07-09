@@ -17,6 +17,8 @@ tr.info {
 tr.info td {
     vertical-align: middle;
 }
+
+
 /*th comment*/
 
 th.colHeader a {
@@ -37,8 +39,7 @@ tr.info {
     0% {
         transform: scale3d(1, 1, 0.9);
     }
-    25%,
-    50% {
+    25%, 50% {
         opacity: 1;
     }
     80% {
@@ -74,13 +75,11 @@ tr.info {
 
 .search-form .form-group input.form-control:-moz-placeholder {
     /* Firefox 18- */
-    
     display: none;
 }
 
 .search-form .form-group input.form-control::-moz-placeholder {
     /* Firefox 19+ */
-    
     display: none;
 }
 
@@ -88,8 +87,7 @@ tr.info {
     display: none;
 }
 
-.search-form .form-group:hover,
-.search-form .form-group.hover {
+.search-form .form-group:hover, .search-form .form-group.hover {
     width: 100%;
     border-radius: 4px 25px 25px 4px;
 }
@@ -128,8 +126,7 @@ tr.info {
     padding: 0px 0% 0% 10%;
 }
 
-.double-bounce1,
-.double-bounce2 {
+.double-bounce1, .double-bounce2 {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -167,8 +164,7 @@ tr.info {
     }
 }
 
-th,
-td {
+th, td {
     white-space: nowrap;
 }
 
@@ -212,6 +208,8 @@ td {
     line-height: 1.33;
     border-radius: 35px;
 }
+
+
 /*-------------- Dropable -------------------*/
 
 .hidtable {

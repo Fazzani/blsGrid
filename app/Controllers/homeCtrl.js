@@ -1,5 +1,4 @@
 app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
-
     var root = 'http://jsonplaceholder.typicode.com';
     $scope.fakeData = [];
     $http.get(root + '/posts').
@@ -16,9 +15,7 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
     $scope.clearUserData = function() {
         $scope.$broadcast('flushEvent');
     }
-    if ($scope.page == 'Index')
-        $scope.page = 'home';
-
+    if ($scope.page == 'Index') $scope.page = 'home';
     $scope.options = {
         multiSelection: true,
         colDef: {
@@ -76,7 +73,6 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
             }
         }
     };
-
     $scope.listPersons = [{
         'name': 'heni',
         'age': 21,
@@ -168,5 +164,4 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
         'age': 28,
         'prenom': 'sfz78zeni'
     }]
-
 });
