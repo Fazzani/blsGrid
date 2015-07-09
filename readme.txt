@@ -1,8 +1,7 @@
 Ràf :
-- fix glyphicon sort
-- Tree
-- Col def (sortOn , filterOn, classCss, action buttons)
 - Ajax loading function (init and by page)
 - Sort on all data
-- storage last active sort 	
+- Tree
 - Save col position in localStorage
+- Pager buttons name
+- Col def (sortOn , filterOn, classCss, action buttons)

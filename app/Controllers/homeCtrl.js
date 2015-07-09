@@ -41,7 +41,7 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout,$log) {
 	{'name':'lousdni','age':28,'prenom':'sfz78zeni'}]
 
 	$scope.options={
-		multiSelection:false,
+		multiSelection:true,
 		colDef:{'userId': { displayName: 'User Id'}, 'body': { displayName: 'Content'}},
 		search:{
 			searchText:'', 
@@ -81,7 +81,7 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout,$log) {
 			pager:{
 				nextTitle:'Suivant',
 				perviousTitle:'Précédent',
-				maxSize:3
+				maxSize:5
 			},
 			itemsPerPage:{
 				prefixStorage:'ipp_',//itemsPerPage

@@ -45,6 +45,7 @@ app
             controller: function($scope, $filter, $timeout, $element, $log, localStorageService) {
                 var defaultOptions = {
                     multiSelection: true,
+                    autoSaveReorderColumns:true,
                     search: {
                         searchText: '',
                         searchClass: 'form-control'
@@ -64,7 +65,7 @@ app
                         }
                     }
                 };
-                $scope.options = angular.extend({}, $scope.options, defaultOptions);
+                $scope.options = angular.extend({}, defaultOptions, $scope.options);
                 $scope.columns = [];
                 $scope.isLoading = true;
                 $scope.dataFilterSearch = $scope.data = [];
@@ -81,49 +82,51 @@ app
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
 
                 $scope.$watch('source.length', function(newVal, oldValue) {
-                    angular.forEach($scope.source, function(value, key) {
-                        if ($scope.actionsEnabled) {
-                            value.actions = $scope.options.actions;
-                        }
-                        $scope.data.push(value);
+                    if (newVal != oldValue) {
+                        angular.forEach($scope.source, function(value, key) {
+                            if ($scope.actionsEnabled) {
+                                value.actions = $scope.options.actions;
+                            }
+                            $scope.data.push(value);
 
-                        //if(key===0)
-                        //	$scope.columns=Object.keys(value);
-                        if ($scope.columns.length > 0) {
-                            // angular.forEach(value,function(v, k){
-                            // angular.forEach($scope.columns, function(vTmp, kTmp) {
-                            // 	console.log(vTmp);
-                            // 	console.log(k);
-                            // 			if(!(k in vTmp))
-                            // 				$scope.columns.push({id:k, displayName:k});
-                            // 		});
-                            // });
-                        } else {
-                            angular.forEach(value, function(v, k) {
-                                if (k != 'actions' && $scope.actionsEnabled)
-                                    $scope.columns.push({
-                                        id: k,
-                                        displayName: $scope.options.colDef[k] ? $scope.options.colDef[k].displayName : k
-                                    });
-                            });
-                            if ($scope.actionsEnabled)
-                                $scope.columns.push({
-                                    id: 'actions',
-                                    displayName: 'Actions'
+                            //if(key===0)
+                            //	$scope.columns=Object.keys(value);
+                            if ($scope.columns.length > 0) {
+                                // angular.forEach(value,function(v, k){
+                                // angular.forEach($scope.columns, function(vTmp, kTmp) {
+                                // 	console.log(vTmp);
+                                // 	console.log(k);
+                                // 			if(!(k in vTmp))
+                                // 				$scope.columns.push({id:k, displayName:k});
+                                // 		});
+                                // });
+                            } else {
+                                angular.forEach(value, function(v, k) {
+                                    if (k != 'actions' && $scope.actionsEnabled)
+                                        $scope.columns.push({
+                                            id: k,
+                                            displayName: $scope.options.colDef[k] ? $scope.options.colDef[k].displayName : k
+                                        });
                                 });
-                            $scope.init();
-                        }
-                    });
-                    $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
-                    $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
-                    $scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
+                                if ($scope.actionsEnabled)
+                                    $scope.columns.push({
+                                        id: 'actions',
+                                        displayName: 'Actions'
+                                    });
+                                $scope.initResizableColumns();
+                            }
+                        });
+                        $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
+                        $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
+                        $scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
 
-                    if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1)
-                        $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
-                    $scope.isLoading = false;
+                        if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1)
+                            $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
+                        $scope.isLoading = false;
+                    }
                 });
 
-                $scope.init = function() {
+                $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
                         $element.find('table').colResizable({
                             fixed: true,
@@ -137,7 +140,7 @@ app
                 }
 
                 $scope.order = function(predicate) {
-                    $log.info('order function was called');
+                    //$log.info('order function was called');
                     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                     $scope.predicate = predicate;
                     $scope.saveUserData({
@@ -150,7 +153,7 @@ app
                     });
                 };
                 $scope.glyphOrder = function(col) {
-                    $log.info('glyphOrder function was called');
+                    //$log.info('glyphOrder function was called');
                     if (col != $scope.predicate)
                         return '';
                     $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
@@ -203,7 +206,6 @@ app
                 }
 
                 $scope.handleDrop = function(draggedData, targetElem) {
-
                     var swapArrayElements = function(array_object, index_a, index_b) {
                         var temp = array_object[index_a];
                         array_object[index_a] = array_object[index_b];
