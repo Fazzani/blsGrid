@@ -47,7 +47,7 @@ ______
 * Fix initial loading (spinner)
 * Fix ItemsPerPage change
 * Allow customize
-    ** Header's class 
-    ** Spinner css
+   ** Header's class 
+   ** Spinner css
 
 
