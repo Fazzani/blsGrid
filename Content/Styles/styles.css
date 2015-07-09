@@ -1,169 +1,219 @@
-
 .blsGrid tfoot {
     background-color: mintcream;
 }
+
 .blsGrid tfoot td {
     padding: 0px 5px !important;
 }
-.blsGrid .pagination{
+
+.blsGrid .pagination {
     margin: 8px 0 !important;
 }
-/*th comment*/
-th.colHeader a{
-	  cursor: pointer;
- outline: none;
+
+tr.info {
+    outline: thin dashed;
 }
 
-th.colHeader a:hover{
-		outline: none;
-		text-decoration:none;
-	}
+tr.info td {
+    vertical-align: middle;
+}
+/*th comment*/
+
+th.colHeader a {
+    cursor: pointer;
+    outline: none;
+}
+
+th.colHeader a:hover {
+    outline: none;
+    text-decoration: none;
+}
+
+tr.info {
+    animation: anim-effect-boris 0.1s ease-in-out;
+}
+
+@keyframes anim-effect-boris {
+    0% {
+        transform: scale3d(1, 1, 0.9);
+    }
+    25%,
+    50% {
+        opacity: 1;
+    }
+    80% {
+        transform: scale3d(1, 1.1, 1);
+    }
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
 
 .search-form .form-group {
-  float: right !important;
-  transition: all 0.35s, border-radius 0s;
-  width: 32px;
-  height: 32px;
-  background-color: #fff;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-  border-radius: 25px;
-  border: 1px solid #ccc;
+    float: right !important;
+    transition: all 0.35s, border-radius 0s;
+    width: 32px;
+    height: 32px;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-radius: 25px;
+    border: 1px solid #ccc;
 }
+
 .search-form .form-group input.form-control {
-  padding-right: 20px;
-  border: 0 none;
-  background: transparent;
-  box-shadow: none;
-  display:block;
+    padding-right: 20px;
+    border: 0 none;
+    background: transparent;
+    box-shadow: none;
+    display: block;
 }
+
 .search-form .form-group input.form-control::-webkit-input-placeholder {
-  display: none;
+    display: none;
 }
+
 .search-form .form-group input.form-control:-moz-placeholder {
-  /* Firefox 18- */
-  display: none;
+    /* Firefox 18- */
+    
+    display: none;
 }
+
 .search-form .form-group input.form-control::-moz-placeholder {
-  /* Firefox 19+ */
-  display: none;
+    /* Firefox 19+ */
+    
+    display: none;
 }
+
 .search-form .form-group input.form-control:-ms-input-placeholder {
-  display: none;
+    display: none;
 }
+
 .search-form .form-group:hover,
 .search-form .form-group.hover {
-  width: 100%;
-  border-radius: 4px 25px 25px 4px;
+    width: 100%;
+    border-radius: 4px 25px 25px 4px;
 }
+
 .search-form .form-group span.form-control-feedback {
-  position: absolute;
-  top: -1px;
-  right: -2px;
-  z-index: 2;
-  display: block;
-  width: 34px;
-  height: 34px;
-  line-height: 34px;
-  text-align: center;
-  color: #3596e0;
-  left: initial;
-  font-size: 14px;
-}
-.overlay{
-	 position: absolute;
-	 top: 0;
-	 left: 0;
-	 right: 0;
-	 bottom: 0;
-	 background-color: rgba(12, 20, 12, 0.6);
-	 z-index: 9999;
-	 color: white;
-	 display: inline-block;
+    position: absolute;
+    top: -1px;
+    right: -2px;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    color: #3596e0;
+    left: initial;
+    font-size: 14px;
 }
 
-.spinner {
-    
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(12, 20, 12, 0.6);
+    z-index: 9999;
+    color: white;
+    display: inline-block;
 }
 
-.pagerList{
-	margin: 6px 0;
-	padding: 0px 0% 0% 10%;
+.spinner {}
+
+.pagerList {
+    margin: 6px 0;
+    padding: 0px 0% 0% 10%;
 }
-.double-bounce1, .double-bounce2 {
-  width: 50px;
+
+.double-bounce1,
+.double-bounce2 {
+    width: 50px;
     height: 50px;
-  border-radius: 50%;
-  background-color: #333;
-  opacity: 0.6;
-  position: absolute;
-  top:42%;
+    border-radius: 50%;
+    background-color: #333;
+    opacity: 0.6;
+    position: absolute;
+    top: 42%;
     left: 42%;
-  
-  -webkit-animation: bounce 2.0s infinite ease-in-out;
-  animation: bounce 2.0s infinite ease-in-out;
+    -webkit-animation: bounce 2.0s infinite ease-in-out;
+    animation: bounce 2.0s infinite ease-in-out;
 }
 
 .double-bounce2 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
 }
 
 @-webkit-keyframes bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
+    0%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    50% {
+        -webkit-transform: scale(1.0)
+    }
 }
 
 @keyframes bounce {
-  0%, 100% { 
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 50% { 
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
-  }
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
 }
 
-th,td {
+th,
+td {
     white-space: nowrap;
 }
-.center{
+
+.center {
     text-align: center
 }
+
 .btn-circle {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 15px;
-}
-.btn-circle.btn-xs {
-  width: 19px;
-  height: 19px;
-  padding: 2px 0;
-  font-size: 11px;
-  line-height: 1.4;
-  border-radius: 10px;
-}
-.btn-circle.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 25px;
-}
-.btn-circle.btn-xl {
-  width: 70px;
-  height: 70px;
-  padding: 10px 16px;
-  font-size: 24px;
-  line-height: 1.33;
-  border-radius: 35px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
 }
 
+.btn-circle.btn-xs {
+    width: 19px;
+    height: 19px;
+    padding: 2px 0;
+    font-size: 11px;
+    line-height: 1.4;
+    border-radius: 10px;
+}
+
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
+}
 /*-------------- Dropable -------------------*/
+
 .hidtable {
     position: absolute;
     top: 0;
@@ -203,6 +253,7 @@ th,td {
     background: red;
     color: white;
 }
-.draggable{
-  cursor:move;
+
+.draggable {
+    cursor: move;
 }
