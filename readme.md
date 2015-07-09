@@ -1,4 +1,6 @@
-#Default options structure : 
+#BlsGrid
+========
+##Default options structure : 
 ___________________________
 var defaultOptions = {
     multiSelection: true,
@@ -23,7 +25,7 @@ var defaultOptions = {
     }
 };
 
-#simple example :
+"###simple example :
 _________________
 
 <bls-grid id="ngGrid1" 
@@ -33,7 +35,7 @@ _________________
 		>
 </bls-grid>
 
-#Ràf :
+##Ràf :
 ______
 *Ajax loading function (init and by page)
 *Sort on all data
@@ -42,6 +44,10 @@ ______
 *Pager buttons name
 *Col def (sortOn , filterOn, classCss, action buttons)
 *Reset user settings (remove data from the localStorage)
-*Fix initial loading
+*Fix initial loading (spinner)
+*Fix ItemsPerPage change
+*Allow customize
+**Header's class 
+**Spinner css
 
 
