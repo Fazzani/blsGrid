@@ -45,7 +45,7 @@ app
             controller: function($scope, $filter, $timeout, $element, $log, localStorageService) {
                 var defaultOptions = {
                     multiSelection: true,
-                    autoSaveReorderColumns:true,
+                    autoSaveReorderColumns: true,
                     search: {
                         searchText: '',
                         searchClass: 'form-control'
@@ -222,6 +222,10 @@ app
                     //$log.info('handleDrag : ' + columnName);
                     $scope.dragHead = columnName.replace(/["']/g, "");
                 };
+
+                $scope.saveReorderColumns = function() {
+
+                }
             }
         }
     }).filter('getByProperty', function() {
