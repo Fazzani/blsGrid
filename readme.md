@@ -1,5 +1,5 @@
 #Default options structure : 
-===========================
+___________________________
 'var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
@@ -21,20 +21,20 @@
             range: [10, 20]
         }
     }
-};''
+};'
 
 #simple example :
-================
+_________________
 
-'<hf-grid id="ngGrid1" 
+'<bls-grid id="ngGrid1" 
 		ng-model="fakeData" 
 		options="options"  
 		grid-class="table table-hover table-striped table-bordered" 
 		>
-</hr-grid>''
+</bls-grid>'
 
 #Ràf :
-=====
+______
 *Ajax loading function (init and by page)
 *Sort on all data
 *Tree

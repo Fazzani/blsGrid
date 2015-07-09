@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive("hfGrid", function() {
+app.directive("blsGrid", function() {
     return {
         restrict: "E",
         transclude: true,
