@@ -157,6 +157,15 @@ app.directive("blsGrid", function() {
                     localStorageService.set(data.key, data.val);
                 }
             }
+            //Clear User Data from the localStorage //Flush
+            $scope.$on('flushEvent', function(data) {
+                $log.info(localStorageService.keys());
+                $log.info('clearUserDataEvent intercepted');
+                if (localStorageService.isSupported) {
+                    localStorageService.clearAll();
+                    localStorageService.remove('dragtable');
+                }
+            });
             $scope.isActionCol = function(col) {
                 return col.id == 'actions';
             }

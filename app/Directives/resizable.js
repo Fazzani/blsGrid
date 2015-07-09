@@ -9,7 +9,7 @@ app.directive("resizable", function($timeout) {
                         fixed: true,
                         liveDrag: true,
                         postbackSafe: true,
-                        partialRefresh: true,
+                        partialRefresh: false,
                         // minWidth: 100
                     });
                 }, 3000);

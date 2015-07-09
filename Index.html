@@ -18,6 +18,7 @@
 	</head>
 	<body ng-controller="rootCtrl">
 		<div class="container well" ng-controller="homeCtrl">
+		<button type="button" class="btn btn-default" ng-click="clearUserData()">clear User Data</button>
 		<input type="text" ng-model="options.search.searchText" class="form-control"></input>
 		<bls-grid id="ngGrid1" 
 			ng-model="fakeData" 

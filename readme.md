@@ -1,7 +1,6 @@
-#BlsGrid directive
-##Default options structure
----------------------------
-``` var defaultOptions = {
+#Default options structure : 
+___________________________
+var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
     search: {
@@ -22,25 +21,27 @@
             range: [10, 20]
         }
     }
-};```
+};
 
-### Simple example
-------------------
+#simple example :
+_________________
 
-```<bls-grid id="ngGrid1" 
+<bls-grid id="ngGrid1" 
 		ng-model="fakeData" 
 		options="options"  
 		grid-class="table table-hover table-striped table-bordered" 
 		>
-</bls-grid>```
+</bls-grid>
 
->Ràf
--------
-* Ajax loading function (init and by page)
-* Sort on all data
-* Tree
-* Save col position in localStorage
-* Pager buttons name
-* Col def (sortOn , filterOn, classCss, action buttons)
+#Ràf :
+______
+*Ajax loading function (init and by page)
+*Sort on all data
+*Tree
+*Save col position in localStorage
+*Pager buttons name
+*Col def (sortOn , filterOn, classCss, action buttons)
+*Reset user settings (remove data from the localStorage)
+*Fix initial loading
 
 
