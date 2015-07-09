@@ -1,6 +1,6 @@
-Default options structure : 
+#Default options structure : 
 ===========================
-var defaultOptions = {
+'var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
     search: {
@@ -21,25 +21,25 @@ var defaultOptions = {
             range: [10, 20]
         }
     }
-};
+};''
 
-simple example :
+#simple example :
 ================
 
-<hf-grid id="ngGrid1" 
-			ng-model="fakeData" 
-			options="options"  
-			grid-class="table table-hover table-striped table-bordered" 
-			>
-		</hr-grid>
+'<hf-grid id="ngGrid1" 
+		ng-model="fakeData" 
+		options="options"  
+		grid-class="table table-hover table-striped table-bordered" 
+		>
+</hr-grid>''
 
-Ràf :
+#Ràf :
 =====
-- Ajax loading function (init and by page)
-- Sort on all data
-- Tree
-- Save col position in localStorage
-- Pager buttons name
-- Col def (sortOn , filterOn, classCss, action buttons)
+*Ajax loading function (init and by page)
+*Sort on all data
+*Tree
+*Save col position in localStorage
+*Pager buttons name
+*Col def (sortOn , filterOn, classCss, action buttons)
 
 
