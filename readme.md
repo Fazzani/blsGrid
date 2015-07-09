@@ -25,7 +25,7 @@ ___________________________
     }
 };```
 
->###simple example 
+>#####simple example 
 _________________
 ```
 <bls-grid id="ngGrid1" 
@@ -47,7 +47,7 @@ ______
 * Fix initial loading (spinner)
 * Fix ItemsPerPage change
 * Allow customize
-** Header's class 
-** Spinner css
+    ** Header's class 
+    ** Spinner css
 
 
