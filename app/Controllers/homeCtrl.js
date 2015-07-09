@@ -1,18 +1,16 @@
-app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
+app.controller("homeCtrl", function ($scope,$http,$filter,$timeout,$log) {
 	var root = 'http://jsonplaceholder.typicode.com';
 	$scope.fakeData=[];
 	$http.get(root + '/posts').
 		  success(function(data, status, headers, config) {
 		  	$timeout(function(){ 
 		   		$scope.fakeData=data;
-		  	},2000);
+		  	},100);
 		  }).
 		  error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs
 		    // or server returns response with an error status.
 		  });
-
-
 
 	if($scope.page == 'Index')
 		$scope.page = 'home';
@@ -55,9 +53,9 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
 			glyphicon:'glyphicon glyphicon-edit',
 			class:'btn-circle btn-info btn-xs',
 			action:function(row){
-				console.log('edit  : '+ row.id);
+				$log.info('edit  : '+ row.id);
 				var obj = $filter('filter')($scope.fakeData, {id: row.id})[0];
-				console.log(obj);
+				$log.info(obj);
 				$scope.fakeData.slice($scope.fakeData.indexOf(obj),1);
 				// $scope.fakeData.push(row);
 			}
@@ -68,9 +66,9 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
 			class:'btn-circle btn-danger btn-xs',
 			action:function(row){
 				//$scope.listPersons.
-				console.log('delete  : '+ row.id);
+				$log.info('delete  : '+ row.id);
 				var obj = $filter('filter')($scope.fakeData, {id: row.id})[0];
-				console.log(obj);
+				$log.info(obj);
 				$scope.fakeData.slice($scope.fakeData.indexOf(obj),1);
 				//$scope.fakeData.slice($scope.fakeData.indexOf(row),1);
 			}

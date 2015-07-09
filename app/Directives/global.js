@@ -265,7 +265,7 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
 	      			<thead>\
 	        			<tr>\
 	          				<th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">{{col.displayName|uppercase}}\
-	          					<i class="glyphicon pull-right"></i>\
+	          					<i class="glyphicon pull-right"  ng-class="glyphOrder(col.id)"></i>\
 	          				</th>\
 	        			</tr>\
 	      			</thead>\
