@@ -1,4 +1,11 @@
 'use strict';
+/**
+ * BLS grid (sort, search, tree, pagination)
+ * @param  {[type]} )            {                                                                return {                                      restrict: "E",        transclude: true,        scope: {            source: ' [description]
+ * @param  {[type]} templateUrl: 'template/blsGrid/blsGrid.html' [description]
+ * @param  {[type]} controller:  function($scope,                $filter,      $timeout, $element, $log,  localStorageService [description]
+ * @return {[type]}              [description]
+ */
 app.directive("blsGrid", function() {
     return {
         restrict: "E",
@@ -168,12 +175,12 @@ app.directive("blsGrid", function() {
                     else $scope.selectedRows.push(data);
                 }
             }
+            var swapArrayElements = function(array_object, index_a, index_b) {
+                var temp = array_object[index_a];
+                array_object[index_a] = array_object[index_b];
+                array_object[index_b] = temp;
+            };
             $scope.handleDrop = function(draggedData, targetElem) {
-                var swapArrayElements = function(array_object, index_a, index_b) {
-                    var temp = array_object[index_a];
-                    array_object[index_a] = array_object[index_b];
-                    array_object[index_b] = temp;
-                };
                 var srcIdx = $filter('getIndexByProperty')('id', draggedData, $scope.columns);
                 var destIdx = $filter('getIndexByProperty')('id', $(targetElem).data('originalTitle'), $scope.columns);
                 swapArrayElements($scope.columns, srcIdx, destIdx);
@@ -184,6 +191,16 @@ app.directive("blsGrid", function() {
                 $scope.dragHead = columnName.replace(/["']/g, "");
             };
             $scope.saveReorderColumns = function() {}
+                /**
+                 * reorder data array from config : arrayConfig[{key:newIndex Column, value: columnTitle}]
+                 * @param  {[type]} arrayConfig [columns indexs dictionary : this dict will be save on localStorage]
+                 * @param  {[type]} dataArray    [array to reorder]
+                 */
+            $scope.initReorderColumns = function(arrayConfig, dataArray) {
+                angular.forEach(arrayConfig, function(val, key) {
+                    swapArrayElements(key, dataArray, val.index);
+                });
+            }
         }
     }
 }).filter('getByProperty', function() {

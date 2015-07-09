@@ -46,6 +46,7 @@ ______
 * Reset user settings (remove data from the localStorage)
 * Fix initial loading (spinner)
 * Fix ItemsPerPage change
+* Show hide columns
 * Add toolbar 
     - Search
     - Reset user settings
@@ -55,3 +56,15 @@ ______
     - Spinner css
 
 
+>####auto reorder save:
+1- load data
+2- load reorder config from localStorage
+3- apply config to columns
+
+detect column reorder event:
+1- update view 
+2- apply config
+
+reorder from config:
+le fichier de config contient une keyValue (original index, index, column Title)[0 : {index, title}]
+suivant l'index original on recupère la colonne à déplacer ensuite on la switch avec la colonne qui tient sa place
