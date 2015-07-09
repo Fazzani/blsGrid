@@ -5,7 +5,7 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
 		  success(function(data, status, headers, config) {
 		  	$timeout(function(){ 
 		   		$scope.fakeData=data;
-		  	},100);
+		  	},2000);
 		  }).
 		  error(function(data, status, headers, config) {
 		    // called asynchronously if an error occurs
@@ -44,7 +44,7 @@ app.controller("homeCtrl", function ($scope,$http,$filter,$timeout) {
 
 	$scope.options={
 		multiSelection:false,
-		colDef:[{'userId':{DisplayName: 'User Id'}}],
+		colDef:{'userId': { displayName: 'User Id'}, 'body': { displayName: 'Content'}},
 		search:{
 			searchText:'', 
 			searchClass:'form-control'
