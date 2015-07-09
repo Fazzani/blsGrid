@@ -125,7 +125,6 @@ app
                         $scope.isLoading = false;
                     }
                 });
-
                 $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
                         $element.find('table').colResizable({
@@ -138,7 +137,6 @@ app
                     });
 
                 }
-
                 $scope.order = function(predicate) {
                     //$log.info('order function was called');
                     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
