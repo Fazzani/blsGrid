@@ -1,8 +1,8 @@
 #BlsGrid
 ========
-##Default options structure : 
+###Default options structure : 
 ___________________________
-var defaultOptions = {
+```var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
     search: {
@@ -23,19 +23,19 @@ var defaultOptions = {
             range: [10, 20]
         }
     }
-};
+};```
 
->###simple example :
+>###simple example 
 _________________
-
+```
 <bls-grid id="ngGrid1" 
 		ng-model="fakeData" 
 		options="options"  
 		grid-class="table table-hover table-striped table-bordered" 
 		>
-</bls-grid>
+</bls-grid>```
 
-##Ràf
+###Ràf
 ______
 * Ajax loading function (init and by page)
 * Sort on all data
