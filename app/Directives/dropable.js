@@ -5,7 +5,8 @@
 app.directive('droppable', ['$parse',
   function ($parse) {
     return {
-
+      restrict: "CA",
+      require: '^hfGrid',
       link: function (scope, element, attr) {
 
         function onDragOver(e) {
@@ -39,9 +40,12 @@ app.directive('droppable', ['$parse',
           });
 
         }
-
-        element.bind("dragover", onDragOver);
-        element.bind("drop", onDrop);
+        attr.$observe('draggable', function (newVal) {
+          if(newVal){
+            element.bind("dragover", onDragOver);
+            element.bind("drop", onDrop);
+          }
+        });
       }
     };
   }
@@ -49,15 +53,15 @@ app.directive('droppable', ['$parse',
 app.directive('draggable', function () {
 
   return {
-
+    restrict: "CA",
+    require: '^hfGrid',
     link: function (scope, elem, attr) {
 
-      elem.attr("draggable", true);
+      //elem.attr("draggable", true);
       var dragDataVal = '';
       var draggedGhostImgElemId = '';
       attr.$observe('dragdata', function (newVal) {
         dragDataVal = newVal;
-
       });
 
       attr.$observe('dragimage', function (newVal) {
@@ -70,7 +74,6 @@ app.directive('draggable', function () {
         // if (attr.dragimage !== 'undefined') {
         //   e.originalEvent.dataTransfer.setDragImage(
         //     document.getElementById(draggedGhostImgElemId), 0, 0);
-
         //}
 
         var dragFn = attr.drag;
