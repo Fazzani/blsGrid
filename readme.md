@@ -25,7 +25,7 @@ var defaultOptions = {
     }
 };
 
-"###simple example :
+>###simple example :
 _________________
 
 <bls-grid id="ngGrid1" 
@@ -35,19 +35,19 @@ _________________
 		>
 </bls-grid>
 
-##Ràf :
+##Ràf
 ______
-*Ajax loading function (init and by page)
-*Sort on all data
-*Tree
-*Save col position in localStorage
-*Pager buttons name
-*Col def (sortOn , filterOn, classCss, action buttons)
-*Reset user settings (remove data from the localStorage)
-*Fix initial loading (spinner)
-*Fix ItemsPerPage change
-*Allow customize
-**Header's class 
-**Spinner css
+* Ajax loading function (init and by page)
+* Sort on all data
+* Tree
+* Save col position in localStorage
+* Pager buttons name
+* Col def (sortOn , filterOn, classCss, action buttons)
+* Reset user settings (remove data from the localStorage)
+* Fix initial loading (spinner)
+* Fix ItemsPerPage change
+* Allow customize
+** Header's class 
+** Spinner css
 
 
