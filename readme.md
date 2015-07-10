@@ -39,7 +39,7 @@ _________________
 ______
 * Ajax loading function (init and by page)
 * Sort on all data
-* Tree
+* Tree (http://www.bootply.com/GGAMvot45f)
 * Save col position in localStorage
 * Pager buttons name
 * Col def (sortOn , filterOn, classCss, action buttons)
