@@ -60,11 +60,10 @@ ______
 1- load data
 2- load reorder config from localStorage
 3- apply config to columns
-
-detect column reorder event:
+>####detect column reorder event:
 1- update view 
 2- apply config
 
-reorder from config:
+>####reorder from config:
 le fichier de config contient une keyValue (original index, index, column Title)[0 : {index, title}]
 suivant l'index original on recupère la colonne à déplacer ensuite on la switch avec la colonne qui tient sa place
