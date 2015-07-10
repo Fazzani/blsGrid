@@ -39,6 +39,8 @@ app.directive("blsGrid", function() {
                     }
                 }
             };
+            this.ColReorderDataKey = "ColReorderDataKey";
+            $scope.colOrderConfig = [];
             $scope.options = angular.extend({}, defaultOptions, $scope.options);
             $scope.columns = [];
             $scope.isLoading = true;
@@ -54,7 +56,7 @@ app.directive("blsGrid", function() {
                 itemsPerPageId: 'ipp_' + $scope.uniqueId
             };
             $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
-            $scope.$watch('source.length', function(newVal, oldValue) {
+            $scope.$watchCollection('source', function(newVal, oldValue) {
                 if (newVal != oldValue) {
                     angular.forEach($scope.source, function(value, key) {
                         if ($scope.actionsEnabled) {
@@ -183,6 +185,7 @@ app.directive("blsGrid", function() {
             $scope.handleDrop = function(draggedData, targetElem) {
                 var srcIdx = $filter('getIndexByProperty')('id', draggedData, $scope.columns);
                 var destIdx = $filter('getIndexByProperty')('id', $(targetElem).data('originalTitle'), $scope.columns);
+                colOrderConfig[srcIdx] = destIdx;
                 swapArrayElements($scope.columns, srcIdx, destIdx);
                 swapArrayElements($scope.data, srcIdx, destIdx);
             };
@@ -190,13 +193,31 @@ app.directive("blsGrid", function() {
                 //$log.info('handleDrag : ' + columnName);
                 $scope.dragHead = columnName.replace(/["']/g, "");
             };
-            $scope.saveReorderColumns = function() {}
-                /**
-                 * reorder data array from config : arrayConfig[{key:newIndex Column, value: columnTitle}]
-                 * @param  {[type]} arrayConfig [columns indexs dictionary : this dict will be save on localStorage]
-                 * @param  {[type]} dataArray    [array to reorder]
-                 */
-            $scope.initReorderColumns = function(arrayConfig, dataArray) {
+            $scope.$watchCollection('colOrderConfig', function(newVal, oldVal) {
+                if (newVal != oldVal) {
+                    $scope.saveUserData(this.ColReorderDataKey, newVal);
+                }
+            })
+            this.defaultColConfig = function(length) {
+                var array = new Array(length);
+                for (var i = array.length - 1; i >= 0; i--) {
+                    array[i] = i;
+                };
+                return array;
+            };
+            /**
+             * reorder data array from config : arrayConfig[{key:newIndex Column, value: columnTitle}]
+             * @param  {array} arrayConfig [columns indexs dictionary : this dict will be save on localStorage]
+             * @param  {array} colArray    [columns array]
+             * @param  {array} dataArray    [data array]
+             */
+            this.initReorderColumns = function(arrayConfig, colArray, dataArray) {
+                arrayConfig = localStorageService.get(this.ColReorderDataKey);
+                if (arrayConfig == null)
+                    arrayConfig = defaultColConfig(colArray.length);
+                angular.forEach(arrayConfig, function(val, key) {
+                    swapArrayElements(key, colArray, val.index);
+                });
                 angular.forEach(arrayConfig, function(val, key) {
                     swapArrayElements(key, dataArray, val.index);
                 });

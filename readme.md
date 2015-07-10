@@ -1,7 +1,7 @@
 #BlsGrid
 ========
 ###Default options structure
-___________________________
+____________________________
 >```var defaultOptions = {
     multiSelection: true,
     autoSaveReorderColumns: true,
@@ -26,7 +26,7 @@ ___________________________
 };```
 
 >#####simple example 
-_________________
+____________________
 ```
 <bls-grid id="ngGrid1" 
 		ng-model="fakeData" 
@@ -54,6 +54,8 @@ ______
 * Allow customize
     - Header's class 
     - Spinner css
+* Create services for differents Features (Reorder, Sort, etc )
+* Add library _underscore (http://stackoverflow.com/questions/14968297/use-underscore-inside-angular-controllers)
 
 
 >####auto reorder save:
