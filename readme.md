@@ -67,5 +67,4 @@ ______
 2- apply config
 
 >####reorder from config:
-le fichier de config contient une keyValue (original index, index, column Title)[0 : {index, title}]
-suivant l'index original on recupère la colonne à déplacer ensuite on la switch avec la colonne qui tient sa place
+Tester la cas de plusieurs BlsGrid dans la mm page et dans des pages différentes
