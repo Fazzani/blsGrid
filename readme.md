@@ -67,4 +67,6 @@ ______
 2- apply config
 
 >####reorder from config:
-Tester la cas de plusieurs BlsGrid dans la mm page et dans des pages différentes
+* Tester la cas de plusieurs BlsGrid dans la mm page et dans des pages différentes
+* Tester sans la colonne Actions
+
