@@ -42,18 +42,18 @@ bls-grid {
 /*th comment*/
 
 .blsGrid th.colHeader {
+  background-image: -webkit-linear-gradient(top, #ffffff 0%, #dfdfdf 100%);
+    background-image: linear-gradient(to bottom, #ffffff 0%, #dfdfdf 100%);
+    background-repeat: repeat-x;
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0);
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.blsGrid th.colHeader a {
-    cursor: pointer;
-    outline: none;
-    text-shadow: #012b4d 2px 2px 2px;
-    text-align: center;
+.blsGrid th.colHeader {
+    text-shadow: gray 5px 5px 12px;
 }
-
 .blsGrid th.colHeader a:hover {
     outline: none;
     text-decoration: none;
@@ -62,19 +62,22 @@ bls-grid {
 .blsGrid tr.info {
     animation: anim-effect-boris 0.1s ease-in-out;
 }
-
+.btn-toolbar{
+  border: thin solid gainsboro;
+}
 .btn-toolbar, .btn-toolbar .btn {
     margin-left: 0 !important;
-    vertical-align: middle;
-    background-image: -webkit-linear-gradient(top, #ffffff 0%, #dfdfdf 100%);
-    background-image: linear-gradient(to bottom, #ffffff 0%, #dfdfdf 100%);
-    background-repeat: repeat-x;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0);
 }
-
+.btn-toolbar .search-form{
+    padding: 0px !important;
+}
+.btn-toolbar .btn{
+    text-shadow: gray 4px 4px 10px;
+}
 .btn-toolbar> .btn-group {
-    padding-left: 2px !important;
+    padding-left: 0px !important;
     padding-top: 1px !important;
+    margin-left: 0px !important;
 }
 
 @keyframes anim-effect-boris {

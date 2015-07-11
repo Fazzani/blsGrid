@@ -7,12 +7,12 @@ app.directive('blsToolBar', [function() {
         restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
         template: '<div class="">\
                         <div class="btn-toolbar" role="toolbar">\
-		            									<div class="btn-group col-xs-8 col-md-8 btn-group-sm" >\
+		            									<div class="btn-group col-xs-12 col-md-8 btn-group-sm" >\
 			            									<button type="button" class="{{btnClass}}" aria-label="Right Align"><span class="fa fa-cog" aria-hidden="true"></span></button>\
 			            									<button type="button" ng-click="clearUserData()" class="{{btnClass}}" aria-label="Right Align"><span class="fa fa-recycle" aria-hidden="true"></span></button>\
 			            									<button type="button" ng-click="refresh()" class="{{btnClass}}" aria-label="Right Align"><span class="fa fa-refresh" aria-hidden="true"></span></button>\
 			            								</div>\
-			            								<form action="" class="search-form col-xs-4 col-md-2 pull-right">\
+			            								<form action="" class="search-form col-xs-12 col-md-3 pull-right">\
 			                            <div class="form-group has-feedback">\
 			                                <label for="search" class="sr-only">Search</label>\
 			                                <input type="text" class="{{options.search.searchClass}}" name="search" id="search" placeholder="{{searchPlaceHolder}}" ng-model="options.search.searchText">\
