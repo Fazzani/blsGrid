@@ -13,7 +13,8 @@ app.directive("blsGrid", function() {
         scope: {
             source: '=ngModel',
             gridClass: '@',
-            options: '='
+            options: '=', 
+            loadData: '&'//function to load data (promise)
         },
         templateUrl: 'template/blsGrid/blsGrid.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
@@ -57,6 +58,7 @@ app.directive("blsGrid", function() {
                     colReorderDataKey: 'crdKey_' + $scope.uniqueId,
                 };
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
+                
                 $scope.$watchCollection('source', function(newVal, oldValue) {
                     if (newVal != oldValue) {
                         angular.forEach($scope.source, function(value, key) {
@@ -98,6 +100,9 @@ app.directive("blsGrid", function() {
                         $scope.isLoading = false;
                     }
                 });
+															 $scope.init = function(){
+
+															 }
                 $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
                         $element.find('table').colResizable({
@@ -169,6 +174,11 @@ app.directive("blsGrid", function() {
                         localStorageService.remove('dragtable');
                     }
                 });
+                $scope.$on('refreshEvent', function(data) {
+                    $log.debug('refreshEvent intercepted');
+                    $scope.init();
+                });
+                
                 $scope.isActionCol = function(col) {
                     return col.id == 'actions';
                 }
@@ -203,21 +213,13 @@ app.directive("blsGrid", function() {
 angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
     $templateCache.put('template/blsGrid/blsGrid.html', '<pre> options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
-                <div class="row-fluid">\
-                        <form action="" class="search-form">\
-                            <div class="form-group has-feedback">\
-                                <label for="search" class="sr-only">Search</label>\
-                                <input type="text" class="{{options.search.searchClass}}" name="search" id="search" placeholder="search" ng-model="options.search.searchText">\
-                                <span class="glyphicon glyphicon-search form-control-feedback"></span>\
-                            </div>\
-                         </form>\
-                 </div>\
+            <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
             <div><table class="{{gridClass}} blsGrid" id="dragtable">\
                     <thead>\
                         <tr>\
                             <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">{{col.displayName|uppercase}}\
-                                <i class="pull-right fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
+                                <i class="pull-left fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
                             </th>\
                         </tr>\
                     </thead>\

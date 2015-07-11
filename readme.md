@@ -41,18 +41,19 @@ ______
 * Tree (http://www.bootply.com/GGAMvot45f)
 * Pager buttons name
 * Col def (sortOn , filterOn, classCss, action buttons)
-* Show hide columns
 * Add toolbar 
     - Search
     - Reset user settings
-    - Pagination 
+    - Pagination (itemsPerPage + message for indexPage and count)
+    - Refresh (reload data)
+    - Show hide columns (list checkbox)
 * Allow customize
     - Header's class 
     - Spinner css
 * Create services for differents Features (Reorder, Sort, etc )
-* Add onSeletedItem Event
-* Modify Icon's sort
+* Add onSeletedItem Event and send the current element and data row
 * Add checkbox header for selectAll
+* Fullscreen
 * Add library _underscore (http://stackoverflow.com/questions/14968297/use-underscore-inside-angular-controllers)
 
 >####reorder from config:
