@@ -11,15 +11,16 @@ app.directive("blsGrid", function() {
         restrict: "E",
         transclude: true,
         scope: {
-            source: '=ngModel',
+            model: '=ngModel',
             gridClass: '@',
-            options: '=', 
-            loadData: '&'//function to load data (promise)
+            options: '=',
+            loadDataFun: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise
         },
         templateUrl: 'template/blsGrid/blsGrid.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
+                $scope.source;
                 var defaultOptions = {
                     multiSelection: true,
                     autoSaveReorderColumns: true,
@@ -58,8 +59,8 @@ app.directive("blsGrid", function() {
                     colReorderDataKey: 'crdKey_' + $scope.uniqueId,
                 };
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
-                
                 $scope.$watchCollection('source', function(newVal, oldValue) {
+                    $scope.isLoading = true;
                     if (newVal != oldValue) {
                         angular.forEach($scope.source, function(value, key) {
                             if ($scope.actionsEnabled) {
@@ -93,16 +94,39 @@ app.directive("blsGrid", function() {
                         });
                         $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
                         $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
-                        $scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
                         if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1) $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
                         $scope.colOrderConfig = dropableService.initReorderColumns($scope.columns, $scope.data, $scope.storageIds.colReorderDataKey);
                         $log.debug('init colOrderConfig : ' + $scope.colOrderConfig);
-                        $scope.isLoading = false;
+                        $
                     }
+                    $scope.isLoading = false;
                 });
-															 $scope.init = function(){
-
-															 }
+                var init = function() {
+                    $scope.columns = [];
+                    $scope.data = [];
+                    $scope.isLoading = true;
+                    $log.debug('initialise BlsGrid');
+                    if ($scope.loadDataFun && angular.isDefined($scope.loadDataFun()) && angular.isDefined($scope.loadDataFun().then)) {
+                        $scope.loadDataFun().then(function(d) {
+                            $timeout(function() {
+                                $scope.$apply(function() {
+                                    $scope.dataFilterSearch = $scope.source = d.data;//.slice(0,rdm+=10);
+                                    $scope.isLoading = false;
+                                });
+                            }, 0);
+                            return;
+                        }, function(error) {
+                            $log.error(error);
+                            $scope.isLoading = false;
+                        });
+                    } else {
+                        $scope.$watchCollection('model', function(newVal, oldValue) {
+                            $log.debug('is model passed => ' + $scope.model);
+                            $scope.dataFilterSearch = $scope.source = newVal;
+                        });
+                    }
+                    $scope.isLoading = false;
+                }
                 $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
                         $element.find('table').colResizable({
@@ -151,17 +175,12 @@ app.directive("blsGrid", function() {
                     $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
                     $scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
                 }
-                $scope.$watch('options.pagination.pageLength', function(newValue, oldValue) {
-                    $scope.pages = new Array(Math.ceil($scope.dataFilterSearch.length / newValue));
-                })
+                
                 $scope.$watch('options.search.searchText', function(newValue, oldValue) {
                     $scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
                     $log.debug('options.search.searchText triggred => ' + $scope.dataFilterSearch.length);
                 })
-                $scope.$watch('dataFilterSearch.length', function(newValue, oldValue) {
-                    $log.debug('dataFilterSearch triggred => ' + $scope.dataFilterSearch.length);
-                    $scope.pages = new Array(Math.ceil(newValue / $scope.options.pagination.pageLength));
-                });
+                
                 $scope.saveUserData = function(data) {
                         if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
                     }
@@ -176,9 +195,8 @@ app.directive("blsGrid", function() {
                 });
                 $scope.$on('refreshEvent', function(data) {
                     $log.debug('refreshEvent intercepted');
-                    $scope.init();
+                    init();
                 });
-                
                 $scope.isActionCol = function(col) {
                     return col.id == 'actions';
                 }
@@ -206,19 +224,21 @@ app.directive("blsGrid", function() {
                         dropableService.saveConfig($scope.storageIds.colReorderDataKey, $scope.colOrderConfig);
                     }
                 })
+                init();
             }
         ]
     }
 });
 angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
-    $templateCache.put('template/blsGrid/blsGrid.html', '<pre> options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
+    $templateCache.put('template/blsGrid/blsGrid.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
             <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
             <div><table class="{{gridClass}} blsGrid" id="dragtable">\
                     <thead>\
                         <tr>\
-                            <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">{{col.displayName|uppercase}}\
+                            <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
+                            				{{col.displayName|uppercase}}\
                                 <i class="pull-left fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
                             </th>\
                         </tr>\

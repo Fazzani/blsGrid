@@ -1,7 +1,8 @@
 app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
     var root = 'http://jsonplaceholder.typicode.com';
     $scope.fakeData = [];
-    $http.get(root + '/posts').
+    $scope.loadDataFun = $http.get(root + '/posts');
+    $scope.loadDataFun.
     success(function(data, status, headers, config) {
         $timeout(function() {
             $scope.fakeData = data;
