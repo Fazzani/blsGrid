@@ -1,7 +1,12 @@
 bls-grid {
     position: relative;
 }
-
+.fa-sort{
+  opacity: 0.5;
+}
+.fa-sort-asc, .fa-sort-desc{
+  opacity: 0.8;
+}
 .bls-table-container {
     min-height: 400px !important;
 }
@@ -25,7 +30,6 @@ tr.info {
 tr.info td {
     vertical-align: middle;
 }
-
 
 /*th comment*/
 

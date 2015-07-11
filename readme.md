@@ -50,6 +50,9 @@ ______
     - Header's class 
     - Spinner css
 * Create services for differents Features (Reorder, Sort, etc )
+* Add onSeletedItem Event
+* Modify Icon's sort
+* Add checkbox header for selectAll
 * Add library _underscore (http://stackoverflow.com/questions/14968297/use-underscore-inside-angular-controllers)
 
 >####reorder from config:
