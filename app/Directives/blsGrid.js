@@ -18,7 +18,7 @@ app.directive("blsGrid", function() {
         templateUrl: 'template/blsGrid/blsGrid.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
-            	var me=this;
+                var me = this;
                 var defaultOptions = {
                     multiSelection: true,
                     autoSaveReorderColumns: true,
@@ -41,21 +41,20 @@ app.directive("blsGrid", function() {
                         }
                     }
                 };
-                var ColReorderDataKey = "ColReorderDataKey";
                 $scope.colOrderConfig = [];
                 $scope.options = angular.extend({}, defaultOptions, $scope.options);
                 $scope.columns = [];
                 $scope.isLoading = true;
                 $scope.dataFilterSearch = $scope.data = [];
                 $scope.offset = 0;
-                $scope.filteredData = [];
                 $scope.selectedRows = [];
                 $scope.actionsEnabled = $scope.options.actions != null;
                 $scope.uniqueId = $scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
                 $scope.storageIds = {
                     predicateId: 'prd_' + $scope.uniqueId,
                     reverseId: 'rvs_' + $scope.uniqueId,
-                    itemsPerPageId: 'ipp_' + $scope.uniqueId
+                    itemsPerPageId: 'ipp_' + $scope.uniqueId,
+                    colReorderDataKey: 'crdKey_' + $scope.uniqueId,
                 };
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
                 $scope.$watchCollection('source', function(newVal, oldValue) {
@@ -94,9 +93,9 @@ app.directive("blsGrid", function() {
                         $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
                         $scope.pages = new Array(Math.ceil($scope.data.length / $scope.options.pagination.pageLength));
                         if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1) $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
+                        $scope.colOrderConfig = dropableService.initReorderColumns($scope.columns, $scope.data, $scope.storageIds.colReorderDataKey);
+                        $log.debug('init colOrderConfig : ' + $scope.colOrderConfig);
                         $scope.isLoading = false;
-                        $scope.colOrderConfig = dropableService.initReorderColumns($scope.columns, $scope.data, ColReorderDataKey);
-                        $log.info('init colOrderConfig : '+$scope.colOrderConfig);
                     }
                 });
                 $scope.initResizableColumns = function() {
@@ -137,7 +136,7 @@ app.directive("blsGrid", function() {
                     $scope.refreshOffset();
                 })
                 $scope.refreshOffset = function() {
-                    $scope.offset = ($scope.options.pagination.pageIndex - 1) * $scope.options.pagination.pageLength;
+                    $scope.offset = ($scope.options.pagination.pageIndex) * $scope.options.pagination.pageLength;
                 }
                 $scope.updateRecordsCount = function() {
                     $scope.saveUserData({
@@ -152,19 +151,19 @@ app.directive("blsGrid", function() {
                 })
                 $scope.$watch('options.search.searchText', function(newValue, oldValue) {
                     $scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
+                    $log.debug('options.search.searchText triggred => ' + $scope.dataFilterSearch.length);
                 })
                 $scope.$watch('dataFilterSearch.length', function(newValue, oldValue) {
+                    $log.debug('dataFilterSearch triggred => ' + $scope.dataFilterSearch.length);
                     $scope.pages = new Array(Math.ceil(newValue / $scope.options.pagination.pageLength));
-                })
+                });
                 $scope.saveUserData = function(data) {
-                        if (localStorageService.isSupported) {
-                            localStorageService.set(data.key, data.val);
-                        }
+                        if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
                     }
                     //Clear User Data from the localStorage //Flush
                 $scope.$on('flushEvent', function(data) {
-                    $log.info(localStorageService.keys());
-                    $log.info('clearUserDataEvent intercepted');
+                    $log.debug(localStorageService.keys());
+                    $log.debug('clearUserDataEvent intercepted');
                     if (localStorageService.isSupported) {
                         localStorageService.clearAll();
                         localStorageService.remove('dragtable');
@@ -181,7 +180,6 @@ app.directive("blsGrid", function() {
                         else $scope.selectedRows.push(data);
                     }
                 }
-               
                 $scope.handleDrop = function(draggedData, targetElem) {
                     var srcIdx = $filter('getIndexByProperty')('id', draggedData, $scope.columns);
                     var destIdx = $filter('getIndexByProperty')('id', $(targetElem).data('originalTitle'), $scope.columns);
@@ -190,21 +188,20 @@ app.directive("blsGrid", function() {
                     dropableService.swapArrayElements($scope.colOrderConfig, srcIdx, destIdx);
                 };
                 $scope.handleDrag = function(columnName) {
-                    //$log.info('handleDrag : ' + columnName);
+                    //$log.debug('handleDrag : ' + columnName);
                     $scope.dragHead = columnName.replace(/["']/g, "");
                 };
                 $scope.$watchCollection('columns', function(newVal, oldVal) {
                     if (newVal != oldVal && newVal) {
-                        dropableService.saveConfig(ColReorderDataKey, $scope.colOrderConfig);
+                        dropableService.saveConfig($scope.storageIds.colReorderDataKey, $scope.colOrderConfig);
                     }
                 })
             }
         ]
     }
 });
-
 angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
-    $templateCache.put('template/blsGrid/blsGrid.html', '<pre>pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
+    $templateCache.put('template/blsGrid/blsGrid.html', '<pre> options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
                 <div class="row-fluid">\
                         <form action="" class="search-form">\
@@ -216,7 +213,7 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
                          </form>\
                  </div>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
-            <table class="{{gridClass}} blsGrid" id="dragtable">\
+            <div><table class="{{gridClass}} blsGrid" id="dragtable">\
                     <thead>\
                         <tr>\
                             <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">{{col.displayName|uppercase}}\
@@ -225,7 +222,7 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
                         </tr>\
                     </thead>\
                     <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| limitTo:options.pagination.pageLength:offset | orderBy:predicate:reverse)">\
+                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.pageLength:offset)">\
                                 <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
                                 <td ng-if="actionsEnabled" class="center">\
                                     <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
@@ -233,12 +230,12 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="dataFilterSearch.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
                         </td></tr>\
                         </tfoot>\
-            </table>\
+            </table></div>\
         </div>');
 }]);

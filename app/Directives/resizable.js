@@ -10,9 +10,11 @@ app.directive("resizable", function($timeout) {
                         liveDrag: true,
                         postbackSafe: true,
                         partialRefresh: false,
+                        gripInnerHtml:"<div class='grip'></div>", 
+                        draggingClass:"dragging", 
                         // minWidth: 100
                     });
-                }, 3000);
+                }, 1000);
             });
         },
         restrict: "CA",

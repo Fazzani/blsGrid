@@ -1,3 +1,11 @@
+bls-grid {
+    position: relative;
+}
+
+.bls-table-container {
+    min-height: 400px !important;
+}
+
 .blsGrid tfoot {
     background-color: mintcream;
 }
@@ -24,6 +32,8 @@ tr.info td {
 th.colHeader a {
     cursor: pointer;
     outline: none;
+    text-shadow: #012b4d 2px 2px 2px;
+   text-align: center;   
 }
 
 th.colHeader a:hover {
@@ -254,4 +264,32 @@ th, td {
 
 .draggable {
     cursor: move;
+}
+
+/*---------------------- Resizable ---------------------*/
+.grip{
+  width:20px;
+  height:15px;
+  margin-top:-3px;
+  background-image:url('../img/grip.png');
+  margin-left:-5px;
+  position:relative;
+  z-index:88;
+  cursor:e-resize;
+    background-repeat: no-repeat;
+}
+
+.grip:hover{
+  background-position-x:-20px;
+}
+
+.dragging .grip{
+  background-position-x:-40px;
+}
+.JCLRLastGrip .grip{
+    background-position-y:-18px;
+    left:-2px;
+}
+#postback{
+  margin-bottom:10px;
 }
