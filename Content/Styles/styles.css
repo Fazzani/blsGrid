@@ -51,9 +51,6 @@ bls-grid {
     text-overflow: ellipsis;
 }
 
-.blsGrid th.colHeader {
-    text-shadow: gray 2px 2px 5px;
-}
 .blsGrid th.colHeader a:hover {
     outline: none;
     text-decoration: none;
@@ -62,9 +59,7 @@ bls-grid {
 .blsGrid tr.info {
     animation: anim-effect-boris 0.1s ease-in-out;
 }
-.btn-toolbar{
-  border: thin solid gainsboro;
-}
+
 .btn-toolbar, .btn-toolbar .btn {
     margin-left: 0 !important;
 }
@@ -333,3 +328,5 @@ th, td {
 #postback {
     margin-bottom: 10px;
 }
+
+

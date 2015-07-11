@@ -1,7 +1,17 @@
 app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
     var root = 'http://jsonplaceholder.typicode.com';
     $scope.fakeData = [];
-    $scope.loadDataFun = $http.get(root + '/posts');
+    $scope.loadDataFun = $http.get('http://jsonstub.com/bls/Person', {
+        dataType: 'json',
+        data: '',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            "X-Testing": "testing",
+            'JsonStub-User-Key': '9b0c8e63-914c-44bf-a7b9-79d70e7510fa',
+            'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
+        }
+    });
     $scope.loadDataFun.
     success(function(data, status, headers, config) {
         $timeout(function() {
@@ -74,95 +84,95 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
             }
         }
     };
-    $scope.listPersons = [{
-        'name': 'heni',
-        'age': 21,
-        'prenom': 'mezzeni'
+    [{
+        "name": "heni",
+        "age": 21,
+        "prenom": "mezzeni"
     }, {
-        'name': 'riz',
-        'age': 0
+        "name": "riz",
+        "age": 0
     }, {
-        'name': 'téléphone',
-        'age': 2
+        "name": "téléphone",
+        "age": 2
     }, {
-        'name': 'ahmed',
-        'prenom': 'high tech',
-        'age': 5
+        "name": "ahmed",
+        "prenom": "hightech",
+        "age": 5
     }, {
-        'name': 'heni',
-        'age': 21,
-        'prenom': 'Fezzeni'
+        "name": "heni",
+        "age": 21,
+        "prenom": "Fezzeni"
     }, {
-        'name': 'heni',
-        'age': 21,
-        'prenom': 'aezzeni'
+        "name": "heni",
+        "age": 21,
+        "prenom": "aezzeni"
     }, {
-        'name': 'heeni',
-        'age': 6,
-        'prenom': 'Fezrtzeni'
+        "name": "heeni",
+        "age": 6,
+        "prenom": "Fezrtzeni"
     }, {
-        'name': 'heni',
-        'age': 12,
-        'prenom': 'sezzueni'
+        "name": "heni",
+        "age": 12,
+        "prenom": "sezzueni"
     }, {
-        'name': 'heni',
-        'age': 21,
-        'prenom': 'rFezzeni'
+        "name": "heni",
+        "age": 21,
+        "prenom": "rFezzeni"
     }, {
-        'name': 'hertni',
-        'age': 21,
-        'prenom': 'Fezzeni'
+        "name": "hertni",
+        "age": 21,
+        "prenom": "Fezzeni"
     }, {
-        'name': 'bfni',
-        'age': 8,
-        'prenom': 'kezsdzeni'
+        "name": "bfni",
+        "age": 8,
+        "prenom": "kezsdzeni"
     }, {
-        'name': 'poni',
-        'age': 21,
-        'prenom': 'bFezzeni'
+        "name": "poni",
+        "age": 21,
+        "prenom": "bFezzeni"
     }, {
-        'name': 'gusi',
-        'age': 35,
-        'prenom': 'Fezzeni87'
+        "name": "gusi",
+        "age": 35,
+        "prenom": "Fezzeni87"
     }, {
-        'name': 'hbsdni',
-        'age': 22,
-        'prenom': 'Fez78zeni'
+        "name": "hbsdni",
+        "age": 22,
+        "prenom": "Fez78zeni"
     }, {
-        'name': 'hesdni',
-        'age': 55,
-        'prenom': 'ez78eni'
+        "name": "hesdni",
+        "age": 55,
+        "prenom": "ez78eni"
     }, {
-        'name': 'hesdni',
-        'age': 22,
-        'prenom': 'Fezzeni'
+        "name": "hesdni",
+        "age": 22,
+        "prenom": "Fezzeni"
     }, {
-        'name': 'htedni',
-        'age': 75,
-        'prenom': 'yr78zeni'
+        "name": "htedni",
+        "age": 75,
+        "prenom": "yr78zeni"
     }, {
-        'name': 'redni',
-        'age': 11,
-        'prenom': 'Fez78zeni'
+        "name": "redni",
+        "age": 11,
+        "prenom": "Fez78zeni"
     }, {
-        'name': 'hgsdni',
-        'age': 22,
-        'prenom': 'Fre8zeni'
+        "name": "hgsdni",
+        "age": 22,
+        "prenom": "Fre8zeni"
     }, {
-        'name': 'opusdni',
-        'age': 44,
-        'prenom': 'sfz78zeni'
+        "name": "opusdni",
+        "age": 44,
+        "prenom": "sfz78zeni"
     }, {
-        'name': 'jusdni',
-        'age': 57,
-        'prenom': 'sfz78zeni'
+        "name": "jusdni",
+        "age": 57,
+        "prenom": "sfz78zeni"
     }, {
-        'name': 'pusdni',
-        'age': 78,
-        'prenom': 'sfz78zeni'
+        "name": "pusdni",
+        "age": 78,
+        "prenom": "sfz78zeni"
     }, {
-        'name': 'lousdni',
-        'age': 28,
-        'prenom': 'sfz78zeni'
+        "name": "lousdni",
+        "age": 28,
+        "prenom": "sfz78zeni"
     }]
 });

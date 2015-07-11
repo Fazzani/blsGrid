@@ -23,7 +23,7 @@ app.directive("blsGrid", function() {
                 $scope.source;
                 var defaultOptions = {
                     multiSelection: true,
-                    autoSaveReorderColumns: true,
+                    //autoSaveReorderColumns: true,
                     search: {
                         searchText: '',
                         searchClass: 'form-control'
@@ -38,8 +38,8 @@ app.directive("blsGrid", function() {
                         },
                         itemsPerPage: {
                             prefixStorage: 'ipp_', //itemsPerPage storage prefix 
-                            selected: 10,
-                            range: [10, 20]
+                            selected: 10, // default selectet pageLength
+                            range: [10, 20]//list pageLength
                         }
                     }
                 };

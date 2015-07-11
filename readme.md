@@ -42,10 +42,10 @@ ______
 * Pager buttons name
 * Col def (sortOn , filterOn, classCss, action buttons)
 * Add toolbar 
-    - Search
-    - Reset user settings
+    - Search => ok  
+    - Reset user settings => ok
     - Pagination (itemsPerPage + message for indexPage and count)
-    - Refresh (reload data)
+    - Refresh (reload data) => ok
     - Show hide columns (list checkbox)
 * Allow customize
     - Header's class 
@@ -53,7 +53,7 @@ ______
 * Create services for differents Features (Reorder, Sort, etc )
 * Add onSeletedItem Event and send the current element and data row
 * Add checkbox header for selectAll
-* Fullscreen
+* ToolTip hover (option)
 * Add library _underscore (http://stackoverflow.com/questions/14968297/use-underscore-inside-angular-controllers)
 
 >####reorder from config:
