@@ -52,7 +52,7 @@ bls-grid {
 }
 
 .blsGrid th.colHeader {
-    text-shadow: gray 5px 5px 12px;
+    text-shadow: gray 2px 2px 5px;
 }
 .blsGrid th.colHeader a:hover {
     outline: none;
