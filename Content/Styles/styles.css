@@ -47,6 +47,7 @@ bls-grid {
 
 .blsGrid th.colHeader {
     background-image: -webkit-linear-gradient(top, #ffffff 0%, #dfdfdf 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#dfdfdf));
     background-image: linear-gradient(to bottom, #ffffff 0%, #dfdfdf 100%);
     background-repeat: repeat-x;
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0);
@@ -61,7 +62,8 @@ bls-grid {
 }
 
 .blsGrid tr.info {
-    animation: anim-effect-boris 0.1s ease-in-out;
+    -webkit-animation: anim-effect-boris 0.1s ease-in-out;
+            animation: anim-effect-boris 0.1s ease-in-out;
 }
 
 .btn-toolbar, .btn-toolbar .btn {
@@ -82,28 +84,51 @@ bls-grid {
     margin-left: 0px !important;
 }
 
-@keyframes anim-effect-boris {
+@-webkit-keyframes anim-effect-boris {
     0% {
-        transform: scale3d(1, 1, 0.9);
+        -webkit-transform: scale3d(1, 1, 0.9);
+                transform: scale3d(1, 1, 0.9);
     }
     25%, 50% {
         opacity: 1;
     }
     80% {
-        transform: scale3d(1, 1.1, 1);
+        -webkit-transform: scale3d(1, 1.1, 1);
+                transform: scale3d(1, 1.1, 1);
     }
     100% {
-        transform: scale3d(1, 1, 1);
+        -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes anim-effect-boris {
+    0% {
+        -webkit-transform: scale3d(1, 1, 0.9);
+                transform: scale3d(1, 1, 0.9);
+    }
+    25%, 50% {
+        opacity: 1;
+    }
+    80% {
+        -webkit-transform: scale3d(1, 1.1, 1);
+                transform: scale3d(1, 1.1, 1);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+                transform: scale3d(1, 1, 1);
     }
 }
 
 .search-form .form-group {
     float: right !important;
-    transition: all 0.35s, border-radius 0s;
+    -webkit-transition: all 0.35s, border-radius 0s;
+            transition: all 0.35s, border-radius 0s;
     width: 32px;
     height: 32px;
     background-color: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     border-radius: 25px;
     border: 1px solid #ccc;
     margin-bottom: 0px !important;
@@ -113,7 +138,8 @@ bls-grid {
     padding-right: 20px;
     border: 0 none;
     background: transparent;
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
     display: block;
 }
 
@@ -357,14 +383,16 @@ th, td {
      -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
     -webkit-transform: scale(0);
-    transform: scale(0);
+    -ms-transform: scale(0);
+        transform: scale(0);
     opacity: 1;
 }
 .pop.ng-enter-active,
 .pop.ng-leave,
 .pop.ng-leave-active {
     -webkit-transform: scale(1);
-    transform: scale(1);
+    -ms-transform: scale(1);
+        transform: scale(1);
     opacity: 0.5;
 }
 .pop.ng-leave-active {
