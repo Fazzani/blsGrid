@@ -1,26 +1,41 @@
-var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule']);
-app.config(function(localStorageServiceProvider) {
-    localStorageServiceProvider.setStorageType('sessionStorage').setPrefix('').setNotify(true, true);
-}).filter('getByProperty', function() {
-    return function(propertyName, propertyValue, collection) {
-        var i = 0,
-            len = collection.length;
-        for (; i < len; i++) {
-            if (collection[i][propertyName] == propertyValue) {
-                return collection[i];
-            }
+(function(angular) {
+    'use strict';
+    app.
+    config(['localStorageServiceProvider', '$routeProvider', '$locationProvider',
+        function(localStorageServiceProvider, $routeProvider, $locationProvider) {
+            localStorageServiceProvider.setStorageType('sessionStorage').setPrefix('').setNotify(true, true);
+            $routeProvider.when('/blsGrid', {
+                templateUrl: "Views/Partials/blsGrid.html", 
+                controller:'homeCtrl'
+            }).when("/blsGridAsync", {
+                templateUrl: "Views/Partials/blsGridAsync.html",
+                controller:'homeCtrl'
+            }).otherwise({
+                redirectTo: '/blsGrid'
+            });
+            $locationProvider.html5Mode(true);
         }
-        return null;
-    }
-}).filter('getIndexByProperty', function() {
-    return function(propertyName, propertyValue, collection) {
-        var i = 0,
-            len = collection.length;
-        for (; i < len; i++) {
-            if (collection[i][propertyName] == propertyValue) {
-                return i;
+    ]).filter('getByProperty', function() {
+        return function(propertyName, propertyValue, collection) {
+            var i = 0,
+                len = collection.length;
+            for (; i < len; i++) {
+                if (collection[i][propertyName] == propertyValue) {
+                    return collection[i];
+                }
             }
+            return null;
         }
-        return null;
-    }
-});
+    }).filter('getIndexByProperty', function() {
+        return function(propertyName, propertyValue, collection) {
+            var i = 0,
+                len = collection.length;
+            for (; i < len; i++) {
+                if (collection[i][propertyName] == propertyValue) {
+                    return i;
+                }
+            }
+            return null;
+        }
+    });
+})(window.angular);

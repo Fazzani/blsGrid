@@ -1,4 +1,5 @@
-'use strict';
+(function(angular) {
+  'use strict';
 /**
  * BLS grid (sort, search, tree, pagination)
  * @param  {[type]} )            {                                                                return {                                      restrict: "E",        transclude: true,        scope: {            source: ' [description]
@@ -14,7 +15,8 @@ app.directive("blsGrid", function() {
             model: '=ngModel',
             gridClass: '@',
             options: '=',
-            loadDataFun: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise
+            func: '&', //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data
+            funcAsync: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise /for lasy load use
         },
         templateUrl: 'template/blsGrid/blsGrid.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
@@ -39,7 +41,7 @@ app.directive("blsGrid", function() {
                         itemsPerPage: {
                             prefixStorage: 'ipp_', //itemsPerPage storage prefix 
                             selected: 10, // default selectet pageLength
-                            range: [10, 20]//list pageLength
+                            range: [10, 20] //list pageLength
                         }
                     }
                 };
@@ -97,7 +99,6 @@ app.directive("blsGrid", function() {
                         if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1) $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
                         $scope.colOrderConfig = dropableService.initReorderColumns($scope.columns, $scope.data, $scope.storageIds.colReorderDataKey);
                         $log.debug('init colOrderConfig : ' + $scope.colOrderConfig);
-                        $
                     }
                     $scope.isLoading = false;
                 });
@@ -106,11 +107,44 @@ app.directive("blsGrid", function() {
                     $scope.data = [];
                     $scope.isLoading = true;
                     $log.debug('initialise BlsGrid');
-                    if ($scope.loadDataFun && angular.isDefined($scope.loadDataFun()) && angular.isDefined($scope.loadDataFun().then)) {
-                        $scope.loadDataFun().then(function(d) {
+                    $log.debug($scope.funcAsync({
+                            pageIndex: $scope.options.pagination.pageLength,
+                            pageLength: $scope.options.pagination.itemsPerPage.selected
+                        }));
+                    if($scope.func && angular.isDefined($scope.func()))
+                    {
+                    	if(!angular.isDefined($scope.func().then))
+                    		throw "func must be promise!!";
+                    	$scope.func({
+                            pageIndex: $scope.options.pagination.pageLength,
+                            pageLength: $scope.options.pagination.itemsPerPage.selected
+                        }).then(function(d) {
                             $timeout(function() {
                                 $scope.$apply(function() {
-                                    $scope.dataFilterSearch = $scope.source = d.data;//.slice(0,rdm+=10);
+                                    $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
+                                    $scope.isLoading = false;
+                                });
+                            }, 0);
+                            return;
+                        }, function(error) {
+                            $log.error(error);
+                            $scope.isLoading = false;
+                        });
+                    }else if (angular.isDefined($scope.funcAsync)) {
+                    	if(!$scope.funcAsync({
+                            pageIndex: $scope.options.pagination.pageLength,
+                            pageLength: $scope.options.pagination.itemsPerPage.selected
+                        }))
+                    		throw "the promose funcAsync must be declared declared correctly with two paramters {pageIndex, pageLength}";
+                        $scope.funcAsync({
+                            pageIndex: $scope.options.pagination.pageLength,
+                            pageLength: $scope.options.pagination.pageLength + $scope.options.pagination.itemsPerPage.selected
+                        }).then(function(d) {
+                            $timeout(function() {
+                                $scope.$apply(function() {
+                                				$log.debug('d=>');
+                                				$log.debug(d.headers()['x-total-count']);
+                                    $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
                                     $scope.isLoading = false;
                                 });
                             }, 0);
@@ -175,12 +209,10 @@ app.directive("blsGrid", function() {
                     $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
                     $scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
                 }
-                
                 $scope.$watch('options.search.searchText', function(newValue, oldValue) {
                     $scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
                     $log.debug('options.search.searchText triggred => ' + $scope.dataFilterSearch.length);
                 })
-                
                 $scope.saveUserData = function(data) {
                         if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
                     }
@@ -261,3 +293,4 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
             </table></div>\
         </div>');
 }]);
+})(window.angular);

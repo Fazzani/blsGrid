@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html ng-app="app">
     <head>
+        <meta name="viewport" content="width=1020">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Example - bls Grid</title>
+        <base href="/">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
-        <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.js"></script>
-        <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
-        <script src="dist/colResizable-1.5.min.js"></script>
-        <script src="app/app.js"></script>
-        <script src="app/Controllers/rootCtrl.js"></script>
-        <script src="app/Controllers/homeCtrl.js"></script>
-        <script src="app/Directives/services.js"></script>
-        <script src="app/Directives/blsGrid.js"></script>
-        <script src="app/Directives/dropable.js"></script>
-        <script src="app/Directives/blsToolBar.js"></script>
         <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="Content/Styles/styles.css">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-route.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-animate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="dist/colResizable-1.5.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script type="text/javascript">
+                    var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule', 'ngRoute', 'ngAnimate']);
+        </script>
+        <script src="app/app.js"  type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Controllers/rootCtrl.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Controllers/homeCtrl.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/services.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/blsGrid.js"  type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/blsGridAsync.js"  type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/dropable.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/blsToolBar.js" type="text/javascript" charset="utf-8" ></script>
     </head>
     <body ng-controller="rootCtrl">
-        <div class="container well" ng-controller="homeCtrl">
-            <button type="button" class="btn btn-default" ng-click="clearUserData()">clear User Data</button>
-            <input type="text" ng-model="options.search.searchText" class="form-control"></input>
-            <bls-grid id="ngGrid1"
-            ng-model="fakeData" load-data-fun="loadDataFun"
-            options="options"
-            grid-class="table table-hover table-striped table-bordered"
-            >
-            </bls-grid>
+        <div class="container col-md-8 col-md-offset-2">
+            <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/blsGrid">blsGrid example</a></li>
+                        <li><a href="/blsGridAsync">blsGrid Async example</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div ng-view  class="content pop"></div>
         </div>
     </body>
-
 </html>

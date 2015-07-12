@@ -1,7 +1,10 @@
+(function(angular) {
+  'use strict';
 app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
     var root = 'http://jsonplaceholder.typicode.com';
+    var rootUrl = 'http://localhost:3000/posts';
     $scope.fakeData = [];
-    $scope.loadDataFun = $http.get('http://jsonstub.com/bls/Person', {
+    $scope.loadDataFun = $http.get('http://localhost:3000/posts', {
         dataType: 'json',
         data: '',
         headers: {
@@ -12,13 +15,25 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
             'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
         }
     });
-    $scope.loadDataFun.
-    success(function(data, status, headers, config) {
+    $scope.query = function(pageIndex, pageLength) {
+        var url = rootUrl + "?_start=" + pageIndex + "&_end=" + pageLength;
+        $log.debug(url);
+        return $http.get(url, {
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "X-Testing": "testing",
+                'JsonStub-User-Key': '9b0c8e63-914c-44bf-a7b9-79d70e7510fa',
+                'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
+            }
+        });
+    }
+    $scope.loadDataFun.success(function(data, status, headers, config) {
         $timeout(function() {
             $scope.fakeData = data;
-        }, 100);
-    }).
-    error(function(data, status, headers, config) {
+        }, 0);
+    }).error(function(data, status, headers, config) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
     });
@@ -84,95 +99,5 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
             }
         }
     };
-    [{
-        "name": "heni",
-        "age": 21,
-        "prenom": "mezzeni"
-    }, {
-        "name": "riz",
-        "age": 0
-    }, {
-        "name": "téléphone",
-        "age": 2
-    }, {
-        "name": "ahmed",
-        "prenom": "hightech",
-        "age": 5
-    }, {
-        "name": "heni",
-        "age": 21,
-        "prenom": "Fezzeni"
-    }, {
-        "name": "heni",
-        "age": 21,
-        "prenom": "aezzeni"
-    }, {
-        "name": "heeni",
-        "age": 6,
-        "prenom": "Fezrtzeni"
-    }, {
-        "name": "heni",
-        "age": 12,
-        "prenom": "sezzueni"
-    }, {
-        "name": "heni",
-        "age": 21,
-        "prenom": "rFezzeni"
-    }, {
-        "name": "hertni",
-        "age": 21,
-        "prenom": "Fezzeni"
-    }, {
-        "name": "bfni",
-        "age": 8,
-        "prenom": "kezsdzeni"
-    }, {
-        "name": "poni",
-        "age": 21,
-        "prenom": "bFezzeni"
-    }, {
-        "name": "gusi",
-        "age": 35,
-        "prenom": "Fezzeni87"
-    }, {
-        "name": "hbsdni",
-        "age": 22,
-        "prenom": "Fez78zeni"
-    }, {
-        "name": "hesdni",
-        "age": 55,
-        "prenom": "ez78eni"
-    }, {
-        "name": "hesdni",
-        "age": 22,
-        "prenom": "Fezzeni"
-    }, {
-        "name": "htedni",
-        "age": 75,
-        "prenom": "yr78zeni"
-    }, {
-        "name": "redni",
-        "age": 11,
-        "prenom": "Fez78zeni"
-    }, {
-        "name": "hgsdni",
-        "age": 22,
-        "prenom": "Fre8zeni"
-    }, {
-        "name": "opusdni",
-        "age": 44,
-        "prenom": "sfz78zeni"
-    }, {
-        "name": "jusdni",
-        "age": 57,
-        "prenom": "sfz78zeni"
-    }, {
-        "name": "pusdni",
-        "age": 78,
-        "prenom": "sfz78zeni"
-    }, {
-        "name": "lousdni",
-        "age": 28,
-        "prenom": "sfz78zeni"
-    }]
 });
+})(window.angular);

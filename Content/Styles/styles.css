@@ -1,3 +1,7 @@
+.content {
+    padding-top: 35px;
+}
+
 bls-grid {
     position: relative;
 }
@@ -42,7 +46,7 @@ bls-grid {
 /*th comment*/
 
 .blsGrid th.colHeader {
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #dfdfdf 100%);
+    background-image: -webkit-linear-gradient(top, #ffffff 0%, #dfdfdf 100%);
     background-image: linear-gradient(to bottom, #ffffff 0%, #dfdfdf 100%);
     background-repeat: repeat-x;
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0);
@@ -63,12 +67,15 @@ bls-grid {
 .btn-toolbar, .btn-toolbar .btn {
     margin-left: 0 !important;
 }
-.btn-toolbar .search-form{
+
+.btn-toolbar .search-form {
     padding: 0px !important;
 }
-.btn-toolbar .btn{
+
+.btn-toolbar .btn {
     text-shadow: gray 4px 4px 10px;
 }
+
 .btn-toolbar> .btn-group {
     padding-left: 0px !important;
     padding-top: 1px !important;
@@ -164,7 +171,7 @@ bls-grid {
 
 .pagerList {
     margin: 6px 0;
-    padding: 0px 0% 0% 10%;
+    padding: 0px 0% 0% 8%;
 }
 
 .double-bounce1, .double-bounce2 {
@@ -330,3 +337,36 @@ th, td {
 }
 
 
+/* ANIMATIONS
+============================================================================= */
+
+.pop {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.pop.ng-leave {
+    -webkit-transition: all 0.4s ease;
+    transition: all  0.4s ease;
+    opacity: 0.2;
+}
+.pop.ng-enter {
+     -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    opacity: 1;
+}
+.pop.ng-enter-active,
+.pop.ng-leave,
+.pop.ng-leave-active {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 0.5;
+}
+.pop.ng-leave-active {
+    opacity: 0.1;
+}
