@@ -54,7 +54,9 @@ ______
 * Add onSeletedItem Event and send the current element and data row
 * Add checkbox header for selectAll
 * ToolTip hover (option)
-* Add library _underscore (http://stackoverflow.com/questions/14968297/use-underscore-inside-angular-controllers)
+* Fix Filter bug 
+* Fix DragTable data when switching views
+* Complete blsGridAsync version (inherit from blsGrid)
 
 >####reorder from config:
 * Tester la cas de plusieurs BlsGrid dans la mm page et dans des pages différentes
