@@ -37,7 +37,6 @@ ____________________
 
 ###Ràf
 ______
-* Ajax loading function (init and by page)
 * Tree (http://www.bootply.com/GGAMvot45f)
     - Expand All
     - Collapse All
@@ -56,11 +55,5 @@ ______
 * Add onSeletedItem Event and send the current element and data row
 * Add checkbox header for selectAll
 * ToolTip hover (option)
-* Fix Filter bug 
-* Fix DragTable data when switching views
-* Complete blsGridAsync version (inherit from blsGrid)
 
->####reorder from config:
-* Tester la cas de plusieurs BlsGrid dans la mm page et dans des pages différentes
-* Tester sans la colonne Actions
 
