@@ -25,7 +25,7 @@
             if (angular.isDefined(searchedText) && searchedText!=="") url += "&q=" + searchedText;
             if (angular.isDefined(orderBy)) {
                 url += '&_sort=' + orderBy;
-                url += '&_order=' + (order == 0 ? 'DESC' : 'ASC');
+                url += '&_order=' + (order == 0 ? 'ASC' : 'DESC');
             }
             $log.debug('url=> ' + url);
             return $http.get(url, {
