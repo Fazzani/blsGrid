@@ -11,16 +11,18 @@ app.directive("blsGridAsync", function() {
     return {
         restrict: "E",
         transclude: true,
+        require:'^ngModel',
         scope: {
+            ngModel:'=',
             gridClass: '@',
             options: '=',
-            funcAsync: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise /for lasy load use
+            funcAsync: '&' 
         },
         templateUrl: 'template/blsGrid/blsGridAsync.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
-                $scope.source;
+                
                 var defaultOptions = {
                     multiSelection: true,
                     //autoSaveReorderColumns: true,
@@ -38,7 +40,7 @@ app.directive("blsGridAsync", function() {
                         },
                         itemsPerPage: {
                             prefixStorage: 'ipp_', //itemsPerPage storage prefix 
-                            selected: 10, // default selectet pageLength
+                            selected: 10, // default selected pageLength
                             range: [10, 20] //list pageLength
                         }
                     }
@@ -47,7 +49,7 @@ app.directive("blsGridAsync", function() {
                 $scope.options = angular.extend({}, defaultOptions, $scope.options);
                 $scope.columns = [];
                 $scope.isLoading = true;
-                $scope.dataFilterSearch = $scope.data = [];
+                $scope.data = [];
                 $scope.offset = 0;
                 $scope.selectedRows = [];
                 $scope.actionsEnabled = $scope.options.actions != null;
@@ -59,10 +61,11 @@ app.directive("blsGridAsync", function() {
                     colReorderDataKey: 'crdKey_' + $scope.uniqueId,
                 };
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
-                $scope.$watchCollection('source', function(newVal, oldValue) {
+
+                $scope.$watchCollection('ngModel.data', function(newVal, oldValue) {
                     $scope.isLoading = true;
                     if (newVal != oldValue) {
-                        angular.forEach($scope.source, function(value, key) {
+                        angular.forEach($scope.ngModel.data, function(value, key) {
                             if ($scope.actionsEnabled) {
                                 value.actions = $scope.options.actions;
                             }
@@ -104,36 +107,19 @@ app.directive("blsGridAsync", function() {
                     $scope.columns = [];
                     $scope.data = [];
                     $scope.isLoading = true;
-                    $log.debug('initialise BlsGrid');
-                    // $log.debug($scope.funcAsync({
-                    //         pageIndex: $scope.options.pagination.pageIndex,
-                    //         pageLength: $scope.options.pagination.itemsPerPage.selected
-                    //     }));
+                    $log.debug('initialise BlsGrid Async');
+                   refreshDataGrid();
+                }
+                var refreshDataGrid = function(){
                     if (angular.isDefined($scope.funcAsync)) {
-                        if(!$scope.funcAsync({
-                            pageIndex: $scope.options.pagination.pageIndex,
-                            pageLength: $scope.options.pagination.itemsPerPage.selected
-                        }))
-                            throw "the promose funcAsync must be declared declared correctly with two paramters {pageIndex, pageLength}";
                         $scope.funcAsync({
                             pageIndex: $scope.options.pagination.pageLength,
-                            pageLength: $scope.options.pagination.pageLength + $scope.options.pagination.itemsPerPage.selected
-                        }).then(function(d) {
-                            $timeout(function() {
-                                $scope.$apply(function() {
-                                                $log.debug('d=>');
-                                                $log.debug(d.headers()['x-total-count']);
-                                    $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
-                                    $scope.isLoading = false;
-                                });
-                            }, 0);
-                            return;
-                        }, function(error) {
-                            $log.error(error);
-                            $scope.isLoading = false;
+                            pageLength: $scope.options.pagination.pageLength + $scope.options.pagination.itemsPerPage.selected,
+                            searchedText: $scope.options.search.searchText,
+                            orderBy:$scope.predicate,
+                            order:$scope.reverse
                         });
                     } 
-                    $scope.isLoading = false;
                 }
                 $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
@@ -165,12 +151,13 @@ app.directive("blsGridAsync", function() {
                     $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
                     return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
                 };
-                $scope.toPage = function(page) {
-                    $scope.options.pagination.pageIndex = page;
-                    $scope.refreshOffset();
-                }
+                
                 $scope.$watch('options.pagination.pageIndex', function(newValue, oldValue) {
-                    $scope.refreshOffset();
+                    if(newValue!=oldValue){
+                        $scope.options.pagination.pageIndex = newValue;
+                        refreshDataGrid();
+                        $scope.refreshOffset();
+                    }
                 })
                 $scope.refreshOffset = function() {
                     $scope.offset = ($scope.options.pagination.pageIndex) * $scope.options.pagination.pageLength;
@@ -181,11 +168,14 @@ app.directive("blsGridAsync", function() {
                         val: $scope.options.pagination.itemsPerPage.selected
                     });
                     $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
-                    $scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
+                    refreshDataGrid();
+                    //$scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
                 }
                 $scope.$watch('options.search.searchText', function(newValue, oldValue) {
-                    $scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
-                    $log.debug('options.search.searchText triggred => ' + $scope.dataFilterSearch.length);
+                    if(newValue!=oldValue){
+                        refreshDataGrid();
+                    }
+                    //$scope.dataFilterSearch = $filter('filter')($scope.data, newValue);
                 })
                 $scope.saveUserData = function(data) {
                         if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
@@ -258,7 +248,7 @@ angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="dataFilterSearch.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
@@ -288,7 +278,7 @@ $templateCache.put('template/blsGrid/blsGrid.html', '<pre> itemsCount : {{data.l
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="dataFilterSearch.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
