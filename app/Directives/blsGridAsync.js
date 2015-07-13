@@ -93,8 +93,6 @@
                                     $scope.initResizableColumns();
                                 }
                             });
-                            $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
-                            $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
                             if ($scope.options.pagination.itemsPerPage && $scope.options.pagination.itemsPerPage.range && $scope.options.pagination.itemsPerPage.range.indexOf($scope.options.pagination.pageLength) < 1) $scope.options.pagination.pageLength = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.range[0];
                             $scope.colOrderConfig = dropableService.initReorderColumns($scope.columns, $scope.data, $scope.storageIds.colReorderDataKey);
                             $log.debug('init colOrderConfig : ' + $scope.colOrderConfig);
@@ -111,6 +109,8 @@
                     }
                     var refreshDataGrid = function() {
                         if (angular.isDefined($scope.funcAsync)) {
+                            $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
+                            $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
                             $scope.funcAsync({
                                 pageIndex: $scope.options.pagination.pageIndex * $scope.options.pagination.itemsPerPage.selected,
                                 pageLength: ($scope.options.pagination.pageIndex * $scope.options.pagination.itemsPerPage.selected) + $scope.options.pagination.itemsPerPage.selected,
@@ -132,7 +132,6 @@
                         });
                     }
                     $scope.order = function(predicate) {
-                        //$log.info('order function was called');
                         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                         $scope.predicate = predicate;
                         $scope.saveUserData({
@@ -143,6 +142,7 @@
                             key: $scope.storageIds.reverseId,
                             val: $scope.reverse
                         });
+                        refreshDataGrid();
                     };
                     $scope.glyphOrder = function(col) {
                         //$log.info('glyphOrder function was called');
