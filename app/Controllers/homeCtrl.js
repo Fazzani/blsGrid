@@ -28,7 +28,7 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
                 'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
             }
         });
-    }
+    };
     $scope.loadDataFun.success(function(data, status, headers, config) {
         $timeout(function() {
             $scope.fakeData = data;
