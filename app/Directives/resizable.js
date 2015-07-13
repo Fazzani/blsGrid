@@ -3,6 +3,8 @@
 app.directive("resizable", function($timeout) {
     return {
         link: function($scope, element, attrs) {
+            console.log('init resizable..');
+            console.log(element);
             $scope.$evalAsync(function() {
                 $timeout(function() {
                     element.colResizable({

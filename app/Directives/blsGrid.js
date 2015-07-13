@@ -58,9 +58,11 @@ app.directive("blsGrid", function() {
                     reverseId: 'rvs_' + $scope.uniqueId,
                     itemsPerPageId: 'ipp_' + $scope.uniqueId,
                     colReorderDataKey: 'crdKey_' + $scope.uniqueId,
+                    colResizeDataKey: 'crsKey_' + $scope.uniqueId
                 };
                 $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
                 $scope.$watchCollection('source', function(newVal, oldValue) {
+                    $scope.data=[];
                     $scope.isLoading = true;
                     if (newVal != oldValue) {
                         angular.forEach($scope.source, function(value, key) {
@@ -136,7 +138,7 @@ app.directive("blsGrid", function() {
                 }
                 $scope.initResizableColumns = function() {
                     $scope.$evalAsync(function() {
-                        $element.find('table').colResizable({
+                        $($element).find('#'+$scope.storageIds.colResizeDataKey).colResizable({
                             fixed: true,
                             liveDrag: true,
                             postbackSafe: true,
@@ -164,10 +166,6 @@ app.directive("blsGrid", function() {
                     $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
                     return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
                 };
-                $scope.toPage = function(page) {
-                    $scope.options.pagination.pageIndex = page;
-                    $scope.refreshOffset();
-                }
                 $scope.$watch('options.pagination.pageIndex', function(newValue, oldValue) {
                     $scope.refreshOffset();
                 })
@@ -194,8 +192,8 @@ app.directive("blsGrid", function() {
                     $log.debug(localStorageService.keys());
                     $log.debug('clearUserDataEvent intercepted');
                     if (localStorageService.isSupported) {
-                        localStorageService.clearAll();
-                        localStorageService.remove('dragtable');
+                        localStorageService.clearAll('^(.)+' + $scope.uniqueId + '$');
+                        //localStorageService.remove('dragtable');
                     }
                 });
                 $scope.$on('refreshEvent', function(data) {

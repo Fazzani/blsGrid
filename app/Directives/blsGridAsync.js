@@ -57,6 +57,7 @@
                         reverseId: 'rvs_' + $scope.uniqueId,
                         itemsPerPageId: 'ipp_' + $scope.uniqueId,
                         colReorderDataKey: 'crdKey_' + $scope.uniqueId,
+                        colResizeDataKey: 'crsKey_' + $scope.uniqueId
                     };
                     $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
                     $scope.$watchCollection('ngModel.data', function(newVal, oldValue) {
@@ -123,7 +124,7 @@
                     }
                     $scope.initResizableColumns = function() {
                         $scope.$evalAsync(function() {
-                            $element.find('table').colResizable({
+                            $($element).find('#'+$scope.storageIds.colResizeDataKey).colResizable({
                                 fixed: true,
                                 liveDrag: true,
                                 postbackSafe: true,
@@ -133,7 +134,6 @@
                         });
                     }
                     $scope.order = function(predicate) {
-                        $scope.options.pagination.pageIndex=1;
                         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                         $scope.predicate = predicate;
                         $scope.saveUserData({
@@ -165,7 +165,6 @@
                         });
                         $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
                         refreshDataGrid();
-                        //$scope.dataFilterSearch = $filter('filter')($scope.data, $scope.options.search.searchText);
                     }
                     $scope.$watch('options.search.searchText', function(newValue, oldValue) {
                         if (newValue != oldValue) {
@@ -181,8 +180,8 @@
                         $log.debug(localStorageService.keys());
                         $log.debug('clearUserDataEvent intercepted');
                         if (localStorageService.isSupported) {
-                            localStorageService.clearAll();
-                            localStorageService.remove('dragtable');
+                            localStorageService.clearAll('^(.)+' + $scope.uniqueId + '$');
+                            //localStorageService.remove('dragtable');
                         }
                     });
                     $scope.$on('refreshEvent', function(data) {
@@ -226,7 +225,7 @@
          <div class="bls-table-container">\
             <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
-            <div><table class="{{gridClass}} blsGrid" id="dragtable">\
+            <div><table class="{{gridClass}} blsGrid" id="{{storageIds.colResizeDataKey}}">\
                     <thead>\
                         <tr>\
                             <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
@@ -256,7 +255,7 @@
          <div class="bls-table-container">\
             <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
-            <div><table class="{{gridClass}} blsGrid" id="dragtable">\
+            <div><table class="{{gridClass}} blsGrid" id="{{storageIds.colResizeDataKey}}">\
                     <thead>\
                         <tr>\
                             <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
