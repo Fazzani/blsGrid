@@ -39,6 +39,8 @@ ____________________
 ______
 * Ajax loading function (init and by page)
 * Tree (http://www.bootply.com/GGAMvot45f)
+    - Expand All
+    - Collapse All
 * Pager buttons name
 * Col def (sortOn , filterOn, classCss, action buttons)
 * Add toolbar 

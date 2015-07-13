@@ -15,20 +15,35 @@ app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
             'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
         }
     });
-    $scope.query = function(pageIndex, pageLength) {
+    $scope.model={totalItems:0,data:{}};
+    $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
+
         var url = rootUrl + "?_start=" + pageIndex + "&_end=" + pageLength;
-        $log.debug(url);
+        if(angular.isDefined(searchedText))
+            url+="&q="+searchedText;
+        if(angular.isDefined(orderBy))
+        {    
+            url+='&_sort='+orderBy;
+            url+='&_order='+(order==0?'DESC':'ASC');
+        }
+
+        $log.debug('url=> '+url);
         return $http.get(url, {
             dataType: 'json',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                "X-Testing": "testing",
+                'X-Testing': 'testing',
                 'JsonStub-User-Key': '9b0c8e63-914c-44bf-a7b9-79d70e7510fa',
                 'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
             }
+        }).then(function(response){
+            $scope.model.totalItems=response.headers()['x-total-count'];
+        $scope.model.data = response.data;
+        }, function(errors){
+            $log.error(errors);
         });
-    }
+    };
     $scope.loadDataFun.success(function(data, status, headers, config) {
         $timeout(function() {
             $scope.fakeData = data;

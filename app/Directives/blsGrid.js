@@ -15,8 +15,7 @@ app.directive("blsGrid", function() {
             model: '=ngModel',
             gridClass: '@',
             options: '=',
-            func: '&', //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data
-            funcAsync: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise /for lasy load use
+            func: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data
         },
         templateUrl: 'template/blsGrid/blsGrid.html',
         controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
@@ -107,10 +106,7 @@ app.directive("blsGrid", function() {
                     $scope.data = [];
                     $scope.isLoading = true;
                     $log.debug('initialise BlsGrid');
-                    $log.debug($scope.funcAsync({
-                            pageIndex: $scope.options.pagination.pageLength,
-                            pageLength: $scope.options.pagination.itemsPerPage.selected
-                        }));
+                   
                     if($scope.func && angular.isDefined($scope.func()))
                     {
                     	if(!angular.isDefined($scope.func().then))
@@ -121,29 +117,6 @@ app.directive("blsGrid", function() {
                         }).then(function(d) {
                             $timeout(function() {
                                 $scope.$apply(function() {
-                                    $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
-                                    $scope.isLoading = false;
-                                });
-                            }, 0);
-                            return;
-                        }, function(error) {
-                            $log.error(error);
-                            $scope.isLoading = false;
-                        });
-                    }else if (angular.isDefined($scope.funcAsync)) {
-                    	if(!$scope.funcAsync({
-                            pageIndex: $scope.options.pagination.pageLength,
-                            pageLength: $scope.options.pagination.itemsPerPage.selected
-                        }))
-                    		throw "the promose funcAsync must be declared declared correctly with two paramters {pageIndex, pageLength}";
-                        $scope.funcAsync({
-                            pageIndex: $scope.options.pagination.pageLength,
-                            pageLength: $scope.options.pagination.pageLength + $scope.options.pagination.itemsPerPage.selected
-                        }).then(function(d) {
-                            $timeout(function() {
-                                $scope.$apply(function() {
-                                				$log.debug('d=>');
-                                				$log.debug(d.headers()['x-total-count']);
                                     $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
                                     $scope.isLoading = false;
                                 });
@@ -261,36 +234,5 @@ app.directive("blsGrid", function() {
         ]
     }
 });
-angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
-    $templateCache.put('template/blsGrid/blsGrid.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
-         <div class="bls-table-container">\
-            <bls-tool-bar></bls-tool-bar>\
-            <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
-            <div><table class="{{gridClass}} blsGrid" id="dragtable">\
-                    <thead>\
-                        <tr>\
-                            <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
-                            				{{col.displayName|uppercase}}\
-                                <i class="pull-left fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
-                            </th>\
-                        </tr>\
-                    </thead>\
-                    <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.pageLength:offset)">\
-                                <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
-                                <td ng-if="actionsEnabled" class="center">\
-                                    <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
-                                </td>\
-                            </tr>\
-                        </tbody>\
-                        <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="dataFilterSearch.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
-                            <div class="pagerList col-md-2 col-xs-4">\
-                                    <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
-                            </div>\
-                        </td></tr>\
-                        </tfoot>\
-            </table></div>\
-        </div>');
-}]);
+
 })(window.angular);
