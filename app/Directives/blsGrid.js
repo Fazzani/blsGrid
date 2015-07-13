@@ -110,9 +110,9 @@ app.directive("blsGrid", function() {
                     if($scope.func && angular.isDefined($scope.func()))
                     {
                     	if(!angular.isDefined($scope.func().then))
-                    		throw "func must be promise!!";
+                    		throw "func must a be promise!!";
                     	$scope.func({
-                            pageIndex: $scope.options.pagination.pageLength,
+                            pageIndex: $scope.options.pagination.pageIndex,
                             pageLength: $scope.options.pagination.itemsPerPage.selected
                         }).then(function(d) {
                             $timeout(function() {
@@ -172,7 +172,7 @@ app.directive("blsGrid", function() {
                     $scope.refreshOffset();
                 })
                 $scope.refreshOffset = function() {
-                    $scope.offset = ($scope.options.pagination.pageIndex) * $scope.options.pagination.pageLength;
+                    $scope.offset = ($scope.options.pagination.pageIndex-1) * $scope.options.pagination.itemsPerPage.selected;
                 }
                 $scope.updateRecordsCount = function() {
                     $scope.saveUserData({

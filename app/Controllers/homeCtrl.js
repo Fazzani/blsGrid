@@ -4,7 +4,7 @@
         var root = 'http://jsonplaceholder.typicode.com';
         var rootUrl = 'http://localhost:3000/posts';
         $scope.fakeData = [];
-        $scope.loadDataFun = $http.get('http://localhost:3000/posts', {
+        $scope.loadDataFunc = $http.get('http://localhost:3000/posts', {
             dataType: 'json',
             data: '',
             headers: {
@@ -20,7 +20,8 @@
             data: {}
         };
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
-            var url = rootUrl + "?_start=" + pageIndex + "&_end=" + pageLength;
+            var offset =  (pageIndex-1)*pageLength;
+            var url = rootUrl + "?_start=" + offset + "&_end=" + (offset + pageLength);
             if (angular.isDefined(searchedText) && searchedText!=="") url += "&q=" + searchedText;
             if (angular.isDefined(orderBy)) {
                 url += '&_sort=' + orderBy;
@@ -43,7 +44,7 @@
                 $log.error(errors);
             });
         };
-        $scope.loadDataFun.success(function(data, status, headers, config) {
+        $scope.loadDataFunc.success(function(data, status, headers, config) {
             $timeout(function() {
                 $scope.fakeData = data;
             }, 0);
@@ -100,7 +101,7 @@
             }],
             pagination: {
                 pageLength: 20,
-                pageIndex: 0,
+                pageIndex: 1,
                 pager: {
                     nextTitle: 'Suivant',
                     perviousTitle: 'Précédent',

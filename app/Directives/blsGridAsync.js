@@ -102,6 +102,7 @@
                     var init = function() {
                         $log.debug('initialise BlsGrid Async');
                         $log.debug($scope.options.pagination.pageLength);
+                        $log.debug($scope.options.pagination.pageIndex);
                         $scope.columns = [];
                         $scope.data = [];
                         $scope.isLoading = true;
@@ -112,8 +113,8 @@
                             $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
                             $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.columns[0] == undefined ? "" : $scope.columns[0].id);
                             $scope.funcAsync({
-                                pageIndex: $scope.options.pagination.pageIndex * $scope.options.pagination.itemsPerPage.selected,
-                                pageLength: ($scope.options.pagination.pageIndex * $scope.options.pagination.itemsPerPage.selected) + $scope.options.pagination.itemsPerPage.selected,
+                                pageIndex: $scope.options.pagination.pageIndex,
+                                pageLength: $scope.options.pagination.itemsPerPage.selected,
                                 searchedText: $scope.options.search.searchText,
                                 orderBy: $scope.predicate,
                                 order: $scope.reverse
@@ -132,7 +133,7 @@
                         });
                     }
                     $scope.order = function(predicate) {
-                        $scope.options.pagination.pageIndex=0;
+                        $scope.options.pagination.pageIndex=1;
                         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                         $scope.predicate = predicate;
                         $scope.saveUserData({
@@ -153,7 +154,7 @@
                     };
                     $scope.$watch('options.pagination.pageIndex', function(newValue, oldValue) {
                         if (newValue != oldValue) {
-                            $scope.options.pagination.pageIndex = newValue;
+                            $scope.options.pagination.pageIndex = newValue++;
                             refreshDataGrid();
                         }
                     })
@@ -243,7 +244,7 @@
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems- options.pagination.itemsPerPage.selected" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
@@ -265,7 +266,7 @@
                         </tr>\
                     </thead>\
                     <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.pageLength:offset)">\
+                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
                                 <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
                                 <td ng-if="actionsEnabled" class="center">\
                                     <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
@@ -273,7 +274,7 @@
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
