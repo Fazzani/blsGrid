@@ -49,7 +49,6 @@
                     $scope.columns = [];
                     $scope.isLoading = true;
                     $scope.data = [];
-                    $scope.offset = 0;
                     $scope.selectedRows = [];
                     $scope.actionsEnabled = $scope.options.actions != null;
                     $scope.uniqueId = $scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
@@ -61,6 +60,7 @@
                     };
                     $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
                     $scope.$watchCollection('ngModel.data', function(newVal, oldValue) {
+                        $scope.data=[];
                         $scope.isLoading = true;
                         if (newVal != oldValue) {
                             angular.forEach(newVal, function(value, key) {
@@ -132,6 +132,7 @@
                         });
                     }
                     $scope.order = function(predicate) {
+                        $scope.options.pagination.pageIndex=0;
                         $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
                         $scope.predicate = predicate;
                         $scope.saveUserData({
@@ -154,12 +155,8 @@
                         if (newValue != oldValue) {
                             $scope.options.pagination.pageIndex = newValue;
                             refreshDataGrid();
-                            $scope.refreshOffset();
                         }
                     })
-                    $scope.refreshOffset = function() {
-                        $scope.offset = ($scope.options.pagination.pageIndex) * $scope.options.pagination.pageLength;
-                    }
                     $scope.updateRecordsCount = function() {
                         $scope.saveUserData({
                             key: $scope.storageIds.itemsPerPageId,
@@ -224,7 +221,7 @@
         }
     });
     angular.module("bls_tpls", []).run(["$templateCache", function($templateCache) {
-        $templateCache.put('template/blsGrid/blsGridAsync.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
+        $templateCache.put('template/blsGrid/blsGridAsync.html', '<pre> itemsCount : {{ngModel.totalItems}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
             <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
@@ -238,7 +235,7 @@
                         </tr>\
                     </thead>\
                     <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.pageLength:offset)">\
+                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in data">\
                                 <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
                                 <td ng-if="actionsEnabled" class="center">\
                                     <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
@@ -246,7 +243,7 @@
                             </tr>\
                         </tbody>\
                         <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems- options.pagination.itemsPerPage.selected" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
