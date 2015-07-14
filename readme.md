@@ -38,24 +38,14 @@ ____________________
 		>
 </bls-grid>```
 
-###Ràf
-______
-* Tree (http://www.bootply.com/GGAMvot45f)
-    - Expand All
-    - Collapse All
-* Pager buttons name
-* Col def (sortOn , filterOn, classCss, action buttons)
-* Add toolbar 
-    - Search => ok  
-    - Reset user settings => ok
-    - Pagination (itemsPerPage + message for indexPage and count)
-    - Refresh (reload data) => ok
-    - Show hide columns (list checkbox)
-* Allow customize
-    - Header's class 
-    - Spinner css
-* Create services for differents Features (Reorder, Sort, etc )
-* Add onSeletedItem Event and send the current element and data row
-* ToolTip hover (option)
+>#####simple Async example 
+<bls-grid-async
+id="ngGridAsync"
+ng-model = "model"
+func-async="query(pageIndex, pageLength, searchedText, orderBy, order)"
+options="options"
+grid-class="table table-hover table-striped table-bordered"
+>
+</bls-grid-async>
 
 

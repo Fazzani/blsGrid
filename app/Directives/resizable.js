@@ -1,10 +1,10 @@
 'use strict';
 
-app.directive("resizable", function($timeout) {
+app.directive("resizable", function($timeout, $log) {
     return {
         link: function($scope, element, attrs) {
-            console.log('init resizable..');
-            console.log(element);
+            $log.debug('init resizable..');
+            $log.debug(element);
             $scope.$evalAsync(function() {
                 $timeout(function() {
                     element.colResizable({
