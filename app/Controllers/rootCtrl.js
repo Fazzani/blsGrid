@@ -5,7 +5,7 @@
             $scope.Page = 'BlsGrid - Documentation';
             if ($location.path() === path) {
                 if (path === '/docs') $scope.Page = 'BlsGrid - Documentation';
-                else $scope.Page = 'BlsGrid';
+                else $scope.Page = 'BlsGrid - Examples';
                 return "active"
             } else {
                 return ""
