@@ -242,14 +242,14 @@
                                 </td>\
                             </tr>\
                         </tbody>\
-                        <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="ngModel.totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                    </table>\
+                        <div class="footer">\
+                            <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
                                     <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                             </div>\
-                        </td></tr>\
-                        </tfoot>\
-            </table></div>\
+                         </div>\
+            </div>\
         </div>');
         $templateCache.put('template/blsGrid/blsGrid.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\
@@ -272,14 +272,14 @@
                                 </td>\
                             </tr>\
                         </tbody>\
-                        <tfoot>  <tr><td colspan="{{columns.length}}">\
-                            <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
-                            <div class="pagerList col-md-2 col-xs-4">\
-                                    <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
-                            </div>\
-                        </td></tr>\
-                        </tfoot>\
-            </table></div>\
+            </table>\
+            <div class="footer">\
+                <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
+                <div class="pagerList col-md-2 col-xs-4">\
+                        <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
+                </div>\
+             </div>\
+            </div>\
         </div>');
     }]);
 })(window.angular);

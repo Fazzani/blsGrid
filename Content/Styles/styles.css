@@ -196,8 +196,11 @@ bls-grid {
 .spinner {}
 
 .pagerList {
-    margin: 6px 0;
+    margin: 20px 0;
     padding: 0px 0% 0% 8%;
+}
+table.blsGrid{
+    margin:0px;
 }
 
 .double-bounce1, .double-bounce2 {
