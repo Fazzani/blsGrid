@@ -11,16 +11,16 @@ app.use('/Views',express.static('Views'));
 
 //Store all HTML files in view folder.
 app.get('/favicon.ico',function(req,res){
-  res.sendFile(path.join(__dirname+'/favicon.ico'));
+  res.sendFile(path.join(__dirname+'favicon.ico'));
   //__dirname : It will resolve to your project folder.
 });
 app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
+  res.sendFile(path.join(__dirname+'index.html'));
   //__dirname : It will resolve to your project folder.
 });
 
 app.get('*',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
+  res.sendFile(path.join(__dirname+'index.html'));
 });
 
 app.listen(process.env.PORT || 30001, function() {
