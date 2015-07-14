@@ -2,9 +2,9 @@
     'use strict';
     app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
         var root = 'http://jsonplaceholder.typicode.com';
-        var rootUrl = 'http://localhost:3000/posts';
+        var posts = root+'/comments';
         $scope.fakeData = [];
-        $scope.loadDataFunc = $http.get('http://localhost:3000/posts', {
+        $scope.loadDataFunc = $http.get(posts, {
             dataType: 'json',
             data: '',
             headers: {
@@ -21,7 +21,7 @@
         };
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
             var offset =  (pageIndex-1)*pageLength;
-            var url = rootUrl + "?_start=" + offset + "&_end=" + (offset + pageLength);
+            var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);
             if (angular.isDefined(searchedText) && searchedText!=="") url += "&q=" + searchedText;
             if (angular.isDefined(orderBy)) {
                 url += '&_sort=' + orderBy;
