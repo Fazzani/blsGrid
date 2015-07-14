@@ -1,7 +1,7 @@
 #BlsGrid
 ========
 <p>This is <a href="http://www.blsgrid.herokuapp.com/" title="Title">
-an example</a> inline link.</p>
+an example</a></p>
 
 ###Default options structure
 ____________________________
