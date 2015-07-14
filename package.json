@@ -4,5 +4,5 @@
   "dependencies": {
     "express": "^4.11.0"
   },
-  "start": "node Server",
+  "start": "node Server.js"
 }
