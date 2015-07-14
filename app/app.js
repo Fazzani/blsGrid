@@ -10,6 +10,8 @@
             }).when("/blsGridAsync", {
                 templateUrl: "Views/Partials/blsGridAsync.html",
                 controller:'homeCtrl'
+            }).when("/docs", {
+                templateUrl: "Views/Partials/docs.html"
             }).otherwise({
                 redirectTo: '/blsGrid'
             });
