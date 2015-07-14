@@ -196,6 +196,10 @@ app.directive("blsGrid", function() {
                         //localStorageService.remove('dragtable');
                     }
                 });
+                $scope.$on('toggleSelectAllEvent', function(ev) {
+                    $log.debug('toggleSelectAllEvent intercepted');
+                    $scope.selectedRows = ev.targetScope.selectedAll ? $scope.data : [];
+                });
                 $scope.$on('refreshEvent', function(data) {
                     $log.debug('refreshEvent intercepted');
                     init();

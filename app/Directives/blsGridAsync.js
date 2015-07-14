@@ -61,7 +61,7 @@
                     };
                     $scope.options.pagination.itemsPerPage.selected = localStorageService.get($scope.storageIds.itemsPerPageId) || $scope.options.pagination.itemsPerPage.selected;
                     $scope.$watchCollection('ngModel.data', function(newVal, oldValue) {
-                        $scope.data=[];
+                        $scope.data = [];
                         $scope.isLoading = true;
                         if (newVal != oldValue) {
                             angular.forEach(newVal, function(value, key) {
@@ -124,7 +124,7 @@
                     }
                     $scope.initResizableColumns = function() {
                         $scope.$evalAsync(function() {
-                            $($element).find('#'+$scope.storageIds.colResizeDataKey).colResizable({
+                            $($element).find('#' + $scope.storageIds.colResizeDataKey).colResizable({
                                 fixed: true,
                                 liveDrag: true,
                                 postbackSafe: true,
@@ -183,6 +183,10 @@
                             localStorageService.clearAll('^(.)+' + $scope.uniqueId + '$');
                             //localStorageService.remove('dragtable');
                         }
+                    });
+                    $scope.$on('toggleSelectAllEvent', function(ev) {
+                        $log.debug('toggleSelectAllEvent intercepted => ' + ev.targetScope.selectedAll);
+                        $scope.selectedRows = ev.targetScope.selectedAll ? $scope.data : [];
                     });
                     $scope.$on('refreshEvent', function(data) {
                         $log.debug('refreshEvent intercepted');

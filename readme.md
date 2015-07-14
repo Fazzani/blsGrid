@@ -53,7 +53,6 @@ ______
     - Spinner css
 * Create services for differents Features (Reorder, Sort, etc )
 * Add onSeletedItem Event and send the current element and data row
-* Add checkbox header for selectAll
 * ToolTip hover (option)
 
 
