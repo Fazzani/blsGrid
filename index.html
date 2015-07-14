@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="app">
-    <head>
+<html ng-app="app" ng-controller="rootCtrl">
+    <head> 
         <meta name="viewport" content="width=1020">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Example - bls Grid</title>
+        <title ng-bind="Page"></title>
         <base href="/">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
@@ -29,7 +29,7 @@
         <script src="app/Directives/dropable.js" type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsToolBar.js" type="text/javascript" charset="utf-8" ></script>
     </head>
-    <body ng-controller="rootCtrl">
+    <body>
         <div class="container col-md-8 col-md-offset-2">
             <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
                 <div class="container-fluid">
@@ -44,13 +44,13 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li ng-class="getActiveMenu('/docs')"><a href="/docs">Docs <span  class="sr-only">(current)</span></a></li>
+                            <li ng-class="getActiveMenu('/docs')"><a href="/docs">Docs</a></li>
                             <li class="dropdown" ng-class="getActiveMenu('/blsGrid')||getActiveMenu('/blsGridAsync')">
                                 <a href="#" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Examples <span class="caret"> <span  class="sr-only">(current)</span></span></a>
                                 <ul class="dropdown-menu">
-                                    <li ng-class="getActiveMenu('/blsGrid')"><a href="/blsGrid">BlsGrid example</a></li>
+                                    <li ng-class="getActiveMenu('/blsGrid')"><a href="/blsGrid">BlsGrid</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li ng-class="getActiveMenu('/blsGridAsync')"><a href="/blsGridAsync">BlsGrid Async example</a></li>
+                                    <li ng-class="getActiveMenu('/blsGridAsync')"><a href="/blsGridAsync">BlsGrid Async</a></li>
                                 </ul>
                             </li>
                         </ul>

@@ -1,6 +1,7 @@
 (function(angular) {
     'use strict';
-    app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log) {
+    app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log, Page) {
+        Page.setTitle("blsGrid");
         var root = 'http://jsonplaceholder.typicode.com';
         var posts = root+'/comments';
         $scope.fakeData = [];

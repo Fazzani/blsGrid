@@ -1,11 +1,11 @@
 (function(angular) {
     'use strict';
-    app.controller("rootCtrl", ['$scope', '$location', '$log', function($scope, $location, $log) {
-        $scope.page = 'Index';
+    app.controller("rootCtrl", ['$scope', '$location', '$log', function($scope, $location, $log, Page) {
         $scope.getActiveMenu = function(path) {
-            $log.debug($location.path());
-            $log.debug($location.path() == path);
+            $scope.Page = 'BlsGrid - Documentation';
             if ($location.path() === path) {
+                if (path === '/docs') $scope.Page = 'BlsGrid - Documentation';
+                else $scope.Page = 'BlsGrid';
                 return "active"
             } else {
                 return ""

@@ -13,7 +13,7 @@
             }).when("/docs", {
                 templateUrl: "Views/Partials/docs.html"
             }).otherwise({
-                redirectTo: '/blsGrid'
+                redirectTo: '/docs.html'
             });
             $locationProvider.html5Mode(true);
         }
@@ -39,5 +39,11 @@
             }
             return null;
         }
-    });
+    }).factory('Page', function() {
+   var title = 'blsGrid';
+   return {
+     title: function() { return title; },
+     setTitle: function(newTitle) { title = newTitle }
+   };
+});
 })(window.angular);
