@@ -1,44 +1,53 @@
 (function(angular) {
     'use strict';
     app.controller("homeCtrl", function($scope, $http, $filter, $timeout, $log, Page) {
-        Page.setTitle("blsGrid");
-        var root = 'http://jsonplaceholder.typicode.com';
-        var posts = root+'/comments';
-        $scope.fakeData = [];
-        $scope.loadDataFunc = $http.get(posts, {
+        var requestOptions = {
             dataType: 'json',
             data: '',
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
-                "X-Testing": "testing",
+                'X-Testing': 'testing',
                 'JsonStub-User-Key': '9b0c8e63-914c-44bf-a7b9-79d70e7510fa',
                 'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
             }
-        });
+        };
+        Page.setTitle("blsGrid");
+        var root = 'http://jsonplaceholder.typicode.com';
+        var posts = root + '/posts'; // /posts/1/comments    /albums  /photos /todos /users
+        $scope.fakeData = [];
+        $scope.loadDataFunc = $http.get(posts, requestOptions);
         $scope.model = {
             totalItems: 0,
             data: {}
         };
+        //For hierarchique view
+        $scope.getChildrens = function(parentId) {
+            var url = root + "/comments?postId=" + parentId;
+            return $http.get(url, requestOptions).then(function(response) {
+                $scope.model.totalItems = response.headers()['x-total-count'];
+                $scope.model.data = response.data;
+            }, function(errors) {
+                $log.error(errors);
+            });
+        };
+        //For master Slave view
+        $scope.getSlaveView = function(masterId) {
+            $log.debug('masterId => '+masterId);
+            // console.dir(masterId);
+            var url = root + "/comments?postId=" + masterId;
+            return {func: $http.get(url, requestOptions), templateUrl:"Views/Partials/slavePostTemplate.html"};
+        };
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
-            var offset =  (pageIndex-1)*pageLength;
+            var offset = (pageIndex - 1) * pageLength;
             var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);
-            if (angular.isDefined(searchedText) && searchedText!=="") url += "&q=" + searchedText;
+            if (angular.isDefined(searchedText) && searchedText !== "") url += "&q=" + searchedText;
             if (angular.isDefined(orderBy)) {
                 url += '&_sort=' + orderBy;
                 url += '&_order=' + (order == 0 ? 'ASC' : 'DESC');
             }
             $log.debug('url=> ' + url);
-            return $http.get(url, {
-                dataType: 'json',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'X-Testing': 'testing',
-                    'JsonStub-User-Key': '9b0c8e63-914c-44bf-a7b9-79d70e7510fa',
-                    'JsonStub-Project-Key': 'fa7febb9-c680-4114-9088-09e474b9d002'
-                }
-            }).then(function(response) {
+            return $http.get(url, requestOptions).then(function(response) {
                 $scope.model.totalItems = response.headers()['x-total-count'];
                 $scope.model.data = response.data;
             }, function(errors) {

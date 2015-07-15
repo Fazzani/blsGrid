@@ -1,5 +1,5 @@
 - Virer pageLength des options et la remplacer par itemsPerPage
-- Tree (http://www.bootply.com/GGAMvot45f)
+- Tree (http://www.bootply.com/GGAMvot45f) il y'a 2 types de tree View Master/slave(another Data) et hiérarchique(some columns def) 
     - Expand All
     - Collapse All
 - Pager buttons name
@@ -10,9 +10,14 @@
     - Pagination (itemsPerPage + message for indexPage and count)
     - Refresh (reload data) => ok
     - Show hide columns (list checkbox)
+    - Export all or selection (csv, json)
+    - virtual scroll (loadind data)
 - Allow customize
     - Header's class 
     - Spinner css
 - Create services for differents Features (Reorder, Sort, etc )
 - Add onSeletedItem Event and send the current element and data row
 - ToolTip hover (option)
+
+example :
+http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx

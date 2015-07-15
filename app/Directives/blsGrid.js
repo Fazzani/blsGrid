@@ -1,18 +1,13 @@
 (function(angular) {
   'use strict';
-/**
- * BLS grid (sort, search, tree, pagination)
- * @param  {[type]} )            {                                                                return {                                      restrict: "E",        transclude: true,        scope: {            source: ' [description]
- * @param  {[type]} templateUrl: 'template/blsGrid/blsGrid.html' [description]
- * @param  {[type]} controller:  function($scope,                $filter,      $timeout, $element, $log,  localStorageService [description]
- * @return {[type]}              [description]
- */
+
 app.directive("blsGrid", function() {
     return {
         restrict: "E",
         transclude: true,
         scope: {
             model: '=ngModel',
+            getSlaveView:'&',
             gridClass: '@',
             options: '=',
             func: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data
@@ -119,7 +114,7 @@ app.directive("blsGrid", function() {
                         }).then(function(d) {
                             $timeout(function() {
                                 $scope.$apply(function() {
-                                    $scope.dataFilterSearch = $scope.source = d.data; //.slice(0,rdm+=10);
+                                    $scope.dataFilterSearch = $scope.source = d.data; 
                                     $scope.isLoading = false;
                                 });
                             }, 0);

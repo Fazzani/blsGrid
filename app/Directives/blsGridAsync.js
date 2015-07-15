@@ -269,7 +269,7 @@
                         </tr>\
                     </thead>\
                     <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
+                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" bls-slave-view ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
                                 <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
                                 <td ng-if="actionsEnabled" class="center">\
                                     <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
@@ -285,5 +285,6 @@
              </div>\
             </div>\
         </div>');
+        $templateCache.put('Views/Partials/slavePostTemplate.html','<ul><li ng-repeat="c in listData">{{c.name}}</li></ul>');
     }]);
 })(window.angular);
