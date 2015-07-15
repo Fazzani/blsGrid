@@ -260,31 +260,31 @@
             <bls-tool-bar></bls-tool-bar>\
             <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\
             <div><table class="{{gridClass}} blsGrid" id="{{storageIds.colResizeDataKey}}">\
-                    <thead>\
-                        <tr>\
-                            <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
-                                            {{col.displayName|uppercase}}\
-                                <i class="pull-left fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
-                            </th>\
-                        </tr>\
-                    </thead>\
-                    <tbody>\
-                            <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" bls-slave-view ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
-                                <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
-                                <td ng-if="actionsEnabled" class="center">\
-                                    <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
-                                </td>\
-                            </tr>\
-                        </tbody>\
+                <thead>\
+                    <tr>\
+                        <th class="colHeader" ng-repeat="col in columns" data-original-title="{{col.id}}" ng-click="order(col.id)" ng-class={draggable:{{!isActionCol(col)}}} droppable="{{!isActionCol(col)}}" draggable="{{!isActionCol(col)}}" dragData="{{col.id}}" drop="handleDrop" drag="handleDrag"  dragImage="5">\
+                               {{col.displayName|uppercase}}\
+                            <i class="pull-left fa fa-sort"  ng-class="glyphOrder(col.id)"></i>\
+                        </th>\
+                    </tr>\
+                </thead>\
+                <tbody>\
+                    <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" bls-slave-view ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
+                        <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
+                        <td ng-if="actionsEnabled" class="center">\
+                            <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\
+                        </td>\
+                    </tr>\
+                </tbody>\
             </table>\
             <div class="footer">\
                 <pagination class="col-md-10 col-xs-8" total-items="data.length" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                 <div class="pagerList col-md-2 col-xs-4">\
-                        <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
+                    <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
                 </div>\
              </div>\
             </div>\
         </div>');
-        $templateCache.put('Views/Partials/slavePostTemplate.html','<ul><li ng-repeat="c in listData">{{c.name}}</li></ul>');
+        $templateCache.put('Views/Partials/slavePostTemplate.html','<table class="table table-hover table-striped"><tr ng-repeat="c in listData"><td>{{c.id}}</td><td>{{c.name}}</td><td>{{c.email}}</td><td>{{c.body}}</td></tr></table>');
     }]);
 })(window.angular);
