@@ -10,10 +10,16 @@
             }).when("/blsGridAsync", {
                 templateUrl: "Views/Partials/blsGridAsync.html",
                 controller:'homeCtrl'
+            }).when("/blsGridMasterSlave", {
+                templateUrl: "Views/Partials/blsGridMasterSlave.html",
+                controller:'homeCtrl'
+            }).when("/blsGridTreeView", {
+                templateUrl: "Views/Partials/blsGridTreeView.html",
+                controller:'homeCtrl'
             }).when("/docs", {
                 templateUrl: "Views/Partials/docs.html"
             }).otherwise({
-                redirectTo: '/docs.html'
+                redirectTo: '/docs'
             });
             $locationProvider.html5Mode(true);
         }
