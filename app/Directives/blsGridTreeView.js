@@ -7,7 +7,7 @@ app.directive("blsGridTreeView", function() {
         transclude: true,
         scope: {
             model: '=ngModel',
-            getSlaveView:'&',
+            getTreeView:'&',
             gridClass: '@',
             options: '=',
             func: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data

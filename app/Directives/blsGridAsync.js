@@ -317,7 +317,7 @@ $templateCache.put('template/blsGrid/blsGridMasterSlave.html', '<pre> itemsCount
      </div>\
     </div>\
 </div>');
-$templateCache.put('template/blsGrid/blsGridTeeView.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
+$templateCache.put('template/blsGrid/blsGridTreeView.html', '<pre> itemsCount : {{data.length}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} offset = {{offset}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
  <div class="bls-table-container">\
     <bls-tool-bar></bls-tool-bar>\
     <div ng-class="{\'overlay\':isLoading}"><div ng-show="isLoading"><div class="double-bounce1"></div><div class="double-bounce2"></div></div></div>\

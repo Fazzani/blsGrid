@@ -38,6 +38,12 @@
             var url = root + "/comments?postId=" + masterId;
             return {func: $http.get(url, requestOptions), templateUrl:"Views/Partials/slavePostTemplate.html"};
         };
+        $scope.getTreeView = function(masterId) {
+            $log.debug('masterId => '+masterId);
+            // console.dir(masterId);
+            var url = root + "/comments?postId=" + masterId;
+            return {func: $http.get(url, requestOptions), templateUrl:"Views/Partials/slavePostTemplate.html"};
+        };
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
             var offset = (pageIndex - 1) * pageLength;
             var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);
