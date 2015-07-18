@@ -12,9 +12,12 @@
 </div>
 <bls-grid-master-slave id="ngGridMasterSlave1"
 get-slave-view="getSlaveView"
+slave-tag-id="slaveId"
 ng-model="fakeData"
 func="loadDataFunc"
 options="options"
 grid-class="table table-hover table-striped table-bordered"
 >
 </bls-grid-master-slave>
+<div id="slaveId" style="overflow:auto; heigth:100%;width:100%" class="row-fluid">
+</div>

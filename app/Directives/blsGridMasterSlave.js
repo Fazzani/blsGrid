@@ -8,13 +8,14 @@ app.directive("blsGridMasterSlave", function() {
         scope: {
             model: '=ngModel',
             getSlaveView:'&',
+            slaveTagId:'@',
             gridClass: '@',
             options: '=',
             func: '&' //function to load data (promise). on doit soit le ngModel pour passer les données ou cette promise/ the func return all Data
         },
         templateUrl: 'template/blsGrid/blsGridMasterSlave.html',
-        controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
-            function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
+        controller: ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice','$templateCache','$compile',
+            function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService,$templateCache,$compile) {
                 var me = this;
                 $scope.source;
                 var defaultOptions = {
@@ -226,6 +227,18 @@ app.directive("blsGridMasterSlave", function() {
                         dropableService.saveConfig($scope.storageIds.colReorderDataKey, $scope.colOrderConfig);
                     }
                 })
+                $scope.ShowSlaveView =function(rowData){
+                    var callBack=$scope.getSlaveView()(rowData);
+                    callBack.func.then(function(res){
+                        $log.debug(res.data);
+                        $scope.listData=res.data;
+                        var tpl = $templateCache.get(callBack.templateUrl);
+                        var contentTr = angular.element('#'+$scope.slaveTagId);
+                        //var contentTr = angular.element('<tr><td colspan="' + element.children().length + '">' + tpl + '</td></tr>');
+                        contentTr.html(tpl);
+                        $compile(contentTr)($scope);
+                    });
+                }
                 init();
             }
         ]

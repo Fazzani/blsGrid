@@ -1,0 +1,14 @@
+<div style="overflow:auto"><pre>{{cols.length}}</pre>
+<table class="hfGrid table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th ng-repeat="col in cols">{{col.title}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="row in rows">
+            <td ng-repeat="column in cols">{{row[column.field]}}</td>
+        </tr>
+    </tbody>
+</table>
+</div>

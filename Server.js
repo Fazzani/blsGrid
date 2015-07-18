@@ -8,6 +8,7 @@ app.use('/Content',express.static('Content'));
 app.use('/font-awesome-4.3.0',express.static('font-awesome-4.3.0'));
 app.use('/bower_components',express.static('bower_components'));
 app.use('/Views',express.static('Views'));
+app.use('/templates',express.static('templates'));
 
 //Store all HTML files in view folder.
 app.get('/favicon.ico',function(req,res){

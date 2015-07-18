@@ -33,9 +33,9 @@
         };
         //For master Slave view
         $scope.getSlaveView = function(masterId) {
-            $log.debug('masterId => '+masterId);
+            $log.debug('masterId => '+masterId.id);
             // console.dir(masterId);
-            var url = root + "/comments?postId=" + masterId;
+            var url = root + "/comments?postId=" + masterId.id;
             return {func: $http.get(url, requestOptions), templateUrl:"Views/Partials/slavePostTemplate.html"};
         };
         $scope.getTreeView = function(masterId) {

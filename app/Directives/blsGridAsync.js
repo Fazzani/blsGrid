@@ -301,7 +301,7 @@ $templateCache.put('template/blsGrid/blsGridMasterSlave.html', '<pre> itemsCount
         </thead>\
         <tbody>\
             <tr ng-class="{\'info\':(selectedRows.indexOf(d)>=0)}" ng-click="toggleSelectedRow(d)" ng-repeat="d in filteredData = (data | filter:options.search.searchText| orderBy:predicate:reverse| limitTo:options.pagination.itemsPerPage.selected:offset)">\
-                <td class="expand"><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>\
+                <td class="expand"><button class="btn btn-default btn-xs" ng-click="ShowSlaveView(d)"><span class="glyphicon glyphicon-eye-open"></span></button></td>\
                 <td ng-repeat="a in columns|filter:{ id:\'!actions\'}">{{d[a.id]}}</td>\
                 <td ng-if="actionsEnabled" class="center">\
                     <a ng-repeat="btn in options.actions" class="btn btn-default {{btn.class}}" ng-click="btn.action(d)" title="{{btn.title}}" ng-class="btn.class"><i class="{{btn.glyphicon}}"></i></a>\

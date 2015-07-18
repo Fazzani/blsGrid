@@ -30,6 +30,7 @@
         <script src="app/Directives/blsGridTreeView.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/dropable.js" type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsToolBar.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/hfGrid.js" type="text/javascript" charset="utf-8" ></script>
     </head>
     <body>
         <div class="container col-md-8 col-md-offset-2">
@@ -52,9 +53,10 @@
                                 <ul class="dropdown-menu">
                                     <li ng-class="getActiveMenu('/blsGrid')"><a href="/blsGrid">BlsGrid</a></li>
                                     <li ng-class="getActiveMenu('/blsGridAsync')"><a href="/blsGridAsync">BlsGrid Async</a></li>
-                                    <li role="separator" class="divider"></li>
                                     <li ng-class="getActiveMenu('/blsGridMasterSlave')"><a href="/blsGridMasterSlave">BlsGrid Master Slave</a></li>
                                     <li ng-class="getActiveMenu('/blsGridTreeView')"><a href="/blsGridTreeView">BlsGrid Tree View</a></li>
+                                    <li role="separator" class="divider"></li>
+                                     <li ng-class="getActiveMenu('/hfGrid')"><a href="/hfGrid">hfGrid</a></li>
                                 </ul>
                             </li>
                         </ul>

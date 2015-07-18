@@ -16,6 +16,9 @@
             }).when("/blsGridTreeView", {
                 templateUrl: "Views/Partials/blsGridTreeView.html",
                 controller:'homeCtrl'
+            }).when("/hfGrid", {
+                templateUrl: "Views/Partials/hfGrid.html",
+                controller:'homeCtrl'
             }).when("/docs", {
                 templateUrl: "Views/Partials/docs.html"
             }).otherwise({
