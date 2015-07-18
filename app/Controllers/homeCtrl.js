@@ -44,6 +44,17 @@
             var url = root + "/comments?postId=" + masterId;
             return {func: $http.get(url, requestOptions), templateUrl:"Views/Partials/slavePostTemplate.html"};
         };
+        $scope.queryPromise = function(pageIndex, pageLength, searchedText, orderBy, order) {
+            var offset = (pageIndex - 1) * pageLength;
+            var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);
+            if (angular.isDefined(searchedText) && searchedText !== "") url += "&q=" + searchedText;
+            if (angular.isDefined(orderBy)) {
+                url += '&_sort=' + orderBy;
+                url += '&_order=' + (order == 0 ? 'ASC' : 'DESC');
+            }
+            $log.debug('url=> ' + url);
+            return $http.get(url, requestOptions);
+        };
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
             var offset = (pageIndex - 1) * pageLength;
             var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);

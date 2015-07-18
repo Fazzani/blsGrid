@@ -1,50 +1,57 @@
 app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, $templateRequest, $compile) {
-    
-    var ctrl = function($scope, $element, $log,$templateRequest, $compile) {
+    var ctrl = function($scope, $element, $log, $templateRequest, $compile) {
         $log.debug('in hfGrid');
         $scope.cols = [];
         $scope.rows = [];
+        $scope.pagination = {};
         $scope.$on('hfGridEndDataLoadingEvent', function(e, cols, rows) {
             $log.debug('hfGridEndDataLoadingEvent intercepted');
             $scope.cols = cols;
             $scope.rows = rows;
             $templateRequest('templates/hfGridTpl.html').then(function(response) {
                 $log.debug('start compile');
-                tpl = response;
                 // compile the html, then link it to the scope
-                elem = $compile(tpl)($scope);
+                elem = $compile(response)($scope);
                 // append the compiled template inside the element
                 $element.html(elem);
             });
         });
+        this.setPagination = function(pagination) {
+            $scope.pagination = pagination;
+        }
+        $scope.$watch('pagination', function(newVal, oldVal) {});
     };
     return {
         controller: ctrl,
         replace: true,
-        restrict: 'E',
+        restrict: 'E'
             //templateUrl: 'templates/hfGridTpl.html'
     };
 }]).directive('hfGridBody', ['$log', function($log) {
     var link = function(scope, element, attrs, ctrlGridBody) {
         $log.debug('link hfGrid Body');
-        scope.source().then(function(res) {
-            scope.$emit('hfGridStartDataLoadingEvent');
-            $log.debug('dataSource => ', res.data);
-            ctrlGridBody.initDataSource(res.data);
-        });
     };
     var ctrl = function($scope, $element, $log) {
         $scope.cols = [];
         $scope.rows = [];
-        this.initDataSource = function(data) {
-            $log.debug('init Data Source called');
-            $scope.rows = data;
-            $scope.$emit('hfGridEndDataLoadingEvent', $scope.cols, $scope.rows);
-        };
+        var me = this;
         this.setCols = function(cols) {
             $scope.cols = cols;
             $log.debug('settings cols => ', $scope.cols)
         };
+        $scope.$on('hfGridPaginationChanged', function(e, pagination) {
+            $log.debug('hfGridPaginationChanged intercepted');
+            me.setPagination(pagination);
+        });
+        this.setPagination = function(pagination) {
+            $scope.pagination = pagination;
+            $scope.source()($scope.pagination.pageIndex, $scope.pagination.itemsPerPage, $scope.pagination.searchedText, $scope.pagination.orderBy, $scope.pagination.order).then(function(res) { //query: pageIndex, pageLength, searchedText, orderBy, order
+                $scope.$emit('hfGridStartDataLoadingEvent'); //Fire Loading
+                $log.debug('dataSource => ', res);
+                $scope.rows = res.data;
+                $scope.$emit('hfGridEndDataLoadingEvent', $scope.cols, $scope.rows);
+            });
+        }
     };
     return {
         require: 'hfGridBody',
@@ -89,6 +96,44 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
     var ctrl = function($scope, $element, $log) {};
     return {
         require: '^hfGridColumns',
+        link: link,
+        restrict: 'E',
+        controller: ctrl
+    };
+}]).directive('hfPagination', ['$log', function($log) {
+    var link = function(scope, element, attrs, ctrls) {
+        $log.debug('in link hfPagination');
+        var hfGridCtrl = ctrls[0];
+        var hfGridBodyCtrl = ctrls[1];
+        scope.pagination = {
+            pageIndex: 1,
+            searchedText: '',
+            orderBy: 'id',
+            order: 0
+        };
+        scope.pagination.itemsPerPage = scope.$eval(attrs.itemsPerPage);
+        scope.pagination.range = scope.$eval(attrs.range);
+        scope.pagination.totalItems = scope.$eval(attrs.totalItems);
+        scope.pagination.maxSize = scope.$eval(attrs.maxSize);
+        hfGridCtrl.setPagination(scope.pagination);
+        hfGridBodyCtrl.setPagination(scope.pagination);
+        attrs.$observe('totalItems', function(newVal, oldVal) {
+            if (newVal != oldVal) {
+                scope.pagination.totalItems = newVal;
+                hfGridCtrl.setPagination(scope.pagination);
+            }
+        });
+        $log.debug('pagination.totalItems => ', scope.pagination.totalItems);
+    };
+    var ctrl = function($scope, $element, $log) {
+        $scope.$watch('pagination', function(newVal, oldVal) {
+            if (newVal.pageIndex == oldVal.pageIndex) $scope.pagination.pageIndex = 1;
+            $log.debug('pagination changed');
+            $scope.$broadcast('hfGridPaginationChanged', $scope.pagination);
+        }, true);
+    };
+    return {
+        require: ['^hfGrid', '^hfGridBody'],
         link: link,
         restrict: 'E',
         controller: ctrl

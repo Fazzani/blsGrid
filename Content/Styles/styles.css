@@ -1,7 +1,15 @@
 .content {
     padding-top: 35px;
 }
-
+.table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+.table td{
+   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 bls-grid {
     position: relative;
 }
