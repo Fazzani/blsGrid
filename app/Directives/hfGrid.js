@@ -3,6 +3,7 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
         $log.debug('in hfGrid');
         $scope.cols = [];
         $scope.rows = [];
+        $scope.uniqueId = 'hfGrid_' + $element[0].id;
         $scope.pagination = {};
         $scope.$on('hfGridEndDataLoadingEvent', function(e, cols, rows) {
             $log.debug('hfGridEndDataLoadingEvent intercepted');
@@ -18,8 +19,26 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
         });
         this.setPagination = function(pagination) {
             $scope.pagination = pagination;
-        }
-        $scope.$watch('pagination', function(newVal, oldVal) {});
+        };
+        // $scope.order = function(predicate) {
+        //     $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+        //     $scope.predicate = predicate;
+        //     // $scope.saveUserData({
+        //     //     key: $scope.storageIds.predicateId,
+        //     //     val: $scope.predicate
+        //     // });
+        //     // $scope.saveUserData({
+        //     //     key: $scope.storageIds.reverseId,
+        //     //     val: $scope.reverse
+        //     // });
+        //     // refreshDataGrid();
+        // };
+        // $scope.glyphOrder = function(col) {
+        //     //$log.info('glyphOrder function was called');
+        //     if (col != $scope.predicate) return '';
+        //     $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
+        //     return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
+        // };
     };
     return {
         controller: ctrl,
@@ -72,7 +91,7 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
     };
     var ctrl = function($scope, $element, $log) {
         var cols = [];
-        this.AddCol = function(col) {
+        this.addCol = function(col) {
             cols.push(col);
             $log.debug("columns : ", col);
         };
@@ -88,9 +107,12 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
 }]).directive('hfGridColumn', ['$log', function($log) {
     var link = function(scope, element, attrs, ctrlHfGridColumns) {
         $log.debug('link hfGridColumn');
-        ctrlHfGridColumns.AddCol({
+        ctrlHfGridColumns.addCol({
             title: attrs.title,
-            field: attrs.field
+            field: attrs.field,
+            sortable: angular.isDefined(attrs.sortable),
+            editable: angular.isDefined(attrs.editable),
+            filterable: angular.isDefined(attrs.editable)
         });
     };
     var ctrl = function($scope, $element, $log) {};
@@ -98,6 +120,50 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
         require: '^hfGridColumns',
         link: link,
         restrict: 'E',
+        controller: ctrl
+    };
+}]).directive('hfGridSortable', ['$log', '$compile', function($log, $compile) {
+    //<i ng-if="col.sortable" class="pull-left fa fa-sort " ng-class="glyphOrder(col.id)"></i>
+    var link = {
+        post: function(scope, element, attrs, hfGridSortableCtrl) {
+            //init order user
+            hfGridSortableCtrl.init();
+            $log.debug('================>> Link hfGridSortable');
+            var sortElement = angular.element('<i ng-if="col.sortable" class="pull-left fa fa-sort " ng-click="onSort(col)" ng-class="glyphOrder(col)"></i>');
+            element.append($compile(sortElement)(scope));
+        }
+    };
+    var ctrl = function($scope, $element, $log, localStorageService) {
+        var orderByKey = '_orderBy';
+        var orderKey = '_order';
+        $scope.onSort = function(col) {
+            $log.debug('sorting on ', col);
+            $scope.pagination.order = col.field == $scope.pagination.orderBy ? !$scope.pagination.order : $scope.pagination.order;
+            $scope.pagination.orderBy = col.field;
+            saveUserData();
+            $scope.$broadcast('hfGridPaginationChanged', $scope.pagination);
+        };
+        $scope.glyphOrder = function(col) {
+            if (col.field != $scope.pagination.orderBy) return '';
+            return $scope.pagination.order ? 'fa-sort-asc' : 'fa-sort-desc';
+        };
+        var saveUserData = function() {
+            if (localStorageService.isSupported) {
+                localStorageService.set($scope.uniqueId + orderByKey, $scope.pagination.orderBy);
+                localStorageService.set($scope.uniqueId + orderKey, $scope.pagination.order);
+            }
+        };
+        this.init = function() {
+            if (localStorageService.isSupported) {
+                $scope.pagination.orderBy = localStorageService.get($scope.uniqueId + orderByKey);
+                $scope.pagination.order = localStorageService.get($scope.uniqueId + orderKey);
+            }
+        }
+    };
+    return {
+        require: 'hfGridSortable',
+        link: link,
+        restrict: 'A',
         controller: ctrl
     };
 }]).directive('hfPagination', ['$log', function($log) {

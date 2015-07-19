@@ -21,3 +21,18 @@
 
 example :
 http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
+
+
+- HfGrid
+    + Virer les données de Tri, Search de l'objet Pagination
+    + colResize
+    + dragTable
+    + persistUserConfig
+    + loading
+    + Selection 
+    + Actions buttons
+    + Bind on event (click, dblClick, hover(ToolTip) on row)
+    + Menu 
+        * Search 
+        * reset user Data
+        * reload

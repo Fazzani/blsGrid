@@ -11,7 +11,7 @@
     </div>
 </div>
 <pre>
-totalItems : {{fakeData.length}}
+totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagination.order}}
 &lt;hf-grid&gt;
 &lt;hf-grid-body source="loadDataFunc"&gt;
 	&lt;hf-grid-columns&gt;
@@ -30,10 +30,10 @@ totalItems : {{fakeData.length}}
 <hf-grid>
 	<hf-grid-body source="queryPromise">
 			<hf-grid-columns>
-				<hf-grid-column title="Id" field="id"></hf-grid-column>
-				<hf-grid-column title="User id" field="userId"></hf-grid-column>
-				<hf-grid-column title="Title" field="title"></hf-grid-column>
-				<hf-grid-column title="Content" field="body"></hf-grid-column>
+				<hf-grid-column title="Id" field="id" sortable></hf-grid-column>
+				<hf-grid-column title="User id" field="userId" sortable></hf-grid-column>
+				<hf-grid-column title="Title" field="title" sortable filterable editable></hf-grid-column>
+				<hf-grid-column title="Content" field="body" filterable editable></hf-grid-column>
 			</hf-grid-columns>
 		<hf-pagination total-items="{{fakeData.length}}" max-size="3" items-per-page="20" range="[20,50,80]"></hf-pagination>
 		</hf-grid-body>
