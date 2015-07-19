@@ -11,9 +11,9 @@
     </div>
 </div>
 <pre>
-totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagination.order}}
+totalItems : {{fakeData.length}} orderBy : {{sort.orderBy}} order : {{sort.order}}
 &lt;hf-grid&gt;
-&lt;hf-grid-body source="loadDataFunc"&gt;
+&lt;hf-grid-body source="queryPromise"&gt;
 	&lt;hf-grid-columns&gt;
 		&lt;hf-grid-column field="id" sortable>&lt;/hf-grid-column&gt;
 		&lt;hf-grid-column field="userId">&lt;/hf-grid-column&gt;
@@ -21,7 +21,7 @@ totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagi
 		&lt;hf-grid-column field="content" filterable>&lt;/hf-grid-column&gt;
 	&lt;/hf-grid-columns&gt;
 	&lt;hf-grid-footer&gt;
-		&lt;pagination maxSize="5" pageLength="10" range="[10,50,80]">&lt;/pagination&gt;
+		&lt;pagination maxSize="5" pageLength="20" range="[10,50,80]">&lt;/pagination&gt;
 	&lt;/hf-grid-footer&gt;
 &lt;/hf-grid-body&gt;
 &lt;/hf-grid&gt;
@@ -34,5 +34,5 @@ totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagi
 				<hf-grid-column title="Title" field="title" sortable filterable editable></hf-grid-column>
 				<hf-grid-column title="Content" field="body" filterable editable></hf-grid-column>
 			</hf-grid-columns>
-		<hf-pagination total-items="{{fakeData.length}}" max-size="3" items-per-page="20" range="[20,50,80]"></hf-pagination>
+		<hf-pagination total-items="{{fakeData.length}}" max-size="5" items-per-page="20" range="[20,50,80]"></hf-pagination>
 </hf-grid>
