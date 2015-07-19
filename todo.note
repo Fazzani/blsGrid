@@ -31,7 +31,6 @@ http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
     + Export (csv, pdf)
     + persistUserConfig
     - Show hide columns (list checkbox)
-    + loading
     + Selection 
     + Actions buttons
     + Bind on event (click, dblClick, hover(ToolTip) on row)
