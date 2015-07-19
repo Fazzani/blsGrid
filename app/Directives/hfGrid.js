@@ -1,10 +1,15 @@
 app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, $templateRequest, $compile) {
     var ctrl = function($scope, $element, $log, $templateRequest, $compile) {
         $log.debug('in hfGrid');
-        $scope.cols = [];
-        $scope.rows = [];
+        $scope.rows = $scope.cols = [];
         $scope.uniqueId = 'hfGrid_' + $element[0].id;
         $scope.pagination = {};
+        $scope.core = {
+            isLoading: true
+        };
+        $scope.$on('hfGridStartDataLoadingEvent', function(e) {
+            $scope.core.isLoading = true;
+        });
         $scope.$on('hfGridEndDataLoadingEvent', function(e, cols, rows) {
             $log.debug('hfGridEndDataLoadingEvent intercepted');
             $scope.cols = cols;
@@ -15,6 +20,7 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
                 elem = $compile(response)($scope);
                 // append the compiled template inside the element
                 $element.html(elem);
+                $scope.core.isLoading = false;
             });
         });
         this.setPagination = function(pagination) {
@@ -51,8 +57,7 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
         $log.debug('link hfGrid Body');
     };
     var ctrl = function($scope, $element, $log) {
-        $scope.cols = [];
-        $scope.rows = [];
+        $scope.rows = $scope.cols = [];
         var me = this;
         this.setCols = function(cols) {
             $scope.cols = cols;
@@ -63,9 +68,9 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', function($log, 
             me.setPagination(pagination);
         });
         this.setPagination = function(pagination) {
+            $scope.$emit('hfGridStartDataLoadingEvent'); //Fire Loading
             $scope.pagination = pagination;
             $scope.source()($scope.pagination.pageIndex, $scope.pagination.itemsPerPage, $scope.pagination.searchedText, $scope.pagination.orderBy, $scope.pagination.order).then(function(res) { //query: pageIndex, pageLength, searchedText, orderBy, order
-                $scope.$emit('hfGridStartDataLoadingEvent'); //Fire Loading
                 $log.debug('dataSource => ', res);
                 $scope.rows = res.data;
                 $scope.$emit('hfGridEndDataLoadingEvent', $scope.cols, $scope.rows);

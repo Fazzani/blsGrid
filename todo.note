@@ -24,10 +24,13 @@ http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
 
 
 - HfGrid
+    + TreeView (unshift for collapsing)
     + Virer les données de Tri, Search de l'objet Pagination
     + colResize
     + dragTable
+    + Export (csv, pdf)
     + persistUserConfig
+    - Show hide columns (list checkbox)
     + loading
     + Selection 
     + Actions buttons
