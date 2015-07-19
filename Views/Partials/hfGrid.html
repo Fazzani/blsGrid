@@ -27,8 +27,7 @@ totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagi
 &lt;/hf-grid&gt;
 </pre>
 
-<hf-grid>
-	<hf-grid-body source="queryPromise">
+<hf-grid source="queryPromise">
 			<hf-grid-columns>
 				<hf-grid-column title="Id" field="id" sortable></hf-grid-column>
 				<hf-grid-column title="User id" field="userId" sortable></hf-grid-column>
@@ -36,5 +35,4 @@ totalItems : {{fakeData.length}} orderBy : {{pagination.orderBy}} order : {{pagi
 				<hf-grid-column title="Content" field="body" filterable editable></hf-grid-column>
 			</hf-grid-columns>
 		<hf-pagination total-items="{{fakeData.length}}" max-size="3" items-per-page="20" range="[20,50,80]"></hf-pagination>
-		</hf-grid-body>
 </hf-grid>
