@@ -38,3 +38,8 @@ http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
         * Search 
         * reset user Data
         * reload
+
+
+
+récupérer les données 
+clone row + injecter la fonction dans la première Td => compiler la row => append to parent row

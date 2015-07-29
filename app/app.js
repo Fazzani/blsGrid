@@ -19,8 +19,14 @@
             }).when("/hfGrid", {
                 templateUrl: "Views/Partials/hfGrid.html",
                 controller:'homeCtrl'
+            }).when("/blsNestedGrid", {
+                templateUrl: "Views/Partials/blsNestedGrid.html",
+                controller:'homeCtrl'
             }).when("/docs", {
                 templateUrl: "Views/Partials/docs.html"
+            }).when("/blsRow", {
+                templateUrl: "Views/Partials/blsRow.html",
+                controller:'testCtrl'
             }).otherwise({
                 redirectTo: '/docs'
             });

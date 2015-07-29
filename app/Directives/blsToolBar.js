@@ -3,7 +3,6 @@ app.directive('blsToolBar', [function() {
     return {
         priority: 2,
         scope: true, // {} = isolate, true = child, false/undefined = no change
-        require: '^blsGrid', // Array = multiple requires, ? = optional, ^ = check parent elements
         restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
         template: '<div class="row">\
                        <div class="btn-toolbar pull-right col-xs-12" role="toolbar">\

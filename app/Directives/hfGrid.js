@@ -2,6 +2,10 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
     var link = {
         post: function(scope, element, attrs, ctrls) {
             $log.debug('_______in post hfGrid');
+            // if (scope.childSource()) {
+            //     scope.cols.unshift({title:'child',field:'childCol'});
+            //     scope.rows.unshift({childCol:'>'});
+            // }
         }
     };
     var ctrl = function($scope, $element, $log, $templateRequest, $compile) {
@@ -56,7 +60,6 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
         this.getSort = function() {
             return $scope.sort;
         }
-       
         this.setCols = function(cols) {
             $scope.cols = cols;
             $log.debug('settings cols => ', $scope.cols)
@@ -73,7 +76,8 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
         restrict: 'E',
         link: link,
         scope: {
-            source: '&'
+            source: '&',
+            childSource: '&'
         },
         //templateUrl: 'templates/hfGridTpl.html'
     };
@@ -118,6 +122,45 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
         restrict: 'E',
         controller: ctrl
     };
+}]).directive('hfGridChilren', ['$log', '$compile', function($log, $compile) {
+    //<i ng-if="col.sortable" class="pull-left fa fa-sort " ng-class="glyphOrder(col.id)"></i>
+    var link = {
+        pre: function(scope, element, attrs, ctrls) {
+            $log.debug('=> pre link hfGridChilren');
+            element.removeAttr('hf-grid-sortable');
+        },
+        post: function(scope, element, attrs, ctrls) {
+            $log.debug('=> post link hfGridChilren');
+            var hfGridCtrl = ctrls[0];
+            var hfGridSortableCtrl = ctrls[1];
+            element.on("click", function() {
+                scope.onSort(scope.col);
+            });
+            //init order user
+            if (!hfGridCtrl.getIsSortInited()) {
+                $log.debug('Sort is not inited !!!!!');
+                hfGridSortableCtrl.init();
+                hfGridCtrl.setIsSortInited(true);
+                hfGridCtrl.setSort(scope.sort);
+            } else {
+                scope.sort = hfGridCtrl.getSort();
+            }
+            // $log.debug('================>> Link hfGridChilren sort =>', scope.sort);
+            var sortElement = angular.element('<i ng-if="col.sortable" class="pull-left fa fa-sort " ng-click="onSort(col)" ng-class="glyphOrder(col)"></i>');
+            element.append($compile(sortElement)(scope));
+        }
+    };
+    var ctrl = function($scope, $element, $log) {
+        var me = this;
+        
+    };
+    return {
+        require: ['^hfGrid', 'hfGridSortable'],
+        link: link,
+        restrict: 'A',
+        controller: ctrl,
+        priority: -9
+    };
 }]).directive('hfGridSortable', ['$log', '$compile', function($log, $compile) {
     //<i ng-if="col.sortable" class="pull-left fa fa-sort " ng-class="glyphOrder(col.id)"></i>
     var link = {
@@ -133,7 +176,6 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
                 scope.onSort(scope.col);
             });
             //init order user
-            
             if (!hfGridCtrl.getIsSortInited()) {
                 $log.debug('Sort is not inited !!!!!');
                 hfGridSortableCtrl.init();
@@ -183,7 +225,7 @@ app.directive('hfGrid', ['$log', '$templateRequest', '$compile', 'localStorageSe
         link: link,
         restrict: 'A',
         controller: ctrl,
-        priority:-10
+        priority: -10
     };
 }]).directive('hfPagination', ['$log', function($log) {
     var link = function(scope, element, attrs, ctrls) {

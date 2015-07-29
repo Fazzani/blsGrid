@@ -23,13 +23,9 @@
         };
         //For hierarchique view
         $scope.getChildrens = function(parentId) {
-            var url = root + "/comments?postId=" + parentId;
-            return $http.get(url, requestOptions).then(function(response) {
-                $scope.model.totalItems = response.headers()['x-total-count'];
-                $scope.model.data = response.data;
-            }, function(errors) {
-                $log.error(errors);
-            });
+            $log.debug('in getChildrens request children of parendId : ', parentId);
+            var url = posts + "/" + parentId.id;
+            return $http.get(url, requestOptions);
         };
         //For master Slave view
         $scope.getSlaveView = function(masterId) {
@@ -55,6 +51,14 @@
             $log.debug('url=> ' + url);
             return $http.get(url, requestOptions);
         };
+
+        $scope.queryPromise2 = function(pageIndex, pageLength) {
+            var offset = (pageIndex - 1) * pageLength;
+            var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);
+            $log.debug('url=> ' + url);
+            return $http.get(url, requestOptions);
+        };
+
         $scope.query = function(pageIndex, pageLength, searchedText, orderBy, order) {
             var offset = (pageIndex - 1) * pageLength;
             var url = posts + "?_start=" + offset + "&_end=" + (offset + pageLength);

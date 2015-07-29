@@ -27,7 +27,7 @@ totalItems : {{fakeData.length}} orderBy : {{sort.orderBy}} order : {{sort.order
 &lt;/hf-grid&gt;
 </pre>
 
-<hf-grid source="queryPromise">
+<hf-grid source="queryPromise" child-source="getTreeView">
 			<hf-grid-columns>
 				<hf-grid-column title="Id" field="id" sortable></hf-grid-column>
 				<hf-grid-column title="User id" field="userId" sortable></hf-grid-column>

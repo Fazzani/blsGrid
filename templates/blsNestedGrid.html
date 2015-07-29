@@ -1,0 +1,12 @@
+<table class="{{gridClass}}">
+	<caption>table title and/or explanatory text</caption>
+	<thead>
+		<tr>
+			<th ng-repeat="c in columns">{{c.displayName}}</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="d in data" columns="columns" nestedDataFunc="nestedDataFunc" bls-tr="d" index="$index"></tr>
+		</tr>
+	</tbody>
+</table>
