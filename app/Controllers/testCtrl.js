@@ -40,6 +40,7 @@
         }];
         $scope.cols = ['id', 'name', 'firstName', 'birthday', 'phone'];
         $scope.getChildren = function(obj) {
+            $log.debug('in getChildren...');
             var childs = angular.copy($scope.data.slice(obj.id - 1));
             angular.forEach($scope.cols, function(val, key) {
                 angular.forEach(childs, function(v, k) {

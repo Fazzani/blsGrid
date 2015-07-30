@@ -9,9 +9,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="d in data" bls-row func="getChildren">
-				<td ng-repeat="c in cols">{{d[c]}}</td>
-			</tr>
+		<bls-rows ng-model="data" cols="cols" get-children="getChildren"></bls-rows>
 		</tbody>
 	</table>
 </div>
