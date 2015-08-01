@@ -1,41 +1,51 @@
 app.directive('blsRowChild', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
-    var templateRow = '<tr ng-repeat="d in data" parentId="{{parentId}}" bls-row-child func="getChildren" level="{{level}}"><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
-    var tplCaret = '<i class="fa {{expand?\'fa-caret-down\':\'fa-caret-right\'}}" style="padding:0 4px 0 {{5+(15*level)}}px"></i>';
+    var templateRow = '<tr ng-repeat="d in data" data-bls-id="{{$id}}" parentId="{{parentId}}" bls-row-child func="getChildren" data-level="{{level}}"><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
+    var tplCaret = '<i id="{{$id}}" class="fa {{expand?\'fa-caret-down\':\'fa-caret-right\'}}" style="padding:0 4px 0 {{5+(15*level)}}px"></i>';
     this.link = function(scope, element, attrs, ctrls, transclude) {
+        var me = this;
+        this.childs = [];
+        var template = angular.element(tplCaret);
+        scope.expand = false;
+        scope.firstExpand = true;
+        this.getRowsChilds = function(id, target) {
+            var siblings = target.siblings('tr[parentId="' + id + '"]').toArray();
+            me.childs = me.childs.concat(siblings);
+            for (var i = 0; i < siblings.length; i++) {
+                me.childs.concat(getRowsChilds(angular.element(siblings[i]).data('blsId'), $(siblings[i])));
+            };
+            return me.childs;
+        };
         var elmTpl = angular.element(templateRow);
         if (!angular.isDefined(attrs.level)) {
             scope.level = 0;
-            element.attr('level', scope.level);
+            element.data('dataLevel', scope.level);
         }
         $timeout(function() {
-            var template = angular.element(tplCaret);
-            scope.expand = false;
-            scope.firstExpand = true;
-            scope.$watch('expand', function(newVal, oldVal) {
-                if (newVal != oldVal) {
-                    scope.expand = newVal;
-                    var childs = $(element).siblings('tr[parentId="' + scope.$id + '"]');
-                    if (scope.expand) {
-                        childs.show();
-                    } else childs.hide();
-                }
-            });
-            template.on('click', function(e) {
-                scope.$apply(function() {
-                    scope.expand = !scope.expand;
+            this.toggle = function(id, target, expand) {
+                me.childs = [];
+                me.childs = me.getRowsChilds(id, target);
+                me.childs.forEach(function(child) {
+                    expand ? $(child).show() : $(child).hide();
                 });
+            }
+            template.on('click', function(e) {
+                var $this = $(this);
                 if (scope.firstExpand) {
                     scope.firstExpand = false;
                     var childScope = scope.$new();
                     childScope.data = scope.getChildren()(scope.d);
                     childScope.level = scope.level + 1;
                     childScope.parentId = scope.$id;
-                    $log.debug(childScope);
+                    elmTpl.insertAfter(element);
                     scope.$apply(function() {
-                        elmTpl.insertAfter(element);
                         $compile(elmTpl)(childScope);
+                        scope.expand = !scope.expand;
+                        me.toggle(scope.$id, $this.closest('tr'), scope.expand);
                     });
-                }
+                } else scope.$apply(function() {
+                    scope.expand = !scope.expand;
+                    me.toggle(scope.$id, $this.closest('tr'), scope.expand);
+                });
             });
             $compile(template)(scope);
             angular.element(element.find('td')[0]).prepend(template);
@@ -46,8 +56,7 @@ app.directive('blsRowChild', ['$log', '$compile', '$templateCache', '$timeout', 
         restrict: 'A',
         link: this.link
     };
-}])
-.directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
+}]).directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
     var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
     this.link = function(scope, element, attrs, ctrls) {
         var eleTpl = angular.element(rowTpl);
