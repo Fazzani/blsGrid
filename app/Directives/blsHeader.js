@@ -7,6 +7,9 @@
                         </th>\
                     </tr>';
         this.link = function(scope, element, attrs, ctrls) {
+            var blsCompositeGridCtrl = ctrls[0];
+            var blsHeaderCtrl = ctrls[1];
+            scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
             // debugger;
             $log.debug('Link => blsHeader');
             var eleTpl = angular.element(tpl);
@@ -19,14 +22,6 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 $log.debug('controller: in init...');
-                $scope.uniqueId = "blsHeader_" + $scope.id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
-                $scope.storageIds = {
-                    predicateId: 'prd_' + $scope.uniqueId,
-                    reverseId: 'rvs_' + $scope.uniqueId,
-                    itemsPerPageId: 'ipp_' + $scope.uniqueId,
-                    colReorderDataKey: 'crdKey_' + $scope.uniqueId,
-                    colResizeDataKey: 'crsKey_' + $scope.uniqueId
-                };
                 $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
                     $log.debug('glyphOrder function was called');
@@ -46,10 +41,8 @@
                         key: $scope.storageIds.reverseId,
                         val: $scope.reverse
                     });
+                    $scope.refreshDataGrid();
                 };
-                $scope.saveUserData = function(data) {
-                    if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
-                }
             }
         ];
         return {
@@ -59,7 +52,7 @@
             restrict: 'E',
             link: this.link,
             controller: controller,
-            scope:false
+            scope: false
         };
     }]);
 })(window.angular);

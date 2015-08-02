@@ -42,6 +42,63 @@
             });
         };
         $scope.columns = ['id', 'name', 'company', 'email', 'picture', 'phone'];
+        $scope.options = {
+            multiSelection: true,
+            colDef: {
+                'userId': {
+                    displayName: 'User Id'
+                },
+                'body': {
+                    displayName: 'Content'
+                }
+            },
+            search: {
+                searchText: '',
+                searchClass: 'form-control'
+            },
+            actions: [{
+                title: 'edit',
+                glyphicon: 'glyphicon glyphicon-edit',
+                class: 'btn-circle btn-info btn-xs',
+                action: function(row) {
+                    $log.info('edit  : ' + row.id);
+                    var obj = $filter('filter')($scope.fakeData, {
+                        id: row.id
+                    })[0];
+                    $log.info(obj);
+                    $scope.fakeData.slice($scope.fakeData.indexOf(obj), 1);
+                    // $scope.fakeData.push(row);
+                }
+            }, {
+                title: 'delete',
+                glyphicon: 'glyphicon glyphicon-remove',
+                class: 'btn-circle btn-danger btn-xs',
+                action: function(row) {
+                    //$scope.listPersons.
+                    $log.info('delete  : ' + row.id);
+                    var obj = $filter('filter')($scope.fakeData, {
+                        id: row.id
+                    })[0];
+                    $log.info(obj);
+                    $scope.fakeData.slice($scope.fakeData.indexOf(obj), 1);
+                    //$scope.fakeData.slice($scope.fakeData.indexOf(row),1);
+                }
+            }],
+            pagination: {
+                pageLength: 20,
+                pageIndex: 1,
+                pager: {
+                    nextTitle: 'Suivant',
+                    perviousTitle: 'Précédent',
+                    maxSize: 5
+                },
+                itemsPerPage: {
+                    prefixStorage: 'ipp_', //itemsPerPage
+                    selected: 20,
+                    range: [20, 50, 100]
+                }
+            }
+        };
         $scope.query(1, 10);
         $scope.cols = ['id', 'name', 'firstName', 'birthday', 'phone'];
         $scope.data = [{

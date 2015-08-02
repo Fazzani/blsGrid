@@ -2,4 +2,11 @@
     <h1>blsRow example</h1>
 </div>
 <!-- <pre>{{model.data|json}}</pre> -->
-<bls-composite-grid ng-model="model.data" total-items="model.totalItems" cols="columns" get-children="getChildren"></bls-composite-grid>
+<bls-composite-grid
+ng-model="model.data"
+func-async="query(pageIndex, pageLength, searchedText, orderBy, order)"
+options="options"
+total-items="model.totalItems"
+cols="columns"
+get-children="getChildren">
+</bls-composite-grid>

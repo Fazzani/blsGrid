@@ -2,6 +2,9 @@
     app.directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
         this.link = function(scope, element, attrs, ctrls) {
+            var blsCompositeGridCtrl=ctrls[0];
+            // debugger;
+            blsCompositeGridCtrl.refreshDataGrid();
             var eleTpl = angular.element(rowTpl);
             $timeout(function() {
                 // scope.$apply(function() {
