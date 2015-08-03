@@ -9,4 +9,12 @@ options="options"
 total-items="model.totalItems"
 cols="columns"
 get-children="getChildren">
+<bls-cols>
+<bls-col field-name="id"></bls-col>
+<bls-col field-name="name"></bls-col>
+<bls-col field-name="company"></bls-col>
+<bls-col title="Mail" field-name="email"></bls-col>
+<bls-col title="Photo Profile" field-name="picture"><img style="height:18px;margin: 0 auto;" class="img-responsive" src="{{::field}}" alt=""/></bls-col>
+<bls-col field-name="phone"></bls-col>
+</bls-cols>
 </bls-composite-grid>

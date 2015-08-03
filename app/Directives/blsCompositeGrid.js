@@ -1,6 +1,7 @@
 (function(angular) {
     app.directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
-        var tpl = '<div class="panel panel-default">\
+        var me = this;
+        this.tpl = '<div class="panel panel-default">\
                         <table class="table table-hover table-striped table-bordered">\
                             <thead>\
                                 <bls-header></bls-header>\
@@ -9,6 +10,7 @@
                                 <bls-rows></bls-rows>\
                             </tbody>\
                         </table>\
+                        <div style="display:none" id="colsConfig" ng-transclude></div>\
                         <div class="footer">\
                             <pagination class="col-md-10 col-xs-8" total-items="totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
                             <div class="pagerList col-md-2 col-xs-4">\
@@ -17,10 +19,10 @@
                         </div>\
                     </div>';
         this.link = function(scope, element, attrs, ctrls) {
-            $log.debug('Link => blsCompositeGrid');
-            var eleTpl = angular.element(tpl);
-            element.replaceWith(eleTpl);
-            $compile(eleTpl)(scope);
+            // $log.debug('Link => blsCompositeGrid');
+            // var eleTpl = angular.element(me.tpl);
+            // element.replaceWith(eleTpl);
+            // $compile(eleTpl)(scope.$new());
         };
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
@@ -71,6 +73,9 @@
                     $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
                     me.refreshDataGrid();
                 }
+                this.setCols = function(cols) {
+                    $scope.cols = cols;
+                }
                 this.refreshDataGrid = function() {
                     if (angular.isDefined($scope.funcAsync)) {
                         $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
@@ -90,12 +95,12 @@
             }
         ];
         return {
-            priority: 1,
             restrict: 'E',
-            //link: this.link,
+            // link: this.link,
             replace: true,
-            template: tpl,
-            controller: controller,
+            transclude: true,
+            template: this.tpl,
+            controller: this.controller,
             scope: {
                 data: '=ngModel',
                 funcAsync: '&',

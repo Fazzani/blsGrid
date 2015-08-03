@@ -1,34 +1,46 @@
 (function(angular) {
     app.directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
-        var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
+        var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols" dynamic="getTdTpl(c)">{{d[c.fieldName]}}</td></tr>';
         this.link = function(scope, element, attrs, ctrls) {
-            var blsCompositeGridCtrl=ctrls[0];
+            var blsCompositeGridCtrl = ctrls[0];
             // debugger;
             blsCompositeGridCtrl.refreshDataGrid();
             var eleTpl = angular.element(rowTpl);
+            scope.getTdTpl = function(col) {
+                if (col.tpl != '') return col.tpl.replace('::field', "d[c.fieldName]");
+            }
             $timeout(function() {
-                // scope.$apply(function() {
-                    element.siblings('table').find('tbody').append(eleTpl);
-                    $compile(eleTpl)(scope);
-                    $(element.siblings('table')[0]).colResizable({
-                        fixed: true,
-                        liveDrag: true,
-                        postbackSafe: true,
-                        partialRefresh: true,
-                        // minWidth: 100
-                    });
-                // });
+                element.siblings('table').find('tbody').append(eleTpl);
+                $compile(eleTpl)(scope);
+                $(element.siblings('table')[0]).colResizable({
+                    fixed: true,
+                    liveDrag: true,
+                    postbackSafe: true,
+                    partialRefresh: true,
+                    // minWidth: 100
+                });
             }, 0);
         };
         return {
-            require:['^blsCompositeGrid'],
-            priority: -9,
+            require: ['^blsCompositeGrid'],
+            priority: -17,
             restrict: 'E',
             link: this.link,
-            scope:true
+            scope: true
         };
-    }]).directive('blsRowChild', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
-        var templateRow = '<tr ng-repeat="d in data" data-bls-id="{{$id}}" parentId="{{parentId}}" bls-row-child func="getChildren" data-level="{{level}}"><td ng-repeat="c in cols">{{d[c]}}</td></tr>';
+    }]).directive('dynamic', function($compile) {//compile dynamic html
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function(scope, ele, attrs) {
+                scope.$watch(attrs.dynamic, function(html) {
+                    ele.html(html);
+                    $compile(ele.contents())(scope);
+                });
+            }
+        };
+    }).directive('blsRowChild', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
+        var templateRow = '<tr ng-repeat="d in data" data-bls-id="{{$id}}" parentId="{{parentId}}" bls-row-child func="getChildren" data-level="{{level}}"><td ng-repeat="c in cols">{{d[c.fieldName]}}</td></tr>';
         var tplCaret = '<i id="{{$id}}" class="fa {{expand?\'fa-caret-down\':\'fa-caret-right\'}}" style="padding:0 4px 0 {{5+(15*level)}}px"></i>';
         this.link = function(scope, element, attrs, ctrls, transclude) {
             var me = this;
@@ -63,8 +75,8 @@
                     if (scope.firstExpand) {
                         scope.firstExpand = false;
                         var childScope = scope.$new();
-                         scope.getChildren()(scope.d).then(function(response){
-                            childScope.data =response.data;
+                        scope.getChildren()(scope.d).then(function(response) {
+                            childScope.data = response.data;
                         });
                         childScope.level = scope.level + 1;
                         childScope.parentId = scope.$id;
@@ -84,11 +96,11 @@
             }, 0);
         };
         return {
-            require:['^blsCompositeGrid'],
-            priority: -10,
+            require: ['^blsCompositeGrid'],
+            priority: -16,
             restrict: 'A',
             link: this.link,
-            scope:true
+            scope: true
         };
     }]);
 })(window.angular);

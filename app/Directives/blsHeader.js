@@ -1,12 +1,12 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)">\
-                                        {{col|uppercase}}\
-                            <i class="pull-left fa fa-sort" ng-class="glyphOrder(col)"></i>\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col.fieldName)">\
+                                        {{col.title|uppercase}}\
+                            <i class="pull-left fa fa-sort" ng-class="glyphOrder(col.fieldName)"></i>\
                         </th>\
                     </tr>';
-        this.link = function(scope, element, attrs, ctrls) {
+        this.link = {post:function(scope, element, attrs, ctrls) {
             var blsCompositeGridCtrl = ctrls[0];
             var blsHeaderCtrl = ctrls[1];
             scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
@@ -18,7 +18,7 @@
                 $log.debug('compiling blsHeader');
                 $compile(eleTpl)(scope);
             }, 0);
-        };
+        }};
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 $log.debug('controller: in init...');
@@ -46,8 +46,7 @@
             }
         ];
         return {
-            priority: -11,
-            terminal: true,
+            priority: -20,
             require: ['^?blsCompositeGrid', 'blsHeader'],
             restrict: 'E',
             link: this.link,

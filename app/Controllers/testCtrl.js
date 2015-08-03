@@ -100,7 +100,7 @@
             }
         };
         //$scope.query(1, 10);
-        $scope.cols = ['id', 'name', 'firstName', 'birthday', 'phone'];
+        //$scope.cols = ['id', 'name', 'firstName', 'birthday', 'phone'];
         // $scope.data = [{
         //     id: '1',
         //     name: 'fazzani',
