@@ -99,6 +99,9 @@
                 }
             }
         };
+        $scope.callFunction = function() {
+            console.log('sdffffffffff');
+        };
         //$scope.query(1, 10);
         //$scope.cols = ['id', 'name', 'firstName', 'birthday', 'phone'];
         // $scope.data = [{

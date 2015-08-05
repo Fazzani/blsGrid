@@ -23,6 +23,7 @@
             require: ['^blsCompositeGrid'],
             priority: -17,
             restrict: 'E',
+            transclude:true,
             link: this.link,
             scope: true
         };
