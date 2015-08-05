@@ -10,11 +10,11 @@ total-items="model.totalItems"
 cols="columns"
 get-children="getChildren">
 <bls-cols>
-<bls-col sort field-name="id"></bls-col>
+<bls-col resize sort field-name="id"></bls-col>
 <bls-col sort field-name="name"></bls-col>
-<bls-col field-name="company"></bls-col>
-<bls-col sort title="Mail" field-name="email">{{::field|lowercase}}</bls-col>
-<bls-col title="Photo Profile" field-name="picture"><img style="height:18px;margin: 0 auto;" class="img-responsive" src="{{::field}}" alt=""/></bls-col>
+<bls-col resize field-name="company"></bls-col>
+<bls-col resize sort title="Mail" field-name="email">{{::field|lowercase}}</bls-col>
+<bls-col resize title="Photo Profile" field-name="picture"><img style="height:18px;margin: 0 auto;" class="img-responsive" src="{{::field}}" alt=""/></bls-col>
 <bls-col field-name="phone"><button type="button" ng-click="callFunction()" class="btn btn-primary btn-xs" value="{{::field}}">call</button></bls-col>
 </bls-cols>
 </bls-composite-grid>

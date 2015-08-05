@@ -37,6 +37,7 @@
                 blsColsCtrl.addCol({
                     title: attrs.title || attrs.fieldName,
                     fieldName: attrs.fieldName,
+                    resize:angular.isDefined(attrs.resize),
                     tpl: element.html(),
                     sortable: angular.isDefined(attrs.sort)
                 });

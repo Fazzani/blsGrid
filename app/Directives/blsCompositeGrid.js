@@ -1,23 +1,19 @@
 (function(angular) {
-    app.directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
+    app.service('objectTableUtilService', [function() {
+        //extend Array [+swap]
+        Array.prototype.swap = function(new_index, old_index) {
+            if (new_index >= this.length) {
+                var k = new_index - this.length;
+                while ((k--) + 1) {
+                    this.push(undefined);
+                }
+            }
+            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+            return this; // for testing purposes
+        }
+    }]).directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout','objectTableUtilService', function($log, $compile, $templateCache, $timeout, objectTableUtilService) {
         var me = this;
-        this.tpl = '<div class="panel panel-default">\
-                        <table class="table table-hover table-striped table-bordered">\
-                            <thead>\
-                                <bls-header></bls-header>\
-                            </thead>\
-                            <tbody>\
-                                <bls-rows></bls-rows>\
-                            </tbody>\
-                        </table>\
-                        <div style="display:none" id="colsConfig" ng-transclude></div>\
-                        <div class="footer">\
-                            <pagination class="col-md-10 col-xs-8" total-items="totalItems" ng-model="options.pagination.pageIndex" max-size="options.pagination.pager.maxSize" items-per-page="options.pagination.itemsPerPage.selected" class="pagination-sm" boundary-links="true" rotate="false"></pagination>\
-                            <div class="pagerList col-md-2 col-xs-4">\
-                                <select class="form-control" id="sel1" ng-model="options.pagination.itemsPerPage.selected" ng-change="updateRecordsCount()" ng-options="c as c for c in options.pagination.itemsPerPage.range" ng-selected="options.pagination.itemsPerPage.selected == c"></select>\
-                            </div>\
-                        </div>\
-                    </div>';
+        this.tpl = $templateCache.get('templates/blsCompositeGrid.html');
         this.link = function(scope, element, attrs, ctrls) {
             // $log.debug('Link => blsCompositeGrid');
             // var eleTpl = angular.element(me.tpl);
@@ -27,7 +23,7 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
-                $scope.uniqueId = "blsContainer_" + $scope.id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
+                $scope.uniqueId = "blsContainer_" + $scope.$id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
                 $scope.storageIds = {
                     predicateId: 'prd_' + $scope.uniqueId,
                     reverseId: 'rvs_' + $scope.uniqueId,
@@ -89,9 +85,28 @@
                         });
                     }
                 }
+                this.changeColumnsOrder = function(from, to) {
+                    $scope.$apply(function() {
+                        $scope.data.swap(from,to);
+                        $scope.cols.swap(from,to);
+                    });
+                }
                 $scope.saveUserData = function(data) {
                     if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
                 }
+                $scope.$on('flushEvent', function(data) {
+                    $log.debug(localStorageService.keys());
+                    $log.debug('clearUserDataEvent intercepted => $scope.uniqueId : ', $scope.uniqueId);
+                    if (localStorageService.isSupported) {
+                        localStorageService.clearAll('^(.)+' + $scope.uniqueId + '$');
+                        //localStorageService.remove('dragtable');
+                    }
+                });
+                $scope.$on('refreshEvent', function(data) {
+                    $log.debug('refreshEvent intercepted');
+                    me.refreshDataGrid();
+                });
+                
             }
         ];
         return {

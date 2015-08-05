@@ -227,6 +227,7 @@
     angular.module("bls_tpls", []).run(["$templateCache","$templateRequest", function($templateCache,$templateRequest) {
         $templateRequest('templates/blsContainer.html');
         $templateRequest('templates/blsTr.html');
+        $templateRequest('templates/blsCompositeGrid.html');
 
         $templateCache.put('template/blsGrid/blsGridAsync.html', '<pre> itemsCount : {{ngModel.totalItems}}  options.search.searchText : {{options.search.searchText}} pageIndex : {{options.pagination.pageIndex}} Sorting predicate = {{predicate}}; reverse = {{reverse}}</pre>\
          <div class="bls-table-container">\

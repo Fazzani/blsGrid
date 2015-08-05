@@ -10,13 +10,6 @@
             $timeout(function() {
                 element.siblings('table').find('tbody').append(eleTpl);
                 $compile(eleTpl)(scope);
-                $(element.siblings('table')[0]).colResizable({
-                    fixed: true,
-                    liveDrag: true,
-                    postbackSafe: true,
-                    partialRefresh: true,
-                    // minWidth: 100
-                });
             }, 0);
         };
         return {

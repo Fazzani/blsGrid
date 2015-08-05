@@ -1,15 +1,18 @@
 .content {
     padding-top: 35px;
 }
+
 .table {
-  table-layout: fixed;
-  word-wrap: break-word;
+    table-layout: fixed;
+    word-wrap: break-word;
 }
-.table td{
-   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 bls-grid {
     position: relative;
 }
@@ -71,7 +74,7 @@ bls-grid {
 
 .blsGrid tr.info {
     -webkit-animation: anim-effect-boris 0.1s ease-in-out;
-            animation: anim-effect-boris 0.1s ease-in-out;
+    animation: anim-effect-boris 0.1s ease-in-out;
 }
 
 .btn-toolbar, .btn-toolbar .btn {
@@ -95,48 +98,48 @@ bls-grid {
 @-webkit-keyframes anim-effect-boris {
     0% {
         -webkit-transform: scale3d(1, 1, 0.9);
-                transform: scale3d(1, 1, 0.9);
+        transform: scale3d(1, 1, 0.9);
     }
     25%, 50% {
         opacity: 1;
     }
     80% {
         -webkit-transform: scale3d(1, 1.1, 1);
-                transform: scale3d(1, 1.1, 1);
+        transform: scale3d(1, 1.1, 1);
     }
     100% {
         -webkit-transform: scale3d(1, 1, 1);
-                transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
     }
 }
 
 @keyframes anim-effect-boris {
     0% {
         -webkit-transform: scale3d(1, 1, 0.9);
-                transform: scale3d(1, 1, 0.9);
+        transform: scale3d(1, 1, 0.9);
     }
     25%, 50% {
         opacity: 1;
     }
     80% {
         -webkit-transform: scale3d(1, 1.1, 1);
-                transform: scale3d(1, 1.1, 1);
+        transform: scale3d(1, 1.1, 1);
     }
     100% {
         -webkit-transform: scale3d(1, 1, 1);
-                transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
     }
 }
 
 .search-form .form-group {
     float: right !important;
     -webkit-transition: all 0.35s, border-radius 0s;
-            transition: all 0.35s, border-radius 0s;
+    transition: all 0.35s, border-radius 0s;
     width: 32px;
     height: 32px;
     background-color: #fff;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     border-radius: 25px;
     border: 1px solid #ccc;
     margin-bottom: 0px !important;
@@ -147,7 +150,7 @@ bls-grid {
     border: 0 none;
     background: transparent;
     -webkit-box-shadow: none;
-            box-shadow: none;
+    box-shadow: none;
     display: block;
 }
 
@@ -207,8 +210,9 @@ bls-grid {
     margin: 20px 0;
     width: 110px;
 }
-table.blsGrid{
-    margin:0px;
+
+table.blsGrid {
+    margin: 0px;
 }
 
 .double-bounce1, .double-bounce2 {
@@ -295,85 +299,6 @@ th, td {
 }
 
 
-/*-------------- Dropable -------------------*/
-
-.hidtable {
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: move;
-    background: white;
-    border-style: dotted;
-    z-index: 4;
-}
-
-.coverhidtable {
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: move;
-    background: white;
-    color: white;
-    z-index: 4;
-}
-
-.acttable {
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: move;
-    z-index: 5;
-    background: white;
-}
-
-.drag {
-    background: orange;
-    color: white;
-    cursor: move;
-}
-
-.over {
-    background: red;
-    color: white;
-}
-
-.draggable {
-    cursor: move;
-}
-
-
-/*---------------------- Resizable ---------------------*/
-
-.grip {
-    width: 20px;
-    height: 15px;
-    margin-top: -3px;
-    background-image: url('../img/grip.png');
-    margin-left: -5px;
-    position: relative;
-    z-index: 88;
-    cursor: e-resize;
-    background-repeat: no-repeat;
-}
-
-.grip:hover {
-    background-position-x: -20px;
-}
-
-.dragging .grip {
-    background-position-x: -40px;
-}
-
-.JCLRLastGrip .grip {
-    background-position-y: -18px;
-    left: -2px;
-}
-
-#postback {
-    margin-bottom: 10px;
-}
-
-
 /* ANIMATIONS
 ============================================================================= */
 
@@ -387,25 +312,50 @@ th, td {
 
 .pop.ng-leave {
     -webkit-transition: all 0.4s ease;
-    transition: all  0.4s ease;
+    transition: all 0.4s ease;
     opacity: 0.2;
 }
+
 .pop.ng-enter {
-     -webkit-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
     -webkit-transform: scale(0);
     -ms-transform: scale(0);
-        transform: scale(0);
+    transform: scale(0);
     opacity: 1;
 }
-.pop.ng-enter-active,
-.pop.ng-leave,
-.pop.ng-leave-active {
+
+.pop.ng-enter-active, .pop.ng-leave, .pop.ng-leave-active {
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
-        transform: scale(1);
+    transform: scale(1);
     opacity: 0.5;
 }
+
 .pop.ng-leave-active {
     opacity: 0.1;
 }
+
+
+/*------------------ Custom Resize------------------*/
+
+i.resize {
+    width: 5px;
+    border-right: 3px dotted rgb(148, 148, 148);
+    position: absolute;
+    right: -1px;
+    visibility: hidden;
+    top: 0;
+    z-index: 999;
+    height: 100%;
+    cursor: ew-resize;
+}
+.blsGrid th{
+    position: relative
+}
+.blsGrid th:hover i.resize {
+    visibility: visible;
+}
+
+
+/*----------------------------------------------------*/

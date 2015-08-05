@@ -1,13 +1,13 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)">\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" allow-drag>\
                                         {{col.title|uppercase}}\
-                            <i ng-if="col.sortable" class="pull-left fa fa-sort"></i>\
+                            <i ng-if="col.sortable" class="pull-left fa fa-sort"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
                     </tr>';
         this.link = {
-            pre: function(scope, element, attrs, ctrls) {
+            post: function(scope, element, attrs, ctrls) {
                 var blsCompositeGridCtrl = ctrls[0];
                 var blsHeaderCtrl = ctrls[1];
                 scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
@@ -45,6 +45,33 @@
                             val: $scope.reverse
                         });
                         $scope.refreshDataGrid();
+                    }
+                };
+                $scope.resizeStart = function(e) {
+                    var target = e.target ? e.target : e.srcElement;
+                    if (target.classList.contains("resize")) {
+                        start = target.parentNode;
+                        resizePressed = true;
+                        startX = e.pageX;
+                        startWidth = target.parentNode.offsetWidth;
+                        document.addEventListener('mousemove', drag);
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                };
+
+                function drag(e) {
+                    if (resizePressed) {
+                        start.width = startWidth + (e.pageX - startX);
+                    }
+                }
+                $scope.resizeEnd = function(e) {
+                    if (resizePressed) {
+                        document.removeEventListener('mousemove', drag);
+                        e.stopPropagation();
+                        e.preventDefault();
+                        resizePressed = false;
+                        resizePressedEnd = true;
                     }
                 };
             }

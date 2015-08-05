@@ -9,16 +9,18 @@
         <link rel="stylesheet" href="font-awesome-4.3.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="Content/Styles/styles.css">
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-route.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular-animate.min.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.js"></script>
         <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="bower_components/ng-csv/build/ng-csv.min.js" type="text/javascript" charset="utf-8" ></script>
         <script src="dist/colResizable-1.5.min.js" type="text/javascript" charset="utf-8" ></script>
         <script type="text/javascript">
-             var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule', 'ngRoute', 'ngAnimate']);
+             var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule', 'ngRoute', 'ngAnimate','ngSanitize', 'ngCsv']);
         </script>
         <script src="app/app.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Controllers/rootCtrl.js" type="text/javascript" charset="utf-8" ></script>
@@ -30,6 +32,7 @@
         <script src="app/Directives/blsGridMasterSlave.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsGridTreeView.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsNestedGrid.js"  type="text/javascript" charset="utf-8" ></script>
+        <script src="app/Directives/draggableDirective.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsCompositeGrid.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsRow.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Directives/blsHeader.js"  type="text/javascript" charset="utf-8" ></script>
