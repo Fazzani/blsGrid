@@ -1,7 +1,7 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" allow-drag>\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" style="width:{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
                             <i ng-if="col.sortable" class="pull-left fa fa-sort"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
@@ -11,12 +11,16 @@
                 var blsCompositeGridCtrl = ctrls[0];
                 var blsHeaderCtrl = ctrls[1];
                 scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
-                // debugger;
                 $log.debug('Link => blsHeader');
                 var eleTpl = angular.element(tpl);
+                scope.getColWidth = function(index) {
+                    $log.debug('get col colWidth of ', index);
+                    if (blsCompositeGridCtrl.tableConfig.cols[index].width > 0) return blsCompositeGridCtrl.tableConfig.cols[index].width + 'px';
+                }
                 $timeout(function() {
                     element.siblings('table').find('thead').append(eleTpl);
                     $log.debug('compiling blsHeader');
+                    blsCompositeGridCtrl.initColConfig();
                     $compile(eleTpl)(scope);
                 }, 0);
             }
@@ -64,7 +68,7 @@
                     if (resizePressed) {
                         start.width = startWidth + (e.pageX - startX);
                         $log.debug('start.width == ', start.width);
-
+                        $scope.setColWidth(angular.element(e.target).scope().$index, start.width);
                         // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
                         //angular.element(e.target).scope().$index
                     }

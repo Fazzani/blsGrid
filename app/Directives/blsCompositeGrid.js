@@ -23,6 +23,7 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
+                this.tableConfig = {};
                 $scope.uniqueId = "blsContainer_" + $scope.$id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
                 $scope.storageIds = {
                     predicateId: 'prd_' + $scope.uniqueId,
@@ -62,14 +63,7 @@
                         me.refreshDataGrid();
                     }
                 });
-                $scope.$watch('data', function(newValue, oldValue) {
-                    if (newValue != oldValue) {
-                        if ($scope.cols.length > 0) {
-                            $log.debug('init Table config');
-                            me.initTableConfig();
-                        }
-                    }
-                });
+                
                 $scope.updateRecordsCount = function() {
                     $scope.saveUserData({
                         key: $scope.storageIds.itemsPerPageId,
@@ -100,39 +94,55 @@
                         $scope.cols.swap(from, to);
                         me.tableConfig.cols.swap(from, to);
                         $scope.saveUserData({
-                                key: $scope.storageIds.tableConfig,
-                                val: me.tableConfig
-                            });
+                            key: $scope.storageIds.tableConfig,
+                            val: me.tableConfig
+                        });
                     });
                 }
-                this.initTableConfig = function() {
-                    if (localStorageService.isSupported) {
-                        me.tableConfig = localStorageService.get($scope.storageIds.tableConfig);
-                        // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
-                        if (me.tableConfig == null) {
-                            me.tableConfig = {
-                                id: $scope.uniqueId,
-                                cols: []
-                            };
-                            for (var i = 0; i <= $scope.cols.length - 1; i++) {
-                                me.tableConfig.cols.push({
-                                    index: i,
-                                    width: -1
-                                });
-                            };
-                            $scope.saveUserData({
-                                key: $scope.storageIds.tableConfig,
-                                val: me.tableConfig
+                $scope.setColWidth = function(index, width) {
+                    $log.debug('setColWidth => ', index, ' width = ', width);
+                    me.tableConfig.cols[index].width = width;
+                    $scope.saveUserData({
+                        key: $scope.storageIds.tableConfig,
+                        val: me.tableConfig
+                    });
+                }
+                this.initColConfig = function() {
+                    if (localStorageService.isSupported) me.tableConfig = localStorageService.get($scope.storageIds.tableConfig);
+                    // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
+                    if (me.tableConfig == null) {
+                        me.tableConfig = {
+                            id: $scope.uniqueId,
+                            cols: []
+                        };
+                        for (var i = 0; i <= $scope.cols.length - 1; i++) {
+                            me.tableConfig.cols.push({
+                                index: i,
+                                width: -1
                             });
-                        } else
-                            for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
-                                if (i != me.tableConfig.cols[i].index) {
-                                    if(i>me.tableConfig.cols[i].index) continue;
-                                    $log.debug('swap form ', i, ' to => ', me.tableConfig.cols[i].index);
-                                    $scope.data.swap(i, me.tableConfig.cols[i].index);
-                                    $scope.cols.swap(i, me.tableConfig.cols[i].index);
-                                }
-                            }
+                        };
+                        $scope.saveUserData({
+                            key: $scope.storageIds.tableConfig,
+                            val: me.tableConfig
+                        });
+                    }
+                }
+                $scope.$watch('data', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        if ($scope.cols.length > 0) {
+                            $log.debug('init Table config');
+                            me.initTableConfig();
+                        }
+                    }
+                });
+                this.initTableConfig = function() {
+                    for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
+                        if (i != me.tableConfig.cols[i].index) {
+                            if (i > me.tableConfig.cols[i].index) continue;
+                            $log.debug('swap form ', i, ' to => ', me.tableConfig.cols[i].index);
+                            $scope.data.swap(i, me.tableConfig.cols[i].index);
+                            $scope.cols.swap(i, me.tableConfig.cols[i].index);
+                        }
                     }
                 }
                 $scope.saveUserData = function(data) {
