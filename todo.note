@@ -44,10 +44,6 @@ http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
 récupérer les données 
 clone row + injecter la fonction dans la première Td => compiler la row => append to parent row
 
-
-#plugins SublimeText : 
-- https://github.com/aronwoost/sublime-expand-region
-
 #blsRow
 
     Operations : 
@@ -57,23 +53,24 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Format Cellules
     + Drag and drop headersnode Server  
     + Resize Columns
+    + Global loading
 
     RAF
     + Filter by culumn
-    + Loading 
+    + Loading image on expand
     + Collpase all
     + Row selection
     + Different events (loading, refresh, etc..)
     + Exporting data
-    + Reset user settings
 
     Bugs 
+    + Global search
     + Loading nested data
     + Remove Glyph icon when no data for expand col
-    + bugs combine drag/Drop and resize
+    + When combine drag/Drop and resize
     + Drag/drop column has have expand capabilty (we have to detect that is the col of expanding and refresh all the grid)
-    + Resize + Glyph icon sort (prevent the event click on header)
-    + Design
+    + Adjust design
+    + Prevent right click event
 
 
     Enhancement

@@ -23,6 +23,7 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
+                $scope.isLoading = true;
                 this.tableConfig = {};
                 $scope.uniqueId = "blsContainer_" + $scope.$id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
                 $scope.storageIds = {
@@ -74,6 +75,7 @@
                     //Reload ngModel by the Func
                 this.refreshDataGrid = function() {
                     if (angular.isDefined($scope.funcAsync)) {
+                        $scope.isLoading = true;
                         $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
                         $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                         $scope.funcAsync({
@@ -148,6 +150,7 @@
                             $scope.cols.swap(i, me.tableConfig.cols[i].index);
                         }
                     }
+                    $scope.isLoading = false;
                 }
                 $scope.saveUserData = function(data) {
                     if (localStorageService.isSupported) localStorageService.set(data.key, data.val);

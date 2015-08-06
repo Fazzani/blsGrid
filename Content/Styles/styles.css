@@ -29,6 +29,7 @@ bls-grid {
 
 .bls-table-container {
     min-height: 400px !important;
+    position: relative;
 }
 
 .blsGrid tfoot {

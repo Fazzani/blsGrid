@@ -1,5 +1,5 @@
 (function(angular) {
-    app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
+    app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout','localStorageService', function($log, $compile, $templateCache, $timeout, localStorageService) {
         var tpl = '<tr>\
                         <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
@@ -9,6 +9,7 @@
         this.link = {
             pre: function(scope, element, attrs, ctrls) {
                 scope.$on('blsDataGrid_initedEvent', function(e) {
+                    scope.predicate = localStorageService.get(scope.storageIds.predicateId) || (scope.cols[0] == undefined ? "" : scope.cols[0].id);
                     $log.debug('    blsDataGrid_initedEvent intercepted');
                     var blsCompositeGridCtrl = ctrls[0];
                     var blsHeaderCtrl = ctrls[1];
@@ -32,7 +33,6 @@
                 me.resizeColData = null;
                 me.resizePressed = false;
                 $log.debug('    blsHeader controller: in init...');
-                $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
                     $log.debug('    glyphOrder function was called');
                     if (col.fieldName != $scope.predicate) return 'fa-sort';

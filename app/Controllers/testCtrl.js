@@ -44,14 +44,6 @@
         $scope.columns = ['id', 'name', 'company', 'email', 'picture', 'phone'];
         $scope.options = {
             multiSelection: true,
-            colDef: {
-                'userId': {
-                    displayName: 'User Id'
-                },
-                'body': {
-                    displayName: 'Content'
-                }
-            },
             search: {
                 searchText: '',
                 searchClass: 'form-control'
