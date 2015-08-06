@@ -1,13 +1,13 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" ng-attr-allow-drag="{{col.dragable?"allow-drag":""}}>\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
                             <i ng-if="col.sortable" class="pull-left fa " ng-class="glyphOrder(col)"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
                     </tr>';
         this.link = {
-            post: function(scope, element, attrs, ctrls) {
+            pre: function(scope, element, attrs, ctrls) {
                 var blsCompositeGridCtrl = ctrls[0];
                 var blsHeaderCtrl = ctrls[1];
                 scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
