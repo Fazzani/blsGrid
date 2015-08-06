@@ -1,7 +1,7 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" style="width:{{getColWidth($index)}}" allow-drag>\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
                             <i ng-if="col.sortable" class="pull-left fa fa-sort"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
@@ -78,7 +78,7 @@
                 }
                 $scope.resizeEnd = function(e) {
                     if (resizePressed) {
-                        $log.debug('---------- END Resize : ', me.resizeColData);
+                        // $log.debug('---------- END Resize : ', me.resizeColData);
                         document.removeEventListener('mousemove', drag);
                         e.stopPropagation();
                         e.preventDefault();
