@@ -60,11 +60,13 @@
                 $scope.resizeStart = function(e) {
                     var target = e.target ? e.target : e.srcElement;
                     if (target.classList.contains("resize")) {
+                        
                         start = target.parentNode;
                         me.resizePressed = true;
                         startX = e.pageX;
                         startWidth = target.parentNode.offsetWidth;
                         document.addEventListener('mousemove', drag);
+                        document.addEventListener('mouseup', $scope.resizeEnd);
                         e.stopPropagation();
                         e.preventDefault();
                     }
@@ -83,6 +85,7 @@
                 $scope.resizeEnd = function(e) {
                     if (me.resizePressed) {
                         document.removeEventListener('mousemove', drag);
+                        document.removeEventListener('mouseup', $scope.resizeEnd);
                         e.stopPropagation();
                         e.preventDefault();
                         me.resizePressed = false;

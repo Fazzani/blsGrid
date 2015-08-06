@@ -50,12 +50,12 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
 
 #blsRow
 
-    les operations : 
-    + Filter 
+    Operations : 
+    + Filter (Search)
     + Pagination
     + sort + direction
     + Format Cellules
-    + Drag and drop headers
+    + Drag and drop headersnode Server  
     + Resize Columns
 
     RAF
@@ -67,12 +67,13 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Exporting data
     + Reset user settings
 
-    bugs 
+    Bugs 
     + Loading nested data
-    + Remove Glyph icon when no data
+    + Remove Glyph icon when no data for expand col
     + bugs combine drag/Drop and resize
-    + Drag/drop column has have expand capabilty
-    + Resize + Glyph icon sort
+    + Drag/drop column has have expand capabilty (we have to detect that is the col of expanding and refresh all the grid)
+    + Resize + Glyph icon sort (prevent the event click on header)
+    + Design
 
 
     Enhancement
