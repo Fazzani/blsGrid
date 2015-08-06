@@ -3,7 +3,7 @@
         var tpl = '<tr>\
                         <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
-                            <i ng-if="col.sortable" class="pull-left fa fa-sort"></i><i ng-if="col.resize" class="resize"></i>\
+                            <i ng-if="col.sortable" class="pull-left fa " ng-class="glyphOrder(col)"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
                     </tr>';
         this.link = {
@@ -29,11 +29,12 @@
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
                 me.resizeColData = null;
+                me.resizePressed = false;
                 $log.debug('controller: in init...');
                 $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
                     $log.debug('glyphOrder function was called');
-                    if (col != $scope.predicate) return '';
+                    if (col.fieldName != $scope.predicate) return 'fa-sort';
                     $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
                     return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
                 };
@@ -57,7 +58,7 @@
                     var target = e.target ? e.target : e.srcElement;
                     if (target.classList.contains("resize")) {
                         start = target.parentNode;
-                        resizePressed = true;
+                        me.resizePressed = true;
                         startX = e.pageX;
                         startWidth = target.parentNode.offsetWidth;
                         document.addEventListener('mousemove', drag);
@@ -67,7 +68,7 @@
                 };
 
                 function drag(e) {
-                    if (resizePressed) {
+                    if (me.resizePressed) {
                         start.width = startWidth + (e.pageX - startX);
                         $log.debug('start.width == ', start.width);
                         me.resizeColData = {
@@ -77,13 +78,12 @@
                     }
                 }
                 $scope.resizeEnd = function(e) {
-                    if (resizePressed) {
+                    if (me.resizePressed) {
                         // $log.debug('---------- END Resize : ', me.resizeColData);
                         document.removeEventListener('mousemove', drag);
                         e.stopPropagation();
                         e.preventDefault();
-                        resizePressed = false;
-                        resizePressedEnd = true;
+                        me.resizePressed = false;
                         $scope.setColWidth(me.resizeColData.index, me.resizeColData.width);
                         me.resizeColData = null;
                     }
