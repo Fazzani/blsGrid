@@ -11,7 +11,7 @@
             this.splice(new_index, 0, this.splice(old_index, 1)[0]);
             return this; // for testing purposes
         }
-    }]).directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout','objectTableUtilService', function($log, $compile, $templateCache, $timeout, objectTableUtilService) {
+    }]).directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', 'objectTableUtilService', function($log, $compile, $templateCache, $timeout, objectTableUtilService) {
         var me = this;
         this.tpl = $templateCache.get('templates/blsCompositeGrid.html');
         this.link = function(scope, element, attrs, ctrls) {
@@ -28,6 +28,7 @@
                     predicateId: 'prd_' + $scope.uniqueId,
                     reverseId: 'rvs_' + $scope.uniqueId,
                     itemsPerPageId: 'ipp_' + $scope.uniqueId,
+                    tableConfig: 'tblConfig_' + $scope.uniqueId,
                     colReorderDataKey: 'crdKey_' + $scope.uniqueId,
                     colResizeDataKey: 'crsKey_' + $scope.uniqueId
                 };
@@ -61,6 +62,14 @@
                         me.refreshDataGrid();
                     }
                 });
+                $scope.$watch('data', function(newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        if ($scope.cols.length > 0) {
+                            $log.debug('init Table config');
+                            me.initTableConfig();
+                        }
+                    }
+                });
                 $scope.updateRecordsCount = function() {
                     $scope.saveUserData({
                         key: $scope.storageIds.itemsPerPageId,
@@ -86,10 +95,45 @@
                     }
                 }
                 this.changeColumnsOrder = function(from, to) {
-                    $scope.$apply(function() {
-                        $scope.data.swap(from,to);
-                        $scope.cols.swap(from,to);
+                    $scope.$applyAsync(function() {
+                        $scope.data.swap(from, to);
+                        $scope.cols.swap(from, to);
+                        me.tableConfig.cols.swap(from, to);
+                        $scope.saveUserData({
+                                key: $scope.storageIds.tableConfig,
+                                val: me.tableConfig
+                            });
                     });
+                }
+                this.initTableConfig = function() {
+                    if (localStorageService.isSupported) {
+                        me.tableConfig = localStorageService.get($scope.storageIds.tableConfig);
+                        // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
+                        if (me.tableConfig == null) {
+                            me.tableConfig = {
+                                id: $scope.uniqueId,
+                                cols: []
+                            };
+                            for (var i = 0; i <= $scope.cols.length - 1; i++) {
+                                me.tableConfig.cols.push({
+                                    index: i,
+                                    width: -1
+                                });
+                            };
+                            $scope.saveUserData({
+                                key: $scope.storageIds.tableConfig,
+                                val: me.tableConfig
+                            });
+                        } else
+                            for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
+                                if (i != me.tableConfig.cols[i].index) {
+                                    if(i>me.tableConfig.cols[i].index) continue;
+                                    $log.debug('swap form ', i, ' to => ', me.tableConfig.cols[i].index);
+                                    $scope.data.swap(i, me.tableConfig.cols[i].index);
+                                    $scope.cols.swap(i, me.tableConfig.cols[i].index);
+                                }
+                            }
+                    }
                 }
                 $scope.saveUserData = function(data) {
                     if (localStorageService.isSupported) localStorageService.set(data.key, data.val);
@@ -106,7 +150,6 @@
                     $log.debug('refreshEvent intercepted');
                     me.refreshDataGrid();
                 });
-                
             }
         ];
         return {

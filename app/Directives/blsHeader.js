@@ -63,6 +63,10 @@
                 function drag(e) {
                     if (resizePressed) {
                         start.width = startWidth + (e.pageX - startX);
+                        $log.debug('start.width == ', start.width);
+
+                        // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
+                        //angular.element(e.target).scope().$index
                     }
                 }
                 $scope.resizeEnd = function(e) {
