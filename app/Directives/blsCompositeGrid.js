@@ -63,18 +63,15 @@
                         me.refreshDataGrid();
                     }
                 });
-                
                 $scope.updateRecordsCount = function() {
-                    $scope.saveUserData({
-                        key: $scope.storageIds.itemsPerPageId,
-                        val: $scope.options.pagination.itemsPerPage.selected
-                    });
-                    $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
-                    me.refreshDataGrid();
-                }
-                this.setCols = function(cols) {
-                    $scope.cols = cols;
-                }
+                        $scope.saveUserData({
+                            key: $scope.storageIds.itemsPerPageId,
+                            val: $scope.options.pagination.itemsPerPage.selected
+                        });
+                        $scope.options.pagination.pageLength = $scope.options.pagination.itemsPerPage.selected;
+                        me.refreshDataGrid();
+                    }
+                    //Reload ngModel by the Func
                 this.refreshDataGrid = function() {
                     if (angular.isDefined($scope.funcAsync)) {
                         $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
@@ -87,6 +84,9 @@
                             order: $scope.reverse
                         });
                     }
+                }
+                this.setCols = function(cols) {
+                    $scope.cols = cols;
                 }
                 this.changeColumnsOrder = function(from, to) {
                     $scope.$applyAsync(function() {
@@ -107,26 +107,6 @@
                         val: me.tableConfig
                     });
                 }
-                this.initColConfig = function() {
-                    if (localStorageService.isSupported) me.tableConfig = localStorageService.get($scope.storageIds.tableConfig);
-                    // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
-                    if (me.tableConfig == null) {
-                        me.tableConfig = {
-                            id: $scope.uniqueId,
-                            cols: []
-                        };
-                        for (var i = 0; i <= $scope.cols.length - 1; i++) {
-                            me.tableConfig.cols.push({
-                                index: i,
-                                width: -1
-                            });
-                        };
-                        $scope.saveUserData({
-                            key: $scope.storageIds.tableConfig,
-                            val: me.tableConfig
-                        });
-                    }
-                }
                 $scope.$watch('data', function(newValue, oldValue) {
                     if (newValue != oldValue) {
                         if ($scope.cols.length > 0) {
@@ -135,6 +115,27 @@
                         }
                     }
                 });
+                //init columns disposition from the localStorage if exists else create new Object
+                this.initColConfig = function() {
+                        if (localStorageService.isSupported) me.tableConfig = localStorageService.get($scope.storageIds.tableConfig);
+                        if (me.tableConfig == null) {
+                            me.tableConfig = {
+                                id: $scope.uniqueId,
+                                cols: []
+                            };
+                            for (var i = 0; i <= $scope.cols.length - 1; i++) {
+                                me.tableConfig.cols.push({
+                                    index: i,
+                                    width: -1
+                                });
+                            };
+                            $scope.saveUserData({
+                                key: $scope.storageIds.tableConfig,
+                                val: me.tableConfig
+                            });
+                        }
+                    }
+                    //Swap data columns according to tableConfig 
                 this.initTableConfig = function() {
                     for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
                         if (i != me.tableConfig.cols[i].index) {
@@ -153,7 +154,6 @@
                     $log.debug('clearUserDataEvent intercepted => $scope.uniqueId : ', $scope.uniqueId);
                     if (localStorageService.isSupported) {
                         localStorageService.clearAll('^(.)+' + $scope.uniqueId + '$');
-                        //localStorageService.remove('dragtable');
                     }
                 });
                 $scope.$on('refreshEvent', function(data) {

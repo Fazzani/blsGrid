@@ -43,3 +43,7 @@ http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
 
 récupérer les données 
 clone row + injecter la fonction dans la première Td => compiler la row => append to parent row
+
+
+plugins SublimeText : 
+- https://github.com/aronwoost/sublime-expand-region
