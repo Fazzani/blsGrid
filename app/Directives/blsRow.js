@@ -2,9 +2,8 @@
     app.directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols" dynamic="getTdTpl(c)">{{d[c.fieldName]}}</td></tr>';
         this.link = function(scope, element, attrs, ctrls) {
-            var blsCompositeGridCtrl = ctrls[0];
+            // var blsCompositeGridCtrl = ctrls[0];
             // debugger;
-            blsCompositeGridCtrl.refreshDataGrid();
             var eleTpl = angular.element(rowTpl);
             $timeout(function() {
                 element.siblings('table').find('tbody').append(eleTpl);

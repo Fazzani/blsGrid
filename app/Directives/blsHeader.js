@@ -8,21 +8,22 @@
                     </tr>';
         this.link = {
             pre: function(scope, element, attrs, ctrls) {
-                var blsCompositeGridCtrl = ctrls[0];
-                var blsHeaderCtrl = ctrls[1];
-                scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
-                $log.debug('    Link => blsHeader');
-                var eleTpl = angular.element(tpl);
-                scope.getColWidth = function(index) {
-                    //$log.debug('    get col colWidth of ', index);
-                    if (blsCompositeGridCtrl.tableConfig.cols[index].width > 0) return blsCompositeGridCtrl.tableConfig.cols[index].width + 'px';
-                }
-                $timeout(function() {
-                    element.siblings('table').find('thead').append(eleTpl);
-                    $log.debug('    compiling blsHeader');
-                    blsCompositeGridCtrl.initColConfig();
-                    $compile(eleTpl)(scope);
-                }, 0);
+                scope.$on('blsDataGrid_initedEvent', function(e) {
+                    $log.debug('    blsDataGrid_initedEvent intercepted');
+                    var blsCompositeGridCtrl = ctrls[0];
+                    var blsHeaderCtrl = ctrls[1];
+                    scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
+                    $log.debug('    Link => blsHeader');
+                    var eleTpl = angular.element(tpl);
+                    scope.getColWidth = function(index) {
+                        if (blsCompositeGridCtrl.tableConfig.cols[index].width > 0) return blsCompositeGridCtrl.tableConfig.cols[index].width + 'px';
+                    }
+                    $timeout(function() {
+                        element.siblings('table').find('thead').append(eleTpl);
+                        $log.debug('    compiling blsHeader');
+                        $compile(eleTpl)(scope);
+                    }, 0);
+                });
             }
         };
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
@@ -33,12 +34,10 @@
                 $log.debug('    blsHeader controller: in init...');
                 $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
-                    if (!me.resizePressed) {
-                        $log.debug('    glyphOrder function was called');
-                        if (col.fieldName != $scope.predicate) return 'fa-sort';
-                        $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
-                        return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
-                    }
+                    $log.debug('    glyphOrder function was called');
+                    if (col.fieldName != $scope.predicate) return 'fa-sort';
+                    $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
+                    return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
                 };
                 $scope.order = function(col) {
                     if (!me.resizePressed)
@@ -60,7 +59,6 @@
                 $scope.resizeStart = function(e) {
                     var target = e.target ? e.target : e.srcElement;
                     if (target.classList.contains("resize")) {
-                        
                         start = target.parentNode;
                         me.resizePressed = true;
                         startX = e.pageX;
@@ -88,9 +86,13 @@
                         document.removeEventListener('mouseup', $scope.resizeEnd);
                         e.stopPropagation();
                         e.preventDefault();
-                        me.resizePressed = false;
+                        setTimeout(function() {
+                            me.resizePressed = false;
+                        }, 50);
+                        //me.resizePressed = false;
                         $scope.setColWidth(me.resizeColData.index, me.resizeColData.width);
                         me.resizeColData = null;
+                        return false;
                     }
                 };
             }

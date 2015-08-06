@@ -87,6 +87,8 @@
                 }
                 this.setCols = function(cols) {
                     $scope.cols = cols;
+                    $scope.$emit('blsDataGrid_initedEvent');
+                    me.initColConfig();
                 }
                 this.changeColumnsOrder = function(from, to) {
                     $scope.$applyAsync(function() {
@@ -134,6 +136,7 @@
                                 val: me.tableConfig
                             });
                         }
+                        me.refreshDataGrid();
                     }
                     //Swap data columns according to tableConfig 
                 this.initTableConfig = function() {
@@ -172,7 +175,6 @@
             scope: {
                 data: '=ngModel',
                 funcAsync: '&',
-                cols: '=',
                 getChildren: '&',
                 options: '=',
                 totalItems: '='

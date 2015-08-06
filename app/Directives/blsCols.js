@@ -30,9 +30,9 @@
     }]).directive('blsCol', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         this.link = {
             pre: function(scope, element, attrs, ctrls) {
-                var blsCompositeGridCtrl = ctrls[0];
+                // var blsCompositeGridCtrl = ctrls[0];
                 var blsColsCtrl = ctrls[1];
-                var blsColCtrl = ctrls[2];
+                // var blsColCtrl = ctrls[2];
                 $log.debug('        Link => blsCol');
                 blsColsCtrl.addCol({
                     title: attrs.title || attrs.fieldName,

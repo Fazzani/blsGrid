@@ -16,7 +16,9 @@
 bls-grid {
     position: relative;
 }
-
+.fa-sort:hover {
+    opacity:1;
+}
 .fa-sort {
     opacity: 0.5;
 }
@@ -343,7 +345,7 @@ i.resize {
     width: 5px;
     border-right: 3px dotted rgb(148, 148, 148);
     position: absolute;
-    right: -1px;
+    right: 0px;
     visibility: hidden;
     top: 0;
     z-index: 999;
