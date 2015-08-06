@@ -21,7 +21,7 @@
             }
         ];
         return {
-            priority: -14,
+            priority: 0,
             require: ['^blsCompositeGrid', 'blsCols'],
             restrict: 'E',
             link: this.link,
@@ -49,7 +49,7 @@
             }
         ];
         return {
-            priority: -15,
+            priority: -1,
             require: ['^blsCompositeGrid', '^blsCols', 'blsCol'],
             restrict: 'E',
             link: this.link,
