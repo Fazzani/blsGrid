@@ -71,6 +71,8 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Loading nested data
     + Remove Glyph icon when no data
     + bugs combine drag/Drop and resize
+    + Drag/drop column has have expand capabilty
+    + Resize + Glyph icon sort
 
 
     Enhancement
