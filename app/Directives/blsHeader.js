@@ -27,6 +27,8 @@
         };
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
+                var me = this;
+                me.resizeColData = null;
                 $log.debug('controller: in init...');
                 $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
@@ -68,18 +70,22 @@
                     if (resizePressed) {
                         start.width = startWidth + (e.pageX - startX);
                         $log.debug('start.width == ', start.width);
-                        $scope.setColWidth(angular.element(e.target).scope().$index, start.width);
-                        // Add tableConfig object { tableId, [{colIndex, colWidth }] } to save on LocalStorage
-                        //angular.element(e.target).scope().$index
+                        me.resizeColData = {
+                            index: angular.element(e.target).scope().$index,
+                            width: start.width
+                        };
                     }
                 }
                 $scope.resizeEnd = function(e) {
                     if (resizePressed) {
+                        $log.debug('---------- END Resize : ', me.resizeColData);
                         document.removeEventListener('mousemove', drag);
                         e.stopPropagation();
                         e.preventDefault();
                         resizePressed = false;
                         resizePressedEnd = true;
+                        $scope.setColWidth(me.resizeColData.index, me.resizeColData.width);
+                        me.resizeColData = null;
                     }
                 };
             }
