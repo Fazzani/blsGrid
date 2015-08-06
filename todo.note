@@ -23,7 +23,7 @@ example :
 http://demos.devexpress.com/aspxgridviewdemos/masterdetail/masterdetail.aspx
 
 
-- HfGrid
+# HfGrid
     + TreeView (unshift for collapsing)
     + Virer les données de Tri, Search de l'objet Pagination
     + colResize
@@ -45,5 +45,35 @@ récupérer les données
 clone row + injecter la fonction dans la première Td => compiler la row => append to parent row
 
 
-plugins SublimeText : 
+#plugins SublimeText : 
 - https://github.com/aronwoost/sublime-expand-region
+
+#blsRow
+
+    les operations : 
+    + Filter 
+    + Pagination
+    + sort + direction
+    + Format Cellules
+    + Drag and drop headers
+    + Resize Columns
+
+    RAF
+    + Filter by culumn
+    + Loading 
+    + Collpase all
+    + Row selection
+    + Different events (loading, refresh, etc..)
+    + Exporting data
+    + Reset user settings
+
+    bugs 
+    + Loading nested data
+    + Remove Glyph icon when no data
+    + bugs combine drag/Drop and resize
+
+
+    Enhancement
+    + Cache differents templates
+    + Create services factoring code
+
