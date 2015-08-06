@@ -1,7 +1,7 @@
 (function(angular) {
     app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
         var tpl = '<tr>\
-                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
+                        <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" ng-attr-allow-drag="{{col.dragable?"allow-drag":""}}>\
                                         {{col.title|uppercase}}\
                             <i ng-if="col.sortable" class="pull-left fa " ng-class="glyphOrder(col)"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
@@ -11,15 +11,15 @@
                 var blsCompositeGridCtrl = ctrls[0];
                 var blsHeaderCtrl = ctrls[1];
                 scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
-                $log.debug('Link => blsHeader');
+                $log.debug('    Link => blsHeader');
                 var eleTpl = angular.element(tpl);
                 scope.getColWidth = function(index) {
-                    $log.debug('get col colWidth of ', index);
+                    //$log.debug('    get col colWidth of ', index);
                     if (blsCompositeGridCtrl.tableConfig.cols[index].width > 0) return blsCompositeGridCtrl.tableConfig.cols[index].width + 'px';
                 }
                 $timeout(function() {
                     element.siblings('table').find('thead').append(eleTpl);
-                    $log.debug('compiling blsHeader');
+                    $log.debug('    compiling blsHeader');
                     blsCompositeGridCtrl.initColConfig();
                     $compile(eleTpl)(scope);
                 }, 0);
@@ -30,29 +30,32 @@
                 var me = this;
                 me.resizeColData = null;
                 me.resizePressed = false;
-                $log.debug('controller: in init...');
+                $log.debug('    blsHeader controller: in init...');
                 $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
                 $scope.glyphOrder = function(col) {
-                    $log.debug('glyphOrder function was called');
-                    if (col.fieldName != $scope.predicate) return 'fa-sort';
-                    $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
-                    return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
+                    if (!me.resizePressed) {
+                        $log.debug('    glyphOrder function was called');
+                        if (col.fieldName != $scope.predicate) return 'fa-sort';
+                        $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
+                        return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
+                    }
                 };
                 $scope.order = function(col) {
-                    $log.debug('order function was called');
-                    if (col.sortable) {
-                        $scope.reverse = ($scope.predicate === col.fieldName) ? !$scope.reverse : false;
-                        $scope.predicate = col.fieldName;
-                        $scope.saveUserData({
-                            key: $scope.storageIds.predicateId,
-                            val: $scope.predicate
-                        });
-                        $scope.saveUserData({
-                            key: $scope.storageIds.reverseId,
-                            val: $scope.reverse
-                        });
-                        $scope.refreshDataGrid();
-                    }
+                    if (!me.resizePressed)
+                        if (col.sortable) {
+                            $log.debug('    order function was called');
+                            $scope.reverse = ($scope.predicate === col.fieldName) ? !$scope.reverse : false;
+                            $scope.predicate = col.fieldName;
+                            $scope.saveUserData({
+                                key: $scope.storageIds.predicateId,
+                                val: $scope.predicate
+                            });
+                            $scope.saveUserData({
+                                key: $scope.storageIds.reverseId,
+                                val: $scope.reverse
+                            });
+                            $scope.refreshDataGrid();
+                        }
                 };
                 $scope.resizeStart = function(e) {
                     var target = e.target ? e.target : e.srcElement;
@@ -70,7 +73,7 @@
                 function drag(e) {
                     if (me.resizePressed) {
                         start.width = startWidth + (e.pageX - startX);
-                        $log.debug('start.width == ', start.width);
+                        //$log.debug('start.width == ', start.width);
                         me.resizeColData = {
                             index: angular.element(e.target).scope().$index,
                             width: start.width
@@ -79,7 +82,6 @@
                 }
                 $scope.resizeEnd = function(e) {
                     if (me.resizePressed) {
-                        // $log.debug('---------- END Resize : ', me.resizeColData);
                         document.removeEventListener('mousemove', drag);
                         e.stopPropagation();
                         e.preventDefault();
