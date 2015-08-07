@@ -166,6 +166,10 @@
                     $log.debug('refreshEvent intercepted');
                     me.refreshDataGrid();
                 });
+                 $scope.$on('exportEvent', function(e,format) {
+                    $log.debug('exportEvent intercepted to type : ', format);
+                    $element.find('table').tableExport({type:format});
+                });
             }
         ];
         return {

@@ -54,6 +54,7 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Drag and drop headersnode Server  
     + Resize Columns
     + Global loading
+    + Exporting data ('excel', 'xml', 'csv','sql', 'json','doc', 'powerpoint')
 
     RAF
     + Filter by culumn
@@ -61,7 +62,7 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Collpase all
     + Row selection
     + Different events (loading, refresh, etc..)
-    + Exporting data
+   
 
     Bugs 
     + Global search

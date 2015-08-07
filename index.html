@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="app" ng-controller="rootCtrl">
-    <head> 
+    <head>
         <meta name="viewport" content="width=1020">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title ng-bind="Page"></title>
@@ -17,9 +17,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.js"></script>
         <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js" type="text/javascript" charset="utf-8" ></script>
-        <script src="bower_components/ng-csv/build/ng-csv.min.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="dist/tableExport.js"></script>
         <script type="text/javascript">
-             var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule', 'ngRoute', 'ngAnimate','ngSanitize', 'ngCsv']);
+        var app = angular.module('app', ['bls_tpls', 'ui.bootstrap', 'LocalStorageModule', 'ngRoute', 'ngAnimate']);
         </script>
         <script src="app/app.js"  type="text/javascript" charset="utf-8" ></script>
         <script src="app/Controllers/rootCtrl.js" type="text/javascript" charset="utf-8" ></script>
@@ -65,16 +65,16 @@
                                     <li ng-class="getActiveMenu('/blsGridMasterSlave')"><a href="/blsGridMasterSlave">BlsGrid Master Slave</a></li>
                                     <li ng-class="getActiveMenu('/blsGridTreeView')"><a href="/blsGridTreeView">BlsGrid Tree View</a></li>
                                     <li role="separator" class="divider"></li>
-                                     <li ng-class="getActiveMenu('/hfGrid')"><a href="/hfGrid">hfGrid</a></li>
-                                     <li ng-class="getActiveMenu('/blsNestedGrid')"><a href="/blsNestedGrid">blsNestedGrid</a></li>
-                                     <li ng-class="getActiveMenu('/blsRow')"><a href="/blsRow">blsRow</a></li>
+                                    <li ng-class="getActiveMenu('/hfGrid')"><a href="/hfGrid">hfGrid</a></li>
+                                    <li ng-class="getActiveMenu('/blsNestedGrid')"><a href="/blsNestedGrid">blsNestedGrid</a></li>
+                                    <li ng-class="getActiveMenu('/blsRow')"><a href="/blsRow">blsRow</a></li>
                                 </ul>
                             </li>
                         </ul>
-                        </div>
                     </div>
-                </nav>
-                <div ng-view  class="content pop"></div>
-            </div>
-        </body>
-    </html>
+                </div>
+            </nav>
+            <div ng-view  class="content pop"></div>
+        </div>
+    </body>
+</html>
