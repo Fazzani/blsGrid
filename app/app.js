@@ -10,17 +10,11 @@
             }).when("/blsGridAsync", {
                 templateUrl: "Views/Partials/blsGridAsync.html",
                 controller:'homeCtrl'
-            }).when("/blsGridMasterSlave", {
-                templateUrl: "Views/Partials/blsGridMasterSlave.html",
-                controller:'homeCtrl'
             }).when("/blsGridTreeView", {
                 templateUrl: "Views/Partials/blsGridTreeView.html",
                 controller:'homeCtrl'
             }).when("/hfGrid", {
                 templateUrl: "Views/Partials/hfGrid.html",
-                controller:'homeCtrl'
-            }).when("/blsNestedGrid", {
-                templateUrl: "Views/Partials/blsNestedGrid.html",
                 controller:'homeCtrl'
             }).when("/docs", {
                 templateUrl: "Views/Partials/docs.html"
