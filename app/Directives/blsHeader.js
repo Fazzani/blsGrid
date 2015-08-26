@@ -1,18 +1,18 @@
 (function(angular) {
-    app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout','localStorageService', function($log, $compile, $templateCache, $timeout, localStorageService) {
+    app.directive('blsHeader', ['$log', '$compile', '$templateCache', '$timeout', 'localStorageService', function($log, $compile, $templateCache, $timeout, localStorageService) {
         var tpl = '<tr>\
                         <th class="colHeader" ng-repeat="col in cols" ng-click="order(col)" width="{{getColWidth($index)}}" allow-drag>\
                                         {{col.title|uppercase}}\
                             <i ng-if="col.sortable" class="pull-left fa " ng-class="glyphOrder(col)"></i><i ng-if="col.resize" class="resize"></i>\
                         </th>\
-                    </tr>';
+                   </tr>';
         this.link = {
             pre: function(scope, element, attrs, ctrls) {
                 scope.$on('blsDataGrid_initedEvent', function(e) {
-                    scope.predicate = localStorageService.get(scope.storageIds.predicateId) || (scope.cols[0] == undefined ? "" : scope.cols[0].id);
                     $log.debug('    blsDataGrid_initedEvent intercepted');
                     var blsCompositeGridCtrl = ctrls[0];
                     var blsHeaderCtrl = ctrls[1];
+                    scope.setPredicate(localStorageService.get(scope.storageIds.predicateId) || (scope.cols[0] == undefined ? "" : scope.cols[0].id));
                     scope.refreshDataGrid = blsCompositeGridCtrl.refreshDataGrid;
                     $log.debug('    Link => blsHeader');
                     var eleTpl = angular.element(tpl);
@@ -30,28 +30,31 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
+                me.reverse = localStorageService.get($scope.storageIds.reverseId) || me.reverse;
                 me.resizeColData = null;
                 me.resizePressed = false;
                 $log.debug('    blsHeader controller: in init...');
+                $scope.setPredicate= function(predicate){
+                    me.predicate = predicate;
+                };
                 $scope.glyphOrder = function(col) {
                     $log.debug('    glyphOrder function was called');
                     if (col.fieldName != $scope.predicate) return 'fa-sort';
-                    $scope.reverse = localStorageService.get($scope.storageIds.reverseId) || $scope.reverse;
-                    return $scope.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
+                    return me.reverse ? 'fa-sort-asc' : 'fa-sort-desc';
                 };
                 $scope.order = function(col) {
                     if (!me.resizePressed)
                         if (col.sortable) {
                             $log.debug('    order function was called');
-                            $scope.reverse = ($scope.predicate === col.fieldName) ? !$scope.reverse : false;
-                            $scope.predicate = col.fieldName;
+                            me.reverse = ($scope.predicate === col.fieldName) ? !me.reverse : false;
+                            me.predicate = col.fieldName;
                             $scope.saveUserData({
                                 key: $scope.storageIds.predicateId,
-                                val: $scope.predicate
+                                val: me.predicate
                             });
                             $scope.saveUserData({
                                 key: $scope.storageIds.reverseId,
-                                val: $scope.reverse
+                                val: me.reverse
                             });
                             $scope.refreshDataGrid();
                         }

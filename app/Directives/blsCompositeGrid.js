@@ -23,7 +23,7 @@
         this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
             function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
-                $scope.isLoading = true;
+                me.initialLoad = $scope.isLoading = true;
                 this.tableConfig = {};
                 $scope.uniqueId = "blsContainer_" + $scope.$id; //$scope.options.pagination.itemsPerPage.prefixStorage + $element[0].id;
                 $scope.storageIds = {
@@ -75,6 +75,7 @@
                     //Reload ngModel by the Func
                 this.refreshDataGrid = function() {
                     if (angular.isDefined($scope.funcAsync)) {
+                        me.initColConfig();
                         $scope.isLoading = true;
                         $scope.reverse = localStorageService.get($scope.storageIds.reverseId);
                         $scope.predicate = localStorageService.get($scope.storageIds.predicateId) || ($scope.cols[0] == undefined ? "" : $scope.cols[0].id);
@@ -90,7 +91,9 @@
                 this.setCols = function(cols) {
                     $scope.cols = cols;
                     $scope.$emit('blsDataGrid_initedEvent');
+                    $log.debug('cols =>', $scope.cols);
                     me.initColConfig();
+                    me.refreshDataGrid();
                 }
                 this.changeColumnsOrder = function(from, to) {
                     $scope.$applyAsync(function() {
@@ -138,17 +141,19 @@
                                 val: me.tableConfig
                             });
                         }
-                        me.refreshDataGrid();
                     }
                     //Swap data columns according to tableConfig 
                 this.initTableConfig = function() {
-                    for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
-                        if (i != me.tableConfig.cols[i].index) {
-                            if (i > me.tableConfig.cols[i].index) continue;
-                            $log.debug('swap form ', i, ' to => ', me.tableConfig.cols[i].index);
-                            $scope.data.swap(i, me.tableConfig.cols[i].index);
-                            $scope.cols.swap(i, me.tableConfig.cols[i].index);
+                    if (me.initialLoad) {
+                        for (var i = 0; i <= me.tableConfig.cols.length - 1; i++) {
+                            if (i != me.tableConfig.cols[i].index) {
+                                if (i > me.tableConfig.cols[i].index) continue;
+                                $log.debug('swap form ', i, ' to => ', me.tableConfig.cols[i].index);
+                                $scope.data.swap(i, me.tableConfig.cols[i].index);
+                                $scope.cols.swap(i, me.tableConfig.cols[i].index);
+                            }
                         }
+                        me.initialLoad = false;
                     }
                     $scope.isLoading = false;
                 }
@@ -166,9 +171,11 @@
                     $log.debug('refreshEvent intercepted');
                     me.refreshDataGrid();
                 });
-                 $scope.$on('exportEvent', function(e,format) {
+                $scope.$on('exportEvent', function(e, format) {
                     $log.debug('exportEvent intercepted to type : ', format);
-                    $element.find('table').tableExport({type:format});
+                    $element.find('table').tableExport({
+                        type: format
+                    });
                 });
             }
         ];

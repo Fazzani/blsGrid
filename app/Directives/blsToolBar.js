@@ -28,7 +28,7 @@ app.directive('blsToolBar', [function() {
         template: '<div class="row">\
                        <div class="btn-toolbar pull-right col-xs-12" role="toolbar">\
                             <div class="btn-group btn-group-sm pull-right ">\
-                                <bls-drop-down links="links" func="export"  title="titleExportButton" ></bls-drop-down>\
+                                <bls-drop-down links="links" func="export" title="titleExportButton" ></bls-drop-down>\
                                 <button type="button" class="{{btnClass}}" tooltip="Settings" aria-label="Right Align"><span class="fa fa-cog" aria-hidden="true"></span></button>\
                                 <button type="button" ng-click="clearUserData()" class="{{btnClass}}" tooltip="Reset" aria-label="Right Align"><span class="fa fa-recycle" aria-hidden="true"></span></button>\
                                 <button type="button" ng-click="refresh()" class="{{btnClass}}" tooltip="Refresh" aria-label="Right Align"><span class="fa fa-refresh" aria-hidden="true"></span></button>\
@@ -44,7 +44,7 @@ app.directive('blsToolBar', [function() {
                         </div>\
                  </div>',
         replace: true,
-        transclude: true,
+        //transclude: true,
         controller: function($scope, $element, $document, $log) {
             $scope.btnClass = "btn btn-default";
             $scope.searchPlaceHolder = "search...";
