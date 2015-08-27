@@ -62,13 +62,12 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Collpase all
     + Row selection
     + Different events (loading, refresh, etc..)
+    + Action's buttons
    
 
     Bugs 
-    + Global search
     + Loading nested data
     + Remove Glyph icon when no data for expand col
-    + When combine drag/Drop and resize
     + Drag/drop column has have expand capabilty (we have to detect that is the col of expanding and refresh all the grid)
     + Adjust design
     + Prevent right click event

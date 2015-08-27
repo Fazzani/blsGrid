@@ -1,6 +1,5 @@
 (function(angular) {
     app.service('objectTableUtilService', [function() {
-        //extend Array [+swap]
         Array.prototype.swap = function(new_index, old_index) {
             if (new_index >= this.length) {
                 var k = new_index - this.length;
@@ -9,7 +8,7 @@
                 }
             }
             this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this; // for testing purposes
+            return this;
         }
     }]).directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', 'objectTableUtilService', function($log, $compile, $templateCache, $timeout, objectTableUtilService) {
         var me = this;
@@ -113,7 +112,15 @@
                         key: $scope.storageIds.tableConfig,
                         val: me.tableConfig
                     });
-                }
+                };
+                $scope.$watch('options.search.searchText', function(newValue, oldValue) {
+                    if (me.timerSearch) $timeout.cancel(me.timerSearch);
+                    if (newValue != oldValue) {
+                        me.timerSearch = $timeout(function() {
+                            me.refreshDataGrid();
+                        }, 500);
+                    }
+                });
                 $scope.$watch('data', function(newValue, oldValue) {
                     if (newValue != oldValue) {
                         if ($scope.cols.length > 0) {
@@ -177,6 +184,13 @@
                         type: format
                     });
                 });
+
+                $scope.$on(
+                        "$destroy",
+                        function( event ) {
+                            $timeout.cancel( me.timerSearch );
+                        }
+                    );
             }
         ];
         return {
