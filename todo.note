@@ -60,14 +60,12 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Filter by culumn
     + Loading image on expand
     + Collpase all
-    + Row selection
+    + Row selection (For export)
     + Different events (loading, refresh, etc..)
     + Action's buttons
    
 
     Bugs 
-    + Loading nested data
-    + Remove Glyph icon when no data for expand col
     + Drag/drop column has have expand capabilty (we have to detect that is the col of expanding and refresh all the grid)
     + Adjust design
     + Prevent right click event

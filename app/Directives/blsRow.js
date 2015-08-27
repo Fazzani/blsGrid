@@ -55,20 +55,22 @@
                 }
                 elemTplCaret.on('click', function(e) {
                     $log.debug('    toggle row');
+                    elemTplCaret.addClass('fa-spinner');
                     var $this = $(this);
                     if (scope.firstExpand) {
                         scope.firstExpand = false;
                         var childScope = scope.$new();
                         scope.getChildren()(scope.d).then(function(response) {
-                            childScope.data = response.data;
-                        });
-                        childScope.level = scope.level + 1;
-                        childScope.parentId = scope.$id;
-                        scope.$apply(function() {
-                            $compile(elemTplRow)(childScope);
-                            scope.expand = !scope.expand;
-                            me.toggle(scope.$id, $this.closest('tr'), scope.expand);
-                            elemTplRow.insertAfter(element);
+                            elemTplCaret.removeClass('fa-spinner');
+                            if (response.data.length > 0) {
+                                childScope.data = response.data;
+                                childScope.level = scope.level + 1;
+                                childScope.parentId = scope.$id;
+                                $compile(elemTplRow)(childScope);
+                                scope.expand = !scope.expand;
+                                me.toggle(scope.$id, $this.closest('tr'), scope.expand);
+                                elemTplRow.insertAfter(element);
+                            } else elemTplCaret.removeClass('fa').removeClass('fa-caret-down').removeClass('fa-caret-right').off('click');
                         });
                     } else scope.$apply(function() {
                         scope.expand = !scope.expand;
@@ -87,7 +89,7 @@
             link: this.link,
             scope: true
         };
-    }]).directive('dynamic', ['$log','$compile',function($log,$compile) { //compile dynamic html
+    }]).directive('dynamic', ['$log', '$compile', function($log, $compile) { //compile dynamic html
         return {
             restrict: 'A',
             replace: true,
