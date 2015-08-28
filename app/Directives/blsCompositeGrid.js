@@ -175,7 +175,7 @@
                         }
                     );
                 $scope.isHierarchical = function() {
-                    
+
                     return angular.isDefined($attrs.getChildren);
                 };
             }

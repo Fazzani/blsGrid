@@ -1,5 +1,15 @@
 'use strict';
 app.service('dropableservice', function($log, localStorageService) {
+    Array.prototype.swap = function(new_index, old_index) {
+            if (new_index >= this.length) {
+                var k = new_index - this.length;
+                while ((k--) + 1) {
+                    this.push(undefined);
+                }
+            }
+            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+            return this;
+        };
     this.defaultColConfig = function(length) {
         var array = new Array(length);
         for (var i = array.length - 1; i >= 0; i--) {

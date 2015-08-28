@@ -1,10 +1,13 @@
 (function(angular) {
     app.directive('blsRows', ['$log', '$compile', '$templateCache', '$timeout', function($log, $compile, $templateCache, $timeout) {
-        var rowTpl = '<tr ng-repeat="d in data" bls-row-child><td ng-repeat="c in cols" dynamic="getTdTpl(c)">{{d[c.fieldName]}}</td></tr>';
+        var rowTpl = '<tr ng-repeat="d in data" ><td ng-repeat="c in cols" dynamic="getTdTpl(c)">{{d[c.fieldName]}}</td></tr>';
         this.link = function(scope, element, attrs, ctrls) {
             // var blsCompositeGridCtrl = ctrls[0];
             // debugger;
+            
             var eleTpl = angular.element(rowTpl);
+            if(scope.isHierarchical())
+                eleTpl.attr('bls-row-child','');
             $timeout(function() {
                 element.siblings('table').find('tbody').append(eleTpl);
                 $compile(eleTpl)(scope);
@@ -55,9 +58,9 @@
                 }
                 elemTplCaret.on('click', function(e) {
                     $log.debug('    toggle row');
-                    elemTplCaret.addClass('fa-spinner');
                     var $this = $(this);
                     if (scope.firstExpand) {
+                        elemTplCaret.addClass('fa-spinner');
                         scope.firstExpand = false;
                         var childScope = scope.$new();
                         scope.getChildren()(scope.d).then(function(response) {

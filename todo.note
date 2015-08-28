@@ -11,7 +11,7 @@
     - Refresh (reload data) => ok
     - Show hide columns (list checkbox)
     - Export all or selection (csv, json)
-    - virtual scroll (loadind data)
+    - virtual scroll (loading data)
 - Allow customize
     - Header's class 
     - Spinner css
@@ -57,12 +57,11 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     + Exporting data ('excel', 'xml', 'csv','sql', 'json','doc', 'powerpoint')
 
     RAF
-    + Filter by culumn
-    + Loading image on expand
-    + Collpase all
-    + Row selection (For export)
-    + Different events (loading, refresh, etc..)
     + Action's buttons
+    + Filter by culumn
+    + Collpase all and Expand all
+    + Different events (loading, refresh, etc..)
+    + Row selection (For export)
    
 
     Bugs 
@@ -74,4 +73,10 @@ clone row + injecter la fonction dans la première Td => compiler la row => appe
     Enhancement
     + Cache differents templates
     + Create services factoring code
+    
+#Spliter Page
+    + Resizable spliter
+    + Save user's datas on localStorage
+    
+    
 
