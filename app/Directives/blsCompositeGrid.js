@@ -1,26 +1,9 @@
 (function(angular) {
-    app.service('objectTableUtilService', [function() {
-        Array.prototype.swap = function(new_index, old_index) {
-            if (new_index >= this.length) {
-                var k = new_index - this.length;
-                while ((k--) + 1) {
-                    this.push(undefined);
-                }
-            }
-            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this;
-        }
-    }]).directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', 'objectTableUtilService', function($log, $compile, $templateCache, $timeout, objectTableUtilService) {
+    app.directive('blsCompositeGrid', ['$log', '$compile', '$templateCache', '$timeout', 'dropableservice', function($log, $compile, $templateCache, $timeout, dropableservice) {
         var me = this;
         this.tpl = $templateCache.get('templates/blsCompositeGrid.html');
-        this.link = function(scope, element, attrs, ctrls) {
-            // $log.debug('Link => blsCompositeGrid');
-            // var eleTpl = angular.element(me.tpl);
-            // element.replaceWith(eleTpl);
-            // $compile(eleTpl)(scope.$new());
-        };
-        this.controller = ['$scope', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
-            function($scope, $filter, $timeout, $element, $log, localStorageService, dropableService) {
+        this.controller = ['$scope','$attrs', '$filter', '$timeout', '$element', '$log', 'localStorageService', 'dropableservice',
+            function($scope, $attrs, $filter, $timeout, $element, $log, localStorageService, dropableService) {
                 var me = this;
                 me.initialLoad = $scope.isLoading = true;
                 this.tableConfig = {};
@@ -191,11 +174,14 @@
                             $timeout.cancel( me.timerSearch );
                         }
                     );
+                $scope.isHierarchical = function() {
+                    
+                    return angular.isDefined($attrs.getChildren);
+                };
             }
         ];
         return {
             restrict: 'E',
-            // link: this.link,
             replace: true,
             transclude: true,
             template: this.tpl,
